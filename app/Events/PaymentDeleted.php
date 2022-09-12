@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Events;
+
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+
+class PaymentDeleted
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $payment_id;
+    public $paymentable_id;
+
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
+    public function __construct($payment_id, $paymentable_id)
+    {
+        $this->payment_id = $payment_id;
+        $this->paymentable_id = $paymentable_id;
+    }
+}

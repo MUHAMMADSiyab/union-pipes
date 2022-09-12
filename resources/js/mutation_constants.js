@@ -1,0 +1,73 @@
+export const SET_TOKEN = "SET_TOKEN";
+export const SET_USER = "SET_USER";
+export const SET_AUTH_ERROR = "SET_AUTH_ERROR";
+
+export const SET_USER_ABILITIES = "SET_USER_ABILITIES";
+
+export const SET_LOADING = "SET_LOADING";
+
+export const SET_PRINT_MODE = "SET_PRINT_MODE";
+
+export const SET_VALIDATION_ERRORS = "SET_VALIDATION_ERRORS";
+export const CLEAR_VALIDATION_ERRORS = "CLEAR_VALIDATION_ERRORS";
+
+export const SET_PAYMENT_SETTING = "SET_PAYMENT_SETTING";
+
+export const SET_ALERT = "SET_ALERT";
+export const HIDE_ALERT = "HIDE_ALERT";
+
+export const GET_PERMISSIONS = "GET_PERMISSIONS";
+export const NEW_PERMISSION = "NEW_PERMISSION";
+export const GET_PERMISSION = "GET_PERMISSION";
+export const UPDATE_PERMISSION = "UPDATE_PERMISSION";
+export const DELETE_PERMISSION = "DELETE_PERMISSION";
+export const DELETE_PERMISSIONS = "DELETE_PERMISSIONS";
+
+export const GET_ROLES = "GET_ROLES";
+export const NEW_ROLE = "NEW_ROLE";
+export const GET_ROLE = "GET_ROLE";
+export const UPDATE_ROLE = "UPDATE_ROLE";
+export const DELETE_ROLE = "DELETE_ROLE";
+export const DELETE_ROLES = "DELETE_ROLES";
+
+export const GET_USERS = "GET_USERS";
+export const NEW_USER = "NEW_USER";
+export const GET_USER = "GET_USER";
+export const UPDATE_USER = "UPDATE_USER";
+export const DELETE_USER = "DELETE_USER";
+export const DELETE_USERS = "DELETE_USERS";
+
+export const GET_PRODUCTS = "GET_PRODUCTS";
+export const NEW_PRODUCT = "NEW_PRODUCT";
+export const GET_PRODUCT = "GET_PRODUCT";
+export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const DELETE_PRODUCTS = "DELETE_PRODUCTS";
+
+export const GET_TANKS = "GET_TANKS";
+export const NEW_TANK = "NEW_TANK";
+export const GET_TANK = "GET_TANK";
+export const UPDATE_TANK = "UPDATE_TANK";
+export const DELETE_TANK = "DELETE_TANK";
+export const DELETE_TANKS = "DELETE_TANKS";
+
+export const GET_DISPENSERS = "GET_DISPENSERS";
+export const NEW_DISPENSER = "NEW_DISPENSER";
+export const GET_DISPENSER = "GET_DISPENSER";
+export const UPDATE_DISPENSER = "UPDATE_DISPENSER";
+export const DELETE_DISPENSER = "DELETE_DISPENSER";
+export const DELETE_DISPENSERS = "DELETE_DISPENSERS";
+
+export const GET_NOZZLES = "GET_NOZZLES";
+export const NEW_NOZZLE = "NEW_NOZZLE";
+export const GET_NOZZLE = "GET_NOZZLE";
+export const UPDATE_NOZZLE = "UPDATE_NOZZLE";
+export const DELETE_NOZZLE = "DELETE_NOZZLE";
+export const DELETE_NOZZLES = "DELETE_NOZZLES";
+
+export const GET_CURRENT_RATES = "GET_CURRENT_RATES";
+export const UPDATE_RATES = "UPDATE_RATES";
+export const GET_RATES = "GET_RATES";
+
+export const GET_APP_SETTING = "GET_APP_SETTING";
+export const GET_DASHBOARD_DATA = "GET_DASHBOARD_DATA";

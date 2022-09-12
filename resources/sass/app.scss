@@ -1,0 +1,15 @@
+@import "~vuetify/dist/vuetify.min.css";
+
+html {
+    overflow-y: auto !important;
+}
+
+body {
+    height: 100%;
+}
+
+@media print {
+    .v-data-footer {
+        display: none !important;
+    }
+}
