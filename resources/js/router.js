@@ -34,7 +34,28 @@ import Nozzles from "./components/nozzles/Nozzles";
 
 import Rates from "./components/rates/Rates";
 
+import BanksGroup from "./components/banks/BanksGroup";
+
+import AddVehicle from "./components/vehicles/AddVehicle";
+import EditVehicle from "./components/vehicles/EditVehicle";
+import Vehicles from "./components/vehicles/Vehicles";
+
+import AddTransaction from "./components/transactions/AddTransaction";
+import EditTransaction from "./components/transactions/EditTransaction";
+import Transactions from "./components/transactions/Transactions";
+
+import AddUtility from "./components/utilities/AddUtility";
+import EditUtility from "./components/utilities/EditUtility";
+import Utilities from "./components/utilities/Utilities";
+
+import AddCompany from "./components/companies/AddCompany";
+import Companies from "./components/companies/Companies";
+
+import AddPurchase from "./components/purchases/AddPurchase";
+
 import EditSetting from "./components/settings/Edit";
+
+import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
 
 import EditUserAccount from "./components/user-management/users/EditUserAccount";
 
@@ -211,6 +232,149 @@ const router = new VueRouter({
         },
 
         {
+            path: "/banks",
+            name: "banks",
+            component: BanksGroup,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Banks - ${process.env.MIX_APP_NAME}`,
+                gate: "bank_access",
+            },
+        },
+
+        {
+            path: "/vehicles/add",
+            name: "add_vehicle",
+            component: AddVehicle,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Add Vehicle - ${process.env.MIX_APP_NAME}`,
+                gate: "tank_create",
+            },
+        },
+
+        {
+            path: "/vehicles/edit/:id",
+            name: "vehicle_edit",
+            component: EditVehicle,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Vehicle - ${process.env.MIX_APP_NAME}`,
+                gate: "vehicle_edit",
+            },
+        },
+
+        {
+            path: "/vehicles",
+            name: "vehicles",
+            component: Vehicles,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Vehicles - ${process.env.MIX_APP_NAME}`,
+                gate: "vehicle_access",
+            },
+        },
+
+        {
+            path: "/transactions/add",
+            name: "transaction_add",
+            component: AddTransaction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Transaction - ${process.env.MIX_APP_NAME}`,
+                gate: "transaction_create",
+            },
+        },
+
+        {
+            path: "/transactions/edit/:id",
+            name: "transaction_edit",
+            component: EditTransaction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Transaction - ${process.env.MIX_APP_NAME}`,
+                gate: "transaction_edit",
+            },
+        },
+
+        {
+            path: "/transactions",
+            name: "transactions",
+            component: Transactions,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Transactions - ${process.env.MIX_APP_NAME}`,
+                gate: "transaction_access",
+            },
+        },
+
+        {
+            path: "/utilities/add",
+            name: "utility_add",
+            component: AddUtility,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Utility - ${process.env.MIX_APP_NAME}`,
+                gate: "utility_create",
+            },
+        },
+
+        {
+            path: "/utilities/edit/:id",
+            name: "utility_edit",
+            component: EditUtility,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Utility - ${process.env.MIX_APP_NAME}`,
+                gate: "utility_edit",
+            },
+        },
+
+        {
+            path: "/utilities",
+            name: "utilities",
+            component: Utilities,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Utilities - ${process.env.MIX_APP_NAME}`,
+                gate: "utility_access",
+            },
+        },
+
+        {
+            path: "/companies/add",
+            name: "company_add",
+            component: AddCompany,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Company - ${process.env.MIX_APP_NAME}`,
+                gate: "company_create",
+            },
+        },
+
+        {
+            path: "/companies",
+            name: "companies",
+            component: Companies,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Companies - ${process.env.MIX_APP_NAME}`,
+                gate: "company_access",
+            },
+        },
+
+        {
+            path: "/purchases/add",
+            name: "purchase_add",
+            component: AddPurchase,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Purchase - ${process.env.MIX_APP_NAME}`,
+                // gate: "purchase_create",
+            },
+        },
+
+        {
             path: "/user-management/permissions",
             name: "permissions",
             component: PermissionsGroup,
@@ -251,6 +415,17 @@ const router = new VueRouter({
             meta: {
                 title: `Edit App Setting - ${process.env.MIX_APP_NAME}`,
                 gate: "app_setting_edit",
+            },
+        },
+
+        {
+            path: "/payment_settings",
+            name: "payment_settings",
+            component: EditPaymentSetting,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Payment Setting - ${process.env.MIX_APP_NAME}`,
+                gate: "payment_setting_edit",
             },
         },
 

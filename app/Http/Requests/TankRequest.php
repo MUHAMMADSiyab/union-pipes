@@ -31,6 +31,7 @@ class TankRequest extends FormRequest
             'limit' => 'required|numeric',
             'code' => 'nullable',
             'lower_limit' => 'required|numeric',
+            'current_fuel_quantity' => 'numeric',
             'description' => 'nullable|max:500',
         ];
     }

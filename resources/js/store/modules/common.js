@@ -15,9 +15,9 @@ const getters = {
 };
 
 const actions = {
-    async getProducts({ commit }) {
+    async getPaymentSetting({ commit }) {
         try {
-            const res = await axios.get("/api/products");
+            const res = await axios.get("/api/payment_settings");
 
             commit(SET_PAYMENT_SETTING, res.data);
         } catch (error) {

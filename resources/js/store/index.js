@@ -14,7 +14,14 @@ import product from "./modules/product";
 import tank from "./modules/tank";
 import dispenser from "./modules/dispenser";
 import nozzle from "./modules/nozzle";
+import vehicle from "./modules/vehicle";
 import rate from "./modules/rate";
+import bank from "./modules/bank";
+import transaction from "./modules/transaction";
+import utility from "./modules/utility";
+import company from "./modules/company";
+import purchase from "./modules/purchase";
+import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
 
 // Subscriber
@@ -71,8 +78,43 @@ const store = new Vuex.Store({
             namespaced: true,
         },
 
+        vehicle: {
+            ...vehicle,
+            namespaced: true,
+        },
+
         rate: {
             ...rate,
+            namespaced: true,
+        },
+
+        bank: {
+            ...bank,
+            namespaced: true,
+        },
+
+        transaction: {
+            ...transaction,
+            namespaced: true,
+        },
+
+        utility: {
+            ...utility,
+            namespaced: true,
+        },
+
+        company: {
+            ...company,
+            namespaced: true,
+        },
+
+        purchase: {
+            ...purchase,
+            namespaced: true,
+        },
+
+        payment: {
+            ...payment,
             namespaced: true,
         },
 

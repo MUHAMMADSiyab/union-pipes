@@ -12,7 +12,7 @@
             <v-card-text class="mt-1">
               <v-form @submit.prevent="add">
                 <v-row>
-                  <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
+                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
@@ -26,7 +26,7 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
+                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
@@ -61,12 +61,27 @@
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
+                      v-text="validation.getMessage('current_fuel_quantity')"
+                    ></small>
+                    <v-text-field
+                      v-model="data.current_fuel_quantity"
+                      type="number"
+                      label="Current Fuel Quantity (in litres)"
+                      dense
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
+                    <small
+                      class="red--text"
+                      v-if="validation.hasErrors()"
                       v-text="validation.getMessage('limit')"
                     ></small>
                     <v-text-field
                       v-model="data.limit"
                       type="number"
-                      label="Limit (in litres)"
+                      label="Limit/Capacity (in litres)"
                       dense
                       outlined
                     ></v-text-field>
@@ -136,6 +151,7 @@ export default {
         name: "",
         product_id: "",
         limit: "",
+        current_fuel_quantity: "",
         code: "",
         lower_limit: "",
         description: "",
@@ -165,7 +181,7 @@ export default {
         this.data.limit = "";
         this.data.code = "";
         this.data.lower_limit = "";
-        this.data.description = "";
+        (this.data.current_fuel_quantity = ""), (this.data.description = "");
         // Clear the validation messages object
         this.validation.setMessages({});
       }

@@ -7,6 +7,7 @@
         <v-img
           v-if="app_setting"
           :src="app_setting.app_logo"
+          max-height="40"
           max-width="80"
           class="mx-auto"
         ></v-img>
@@ -236,6 +237,111 @@ export default {
           ],
         },
 
+        {
+          text: "Vehicles",
+          icon: "mdi-tanker-truck",
+          active: this.activeMenu("vehicles"),
+          gate: "vehicle_access",
+          submenu: [
+            {
+              text: "Add Vehicle",
+              to: "/vehicles/add",
+              icon: "mdi-chevron-double-right",
+              gate: "vehicle_create",
+              exact: true,
+            },
+            {
+              text: "Manage Vehicles",
+              to: "/vehicles",
+              icon: "mdi-chevron-double-right",
+              gate: "vehicle_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
+          text: "Transactions",
+          icon: "mdi-currency-eur",
+          active: this.activeMenu("transactions"),
+          gate: "transaction_access",
+          submenu: [
+            {
+              text: "Add Transaction",
+              to: "/transactions/add",
+              icon: "mdi-chevron-double-right",
+              gate: "transaction_create",
+              exact: true,
+            },
+            {
+              text: "Manage Transactions",
+              to: "/transactions",
+              icon: "mdi-chevron-double-right",
+              gate: "transaction_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
+          text: "Utilities",
+          icon: "mdi-currency-usd",
+          active: this.activeMenu("utilities"),
+          gate: "utility_access",
+          submenu: [
+            {
+              text: "Add Utility",
+              to: "/utilities/add",
+              icon: "mdi-chevron-double-right",
+              gate: "utility_create",
+              exact: true,
+            },
+            {
+              text: "Manage Utilities",
+              to: "/utilities",
+              icon: "mdi-chevron-double-right",
+              gate: "utility_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
+          text: "Companies",
+          icon: "mdi-office-building-outline",
+          active: this.activeMenu("companies"),
+          gate: "company_access",
+          submenu: [
+            {
+              text: "Add Company",
+              to: "/companies/add",
+              icon: "mdi-chevron-double-right",
+              gate: "company_create",
+              exact: true,
+            },
+            {
+              text: "Manage Companies",
+              to: "/companies",
+              icon: "mdi-chevron-double-right",
+              gate: "company_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
+          text: "Banks",
+          icon: "mdi-bank",
+          to: "/banks",
+          active: this.activeMenu("banks"),
+        },
+
+        {
+          text: "Payment Setting",
+          icon: "mdi-currency-usd-circle-outline",
+          to: "/payment_settings",
+          active: this.activeMenu("payment_setting"),
+        },
 
         {
           text: "User Management",

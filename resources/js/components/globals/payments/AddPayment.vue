@@ -5,43 +5,6 @@
 
     <v-card-text class="mt-1">
       <v-form @submit.prevent="add">
-        <!-- Investor(s) and their payment amounts -->
-        <template v-if="entryData.model === 'App\\Models\\PurchasedVehicle'">
-          <v-row
-            v-for="(investment, i) in data.investments"
-            :key="i"
-            class="mb-2"
-          >
-            <v-col xl="8" lg="8" md="8" sm="12" cols="12" class="py-0">
-              <v-select
-                :items="[
-                  {
-                    investor_id: investment.investor_id,
-                    investor: investment.investor,
-                  },
-                ]"
-                v-model="investment.investor_id"
-                item-text="investor"
-                item-value="investor_id"
-                label="Investor"
-                dense
-                outlined
-                readonly
-              ></v-select>
-            </v-col>
-
-            <v-col xl="4" lg="4" md="4" smal="12" cols="12" class="py-0">
-              <v-text-field
-                name="investor-amount"
-                label="Amount"
-                v-model="investment.amount"
-                dense
-                outlined
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </template>
-
         <small
           class="red--text"
           v-if="validation.hasErrors()"

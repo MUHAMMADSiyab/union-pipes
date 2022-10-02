@@ -18,10 +18,21 @@
           :key="i"
         >
           <v-card class="mx-auto" max-width="344">
-            <v-img src="storage/common/tank-bg.png" height="200px"></v-img>
+            <v-img
+              src="/storage/common/tank-bg.png"
+              height="200px"
+              contain
+            ></v-img>
 
             <v-card-title>
               {{ tank.name }} <span v-if="tank.code">({{ tank.code }})</span>
+
+              <v-chip
+                color="primary"
+                class="ml-auto"
+                title="Tank's Current Fuel Quantity"
+                >{{ tank.current_fuel_quantity }} Ltrs.</v-chip
+              >
             </v-card-title>
 
             <v-card-subtitle class="mt-2">
@@ -138,13 +149,6 @@ export default {
   },
 
   async mounted() {
-    // remove actions if no access is given
-    if (!this.can("tank_edit") && !this.can("tank_delete")) {
-      this.headers = this.headers.filter(
-        (header) => header.value !== "actions"
-      );
-    }
-
     await Promise.all([this.getTanks(), this.getProducts()]);
 
     this.allTanks = this.tanks;

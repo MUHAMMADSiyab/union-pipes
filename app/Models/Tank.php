@@ -14,9 +14,10 @@ class Tank extends Model
     protected $fillable = [
         'name',
         'product_id',
-        'limit',
+        'limit', // capacity
         'code',
         'lower_limit',
+        'current_fuel_quantity',
         'description',
     ];
 

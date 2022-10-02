@@ -44,7 +44,7 @@ class TankController extends Controller
 
     /**
      * Get a single tank
-     * @param App\Tank
+     * @param App\Models\Tank
      * @return \Illuminate\Http\Response
      */
     public function show(Tank $tank)
@@ -52,7 +52,7 @@ class TankController extends Controller
         Gate::authorize('tank_access');
         Gate::authorize('tank_show');
 
-        return response()->json($tank, 201);
+        return response()->json($tank);
     }
 
 
@@ -85,22 +85,6 @@ class TankController extends Controller
 
         if ($tank->delete()) {
             return response()->json(["success" =>  "Tank deleted successfully"]);
-        }
-    }
-
-    /**
-     * Delete multiple tanks.
-     *
-     * @param  Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy_multiple(Request $request)
-    {
-        Gate::authorize('tank_access');
-        Gate::authorize('tank_delete');
-
-        if (Tank::whereIn('id', $request->ids)->delete()) {
-            return response()->json(["success" =>  "Tanks deleted successfully"]);
         }
     }
 }

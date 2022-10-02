@@ -59,9 +59,41 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'nozzle_edit'],
             ['name' => 'nozzle_show'],
             ['name' => 'nozzle_delete'],
-            
+
             ['name' => 'rate_access'],
             ['name' => 'rate_edit'],
+
+            ['name' => 'bank_access'],
+            ['name' => 'bank_create'],
+            ['name' => 'bank_edit'],
+            ['name' => 'bank_show'],
+            ['name' => 'bank_delete'],
+
+            ['name' => 'vehicle_access'],
+            ['name' => 'vehicle_create'],
+            ['name' => 'vehicle_edit'],
+            ['name' => 'vehicle_show'],
+            ['name' => 'vehicle_delete'],
+
+            ['name' => 'transaction_access'],
+            ['name' => 'transaction_create'],
+            ['name' => 'transaction_edit'],
+            ['name' => 'transaction_show'],
+            ['name' => 'transaction_delete'],
+
+            ['name' => 'utility_access'],
+            ['name' => 'utility_create'],
+            ['name' => 'utility_edit'],
+            ['name' => 'utility_show'],
+            ['name' => 'utility_delete'],
+
+            ['name' => 'company_access'],
+            ['name' => 'company_create'],
+            ['name' => 'company_edit'],
+            ['name' => 'company_show'],
+            ['name' => 'company_delete'],
+
+            ['name' => 'payment_setting_edit'],
 
             ['name' => 'app_setting_edit'],
 
