@@ -59,11 +59,9 @@ const actions = {
     },
 
     // Get a single purchase
-    async getPurchase({ commit }, vehicleAdjustmentId) {
+    async getPurchase({ commit }, id) {
         try {
-            const res = await axios.get(
-                `/api/purchases/${vehicleAdjustmentId}`
-            );
+            const res = await axios.get(`/api/purchases/${id}`);
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_PURCHASE, res.data);

@@ -28,6 +28,7 @@ class BankRequest extends FormRequest
             'account_no' => 'nullable|numeric',
             'branch_name' => 'nullable|min:2|max:50',
             'branch_code' => 'nullable|numeric',
+            'balance' => 'nullable|numeric',
         ];
     }
 }

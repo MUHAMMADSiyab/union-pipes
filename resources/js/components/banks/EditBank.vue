@@ -62,6 +62,21 @@
           outlined
         ></v-text-field>
 
+        <small
+          class="red--text"
+          v-if="validation.hasErrors()"
+          v-text="validation.getMessage('balance')"
+        ></small>
+        <v-text-field
+          name="balance"
+          label="Balance"
+          id="balance"
+          type="number"
+          v-model="data.balance"
+          dense
+          outlined
+        ></v-text-field>
+
         <v-btn color="success" type="submit">Update</v-btn>
         <v-btn color="secondary" @click="closeDialog">Cancel</v-btn>
       </v-form>
@@ -79,7 +94,8 @@ export default {
   mixins: [ValidationMixin],
 
   data() {
-    const { id, name, account_no, branch_name, branch_code } = this.singleBank;
+    const { id, name, account_no, branch_name, branch_code, balance } =
+      this.singleBank;
 
     return {
       formLoading: false,
@@ -89,6 +105,7 @@ export default {
         account_no,
         branch_name,
         branch_code,
+        balance,
       },
     };
   },
@@ -120,12 +137,13 @@ export default {
 
   watch: {
     singleBank: {
-      handler({ id, name, account_no, branch_name, branch_code }) {
+      handler({ id, name, account_no, branch_name, branch_code, balance }) {
         this.data.id = id;
         this.data.name = name;
         this.data.account_no = account_no;
         this.data.branch_name = branch_name;
         this.data.branch_code = branch_code;
+        this.data.balance = balance;
       },
     },
   },

@@ -4,12 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PurchaseRequest;
 use App\Models\Distribution;
+use App\Models\Payment;
 use App\Models\Purchase;
 use App\Models\PurchaseReading;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PurchaseController extends Controller
 {
+    /**
+     * Get all purchases
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        Gate::authorize('purchase_access');
+
+        $purchases = Purchase::query()
+            ->with([
+                'company',
+                'chamber_readings',
+                'chamber_readings.chamber',
+                'distributions',
+                'distributions.tank',
+                'distributions.tank.product',
+                'payment',
+            ])
+            ->get();
+
+        return response()->json($purchases);
+    }
+
     /**
      * Add a new purchase
      *
@@ -18,6 +45,9 @@ class PurchaseController extends Controller
      */
     public function store(PurchaseRequest $request)
     {
+        Gate::authorize('purchase_access');
+        Gate::authorize('purchase_create');
+
         try {
             DB::beginTransaction();
 
@@ -44,23 +74,50 @@ class PurchaseController extends Controller
 
     /**
      * Get a single purchase
-     * @param App\Purchase
+     * @param int $purchase(id)
      * @return \Illuminate\Http\Response
      */
-    public function show(Purchase $purchase)
+    public function show(int $purchase)
     {
-        return response()->json($purchase, 201);
+        Gate::authorize('purchase_access');
+        Gate::authorize('purchase_show');
+
+        $purchase = Purchase::with([
+            'company',
+            'vehicle',
+            'chamber_readings',
+            'chamber_readings.chamber',
+            'distributions',
+            'distributions.tank',
+            'distributions.tank.product',
+            'payment',
+            'payment.bank',
+        ])->find($purchase);
+
+        return response()->json($purchase);
     }
 
     /**
      * Update a purchase
      *
      * @param  \App\Http\Requests\PurchaseRequest  $request
-     * @param  App\Models\Transaction  $purchase
+     * @param  App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
     public function update(Purchase $purchase, PurchaseRequest $request)
     {
+        Gate::authorize('purchase_access');
+        Gate::authorize('purchase_edit');
+
+        $old_purchase = Purchase::with([
+            'chamber_readings',
+            'chamber_readings.chamber',
+            'distributions',
+            'distributions.tank',
+            'distributions.tank.product',
+            'payment',
+        ])->find($purchase->id);
+
         try {
             DB::beginTransaction();
 
@@ -71,16 +128,26 @@ class PurchaseController extends Controller
             foreach ($request->chamber_readings as $reading) {
                 PurchaseReading::where('purchase_id', $purchase->id)
                     ->where('chamber_id', $reading['chamber_id'])
-                    ->update($reading);
+                    ->update([
+                        'rod_value' => $reading['rod_value'],
+                        'available_quantity' => $reading['available_quantity'],
+                        'excess_quantity' => $reading['excess_quantity'],
+                    ]);
             }
 
             foreach ($request->distributions as $distribution) {
-                Distribution::where('purchase_id', $purchase->id)
-                    ->where('tank_id', $reading['tank_id'])
-                    ->update($distribution);
+                $distribution_record = Distribution::where('purchase_id', $purchase->id)
+                    ->where('tank_id', $distribution['tank_id'])
+                    ->first();
+
+                $distribution_record->update([
+                    'new_stock_quantity' => $distribution['new_stock_quantity']
+                ]);
             }
 
+
             DB::commit();
+            return response()->json(compact('old_purchase', 'updated_purchase'));
 
             return response()->json($updated_purchase);
         } catch (\Exception $e) {
@@ -97,9 +164,32 @@ class PurchaseController extends Controller
      */
     public function destroy(Purchase $purchase)
     {
+        Gate::authorize('purchase_access');
+        Gate::authorize('purchase_delete');
+
         if ($purchase->delete()) {
-            $purchase->payment()->delete(); // delete payment
+            Payment::where('paymentable_id', $purchase->id)->first()->delete(); // delete payment
             return response()->json(["success" =>  "Purchase deleted successfully"]);
         }
+    }
+
+    /**
+     * Delete multiple purchases.
+     *
+     * @param  Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy_multiple(Request $request)
+    {
+        Gate::authorize('purchase_access');
+        Gate::authorize('purchase_delete');
+
+        foreach ($request->ids as $id) {
+            $purchase = Purchase::find($id);
+            $purchase->delete();
+            Payment::where('paymentable_id', $id)->first()->delete(); // delete payment
+        }
+
+        return response()->json(["success" =>  "Purchases deleted successfully"]);
     }
 }

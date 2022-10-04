@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'except' => ['create', 'edit']
     ]);
 
+    Route::delete('purchases/delete_multiple', [PurchaseController::class, 'destroy_multiple']);
     Route::resource('purchases', PurchaseController::class, [
         'except' => ['create', 'edit']
     ]);

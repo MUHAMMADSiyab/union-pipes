@@ -18,6 +18,11 @@
         props.index + 1
       }}</template>
 
+      <!-- Amount -->
+      <template slot="item.balance" slot-scope="props">
+        <span> {{ money(props.item.balance) }} </span>
+      </template>
+
       <!-- Top -->
       <template v-slot:top v-if="!printMode">
         <v-btn
@@ -95,9 +100,10 @@ import Confirmation from "../globals/Confirmation";
 import Excel from "../globals/exports/Excel.vue";
 import CSV from "../globals/exports/CSV.vue";
 import PDF from "../globals/exports/PDF.vue";
+import CurrencyMixin from "../../mixins/CurrencyMixin";
 
 export default {
-  mixins: [DatatableMixin],
+  mixins: [DatatableMixin, CurrencyMixin],
 
   components: {
     EditBank,
@@ -117,6 +123,7 @@ export default {
         { text: "Bank No.", value: "account_no" },
         { text: "Branch Name", value: "branch_name" },
         { text: "Branch Code", value: "branch_code" },
+        { text: "Balance", value: "balance" },
         { text: "Actions", value: "actions", align: " d-print-none" },
       ],
       selectedItems: [],

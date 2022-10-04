@@ -206,6 +206,12 @@ const actions = {
 
                 await axios.put(`/api/transactions/${paymentable_id}`, data);
             }
+
+            // If the payment belongs to a purchase
+            if (model === "App\\Models\\Purchase") {
+                const purchase = store.getters["purchase/old_purchase"];
+                axios.put(`/api/purchases/${paymentable_id}`, purchase);
+            }
         }
     },
 

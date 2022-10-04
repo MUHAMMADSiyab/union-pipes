@@ -63,6 +63,21 @@
           outlined
         ></v-text-field>
 
+        <small
+          class="red--text"
+          v-if="validation.hasErrors()"
+          v-text="validation.getMessage('balance')"
+        ></small>
+        <v-text-field
+          name="balance"
+          label="Balance"
+          id="balance"
+          type="number"
+          v-model="data.balance"
+          dense
+          outlined
+        ></v-text-field>
+
         <v-btn color="primary" type="submit">Add</v-btn>
       </v-form>
     </v-card-text>
@@ -84,6 +99,7 @@ export default {
         account_no: "",
         branch_name: "",
         branch_code: "",
+        balance: "",
       },
     };
   },
@@ -106,6 +122,7 @@ export default {
         this.data.account_no = "";
         this.data.branch_name = "";
         this.data.branch_code = "";
+        this.data.balance = "";
         // Clear the validation messages object
         this.validation.setMessages({});
       }

@@ -667,9 +667,7 @@ export default {
         diesel_quantity: 0,
         petrol_price: 0,
         diesel_price: 0,
-        total_amount:
-          this.petrol_price * this.petrol_quantity +
-          this.diesel_price * this.diesel_quantity,
+        total_amount: 0,
         chamber_readings: [],
         distributions: [],
         payment: {
@@ -780,6 +778,14 @@ export default {
         this.data.total_amount =
           data.petrol_price * data.petrol_quantity +
           data.diesel_price * data.diesel_quantity;
+
+        this.data.chamber_readings.forEach((reading) => {
+          reading.available_quantity =
+            (reading.rod_value * reading.dip_value) / reading.capacity;
+
+          reading.excess_quantity =
+            reading.capacity - reading.available_quantity;
+        });
       },
       deep: true,
     },

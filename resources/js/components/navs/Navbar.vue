@@ -261,6 +261,29 @@ export default {
         },
 
         {
+          text: "Purchases",
+          icon: "mdi-archive-arrow-down-outline",
+          active: this.activeMenu("purchases"),
+          gate: "purchase_access",
+          submenu: [
+            {
+              text: "Add Purchase",
+              to: "/purchases/add",
+              icon: "mdi-chevron-double-right",
+              gate: "purchase_create",
+              exact: true,
+            },
+            {
+              text: "Manage Purchases",
+              to: "/purchases",
+              icon: "mdi-chevron-double-right",
+              gate: "purchase_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
           text: "Transactions",
           icon: "mdi-currency-eur",
           active: this.activeMenu("transactions"),

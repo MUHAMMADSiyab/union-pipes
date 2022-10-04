@@ -16,6 +16,7 @@ class Bank extends Model
         'account_no',
         'branch_name',
         'branch_code',
+        'balance'
     ];
 
     /**
