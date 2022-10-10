@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SellController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TankController;
 use App\Http\Controllers\TransactionController;
@@ -72,6 +73,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Nozzle
+    Route::get('nozzles/detailed_nozzles', [NozzleController::class, 'detailed_nozzles']);
     Route::delete('nozzles/delete_multiple', [NozzleController::class, 'destroy_multiple']);
     Route::resource('nozzles', NozzleController::class, [
         'except' => ['create', 'edit']
@@ -107,8 +109,22 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'except' => ['create', 'edit']
     ]);
 
+    // Purchase
     Route::delete('purchases/delete_multiple', [PurchaseController::class, 'destroy_multiple']);
     Route::resource('purchases', PurchaseController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Sell
+    Route::get('sells/{sell}/get_sell_final_readings', [
+        SellController::class, 'get_sell_final_readings'
+    ]);
+    Route::post('sells/{sell_id}/update_final_readings', [
+        SellController::class, 'update_final_readings'
+    ]);
+
+    Route::delete('sells/delete_multiple', [SellController::class, 'destroy_multiple']);
+    Route::resource('sells', SellController::class, [
         'except' => ['create', 'edit']
     ]);
 

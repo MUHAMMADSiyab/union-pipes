@@ -26,6 +26,17 @@ class NozzleController extends Controller
         return response()->json($nozzles);
     }
 
+    public function detailed_nozzles()
+    {
+        $nozzles = Nozzle::with([
+            'dispenser',
+            'dispenser.tank',
+            'dispenser.tank.product',
+        ])->get();
+
+        return response()->json($nozzles);
+    }
+
     /**
      * Add a new nozzle
      *

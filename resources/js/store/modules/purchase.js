@@ -34,6 +34,15 @@ const actions = {
 
             commit(NEW_PURCHASE, res.data);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+
+            return dispatch(
+                "alert/setAlert",
+                {
+                    type: "success",
+                    message: "Purchase added successfully",
+                },
+                { root: true }
+            );
         } catch (error) {
             if (error.response.status === 422) {
                 commit(SET_VALIDATION_ERRORS, error.response.data, {
@@ -72,13 +81,22 @@ const actions = {
     },
 
     // Update purchase
-    async updatePurchase({ commit }, data) {
+    async updatePurchase({ dispatch, commit }, data) {
         try {
             const res = await axios.put(`/api/purchases/${data.id}`, data);
 
             commit(UPDATE_PURCHASE, res.data.updated_purchase);
             commit(OLD_PURCHASE, res.data.old_purchase);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+
+            return dispatch(
+                "alert/setAlert",
+                {
+                    type: "success",
+                    message: "Purchase updated successfully",
+                },
+                { root: true }
+            );
         } catch (error) {
             if (error.response.status === 422) {
                 commit(SET_VALIDATION_ERRORS, error.response.data, {

@@ -99,6 +99,12 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'purchase_show'],
             ['name' => 'purchase_delete'],
 
+            ['name' => 'sell_access'],
+            ['name' => 'sell_create'],
+            ['name' => 'sell_edit'],
+            ['name' => 'sell_show'],
+            ['name' => 'sell_delete'],
+
             ['name' => 'payment_setting_edit'],
 
             ['name' => 'app_setting_edit'],

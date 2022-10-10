@@ -59,6 +59,7 @@ export const DELETE_DISPENSER = "DELETE_DISPENSER";
 export const DELETE_DISPENSERS = "DELETE_DISPENSERS";
 
 export const GET_NOZZLES = "GET_NOZZLES";
+export const GET_DETAILED_NOZZLES = "GET_DETAILED_NOZZLES";
 export const NEW_NOZZLE = "NEW_NOZZLE";
 export const GET_NOZZLE = "GET_NOZZLE";
 export const UPDATE_NOZZLE = "UPDATE_NOZZLE";
@@ -116,6 +117,15 @@ export const UPDATE_PURCHASE = "UPDATE_PURCHASE";
 export const DELETE_PURCHASE = "DELETE_PURCHASE";
 export const DELETE_PURCHASES = "DELETE_PURCHASES";
 export const OLD_PURCHASE = "OLD_PURCHASE";
+
+export const GET_SELLS = "GET_SELLS";
+export const NEW_SELL = "NEW_SELL";
+export const GET_SELL = "GET_SELL";
+export const GET_SELL_FINAL_READINGS = "GET_SELL_FINAL_READINGS";
+export const UPDATE_SELL = "UPDATE_SELL";
+export const DELETE_SELL = "DELETE_SELL";
+export const DELETE_SELLS = "DELETE_SELLS";
+export const OLD_SELL = "OLD_SELL";
 
 export const GET_CURRENT_RATES = "GET_CURRENT_RATES";
 export const UPDATE_RATES = "UPDATE_RATES";

@@ -56,6 +56,10 @@ import EditPurchase from "./components/purchases/EditPurchase";
 import Purchases from "./components/purchases/Purchases";
 import PurchaseDetails from "./components/purchases/PurchaseDetails";
 
+import AddSell from "./components/sells/AddSell";
+import EditSell from "./components/sells/EditSell";
+import Sells from "./components/sells/Sells";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -407,6 +411,39 @@ const router = new VueRouter({
             meta: {
                 title: `Purchase Details - ${process.env.MIX_APP_NAME}`,
                 gate: "purchase_show",
+            },
+        },
+
+        {
+            path: "/sells/add",
+            name: "sell_add",
+            component: AddSell,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Sell - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_create",
+            },
+        },
+
+        {
+            path: "/sells/edit/:id",
+            name: "sell_edit",
+            component: EditSell,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Sell - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_edit",
+            },
+        },
+
+        {
+            path: "/sells",
+            name: "sells",
+            component: Sells,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Sells - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_access",
             },
         },
 

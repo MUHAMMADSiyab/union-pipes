@@ -9,15 +9,18 @@ import {
     DELETE_NOZZLES,
     GET_NOZZLE,
     NEW_NOZZLE,
+    GET_DETAILED_NOZZLES,
 } from "../../mutation_constants";
 
 const state = {
     nozzles: [],
+    detailed_nozzles: [],
     nozzle: null,
 };
 
 const getters = {
     nozzles: (state) => state.nozzles,
+    detailed_nozzles: (state) => state.detailed_nozzles,
     nozzle: (state) => state.nozzle,
 };
 
@@ -52,10 +55,23 @@ const actions = {
     // Get nozzles
     async getNozzles({ commit }) {
         try {
-            const res = await axios.get("/api/nozzles");
+            const res = await axios.get(`/api/nozzles`);
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_NOZZLES, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
+    // Get detailed nozzles (with dispenser -> tank -> product)
+    async getDetailedNozzles({ commit }) {
+        try {
+            const res = await axios.get(`/api/nozzles/detailed_nozzles`);
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_DETAILED_NOZZLES, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
@@ -147,6 +163,9 @@ const actions = {
 
 const mutations = {
     GET_NOZZLES: (state, payload) => (state.nozzles = payload),
+
+    GET_DETAILED_NOZZLES: (state, payload) =>
+        (state.detailed_nozzles = payload),
 
     GET_NOZZLE: (state, payload) => (state.nozzle = payload),
 
