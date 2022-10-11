@@ -59,6 +59,7 @@ import PurchaseDetails from "./components/purchases/PurchaseDetails";
 import AddSell from "./components/sells/AddSell";
 import EditSell from "./components/sells/EditSell";
 import Sells from "./components/sells/Sells";
+import SellDetails from "./components/sells/SellDetails";
 
 import EditSetting from "./components/settings/Edit";
 
@@ -444,6 +445,17 @@ const router = new VueRouter({
             meta: {
                 title: `Sells - ${process.env.MIX_APP_NAME}`,
                 gate: "sell_access",
+            },
+        },
+
+        {
+            path: "/sells/:id",
+            name: "sell_details",
+            component: SellDetails,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Sell Details - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_show",
             },
         },
 

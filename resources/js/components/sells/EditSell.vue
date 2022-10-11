@@ -220,10 +220,10 @@ export default {
       if (this.validationErrors !== null) {
         this.validation.setMessages(this.validationErrors.errors);
       } else {
-        this.data.date = "";
-
         // Clear the validation messages object
         this.validation.setMessages({});
+
+        return this.$router.push({ name: "sells" });
       }
     },
   },

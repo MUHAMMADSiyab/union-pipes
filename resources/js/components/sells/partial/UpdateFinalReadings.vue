@@ -161,8 +161,10 @@ export default {
       return readings.map((reading) => ({
         product: reading.nozzle.dispenser.tank.product.name,
         tank: reading.nozzle.dispenser.tank.name,
+        tank_id: reading.nozzle.dispenser.tank.id,
         dispenser: reading.nozzle.dispenser.name,
         nozzle_id: reading.nozzle_id,
+        existing_value: reading.value,
         value: reading.value,
       }));
     },

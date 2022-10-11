@@ -2,25 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SellReadingsUpdated;
 use App\Http\Requests\FinalReadingRequest;
 use App\Http\Requests\SellRequest;
 use App\Models\Sell;
 use App\Models\SellReading;
 use App\Services\SellService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SellController extends Controller
 {
     public function index()
     {
-        $sells = Sell::with(['initial_readings', 'final_readings'])->get();
+        $sells = Sell::all();
 
         return response()->json($sells);
     }
 
     public function show(int $sell)
     {
-        $sell = Sell::with(['initial_readings', 'final_readings'])
+        $sell = Sell::with([
+            'initial_readings',
+            'initial_readings.nozzle',
+            'initial_readings.nozzle.dispenser',
+            'initial_readings.nozzle.dispenser.tank',
+            'initial_readings.nozzle.dispenser.tank.product',
+            'final_readings',
+            'final_readings.nozzle',
+            'final_readings.nozzle.dispenser',
+            'final_readings.nozzle.dispenser.tank',
+            'final_readings.nozzle.dispenser.tank.product',
+        ])
             ->find($sell);
 
         return response()->json($sell);
@@ -61,16 +75,21 @@ class SellController extends Controller
         }
     }
 
-    public function update_final_readings(FinalReadingRequest $request, int $sell_id)
+    public function update_final_readings(FinalReadingRequest $request, Sell $sell)
     {
         foreach ($request->final_readings as $reading) {
-            SellReading::where('sell_id', $sell_id)
+            $sell_reading = SellReading::where('sell_id', $sell->id)
                 ->where('nozzle_id', $reading['nozzle_id'])
                 ->where('final_reading', true)
-                ->update(['value' => $reading['value']]);
+                ->first();
+
+            $sell_reading->update(['value' => $reading['value']]);
         }
 
-        return response()->noContent();
+        // Update tanks quantity
+        SellReadingsUpdated::dispatch($request->final_readings, $sell);
+
+        return response()->json($sell);
     }
 
     public function update(SellRequest $request, Sell $sell)
@@ -94,5 +113,18 @@ class SellController extends Controller
             DB::rollBack();
             return response()->json($e->getMessage(), 500);
         }
+    }
+
+    public function get_previous_sell_readings(Request $request)
+    {
+        $request->validate(['date' => 'required|date']);
+
+        $previous_sell = Sell::query()
+            ->with('final_readings')
+            ->whereDate('sell_date', '<', $request->date)
+            ->orderBy('sell_date', 'desc')
+            ->firstOrFail();
+
+        return response()->json($previous_sell->final_readings);
     }
 }

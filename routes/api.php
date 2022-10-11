@@ -119,10 +119,12 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::get('sells/{sell}/get_sell_final_readings', [
         SellController::class, 'get_sell_final_readings'
     ]);
-    Route::post('sells/{sell_id}/update_final_readings', [
+    Route::post('sells/{sell}/update_final_readings', [
         SellController::class, 'update_final_readings'
     ]);
-
+    Route::post('sells/get_previous_sell_readings', [
+        SellController::class, 'get_previous_sell_readings'
+    ]);
     Route::delete('sells/delete_multiple', [SellController::class, 'destroy_multiple']);
     Route::resource('sells', SellController::class, [
         'except' => ['create', 'edit']

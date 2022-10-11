@@ -32,6 +32,7 @@
                       <v-date-picker
                         v-model="data.sell_date"
                         label="Date"
+                        @change="handleSellDateChange"
                         no-title
                         outlined
                         dense
@@ -205,8 +206,15 @@ export default {
     ...mapActions({
       getDetailedNozzles: "nozzle/getDetailedNozzles",
       getCurrentRates: "rate/getCurrentRates",
+      getSellFinalReadings: "sell/getSellFinalReadings",
       addSell: "sell/addSell",
     }),
+
+    async handleSellDateChange(date) {
+      await this.getSellFinalReadings({ date });
+
+      console.log(this.final_readings);
+    },
 
     async add() {
       this.formLoading = true;
@@ -219,7 +227,10 @@ export default {
       if (this.validationErrors !== null) {
         this.validation.setMessages(this.validationErrors.errors);
       } else {
-        this.data.date = "";
+        this.data.sell_date = "";
+        this.data.initial_readings = this.data.initial_readings.map(
+          (reading) => ({ ...reading, nozzle_id: "", value: 0 })
+        );
 
         // Clear the validation messages object
         this.validation.setMessages({});
@@ -262,6 +273,7 @@ export default {
       validationErrors: "validationErrors",
       detailed_nozzles: "nozzle/detailed_nozzles",
       current_rates: "rate/current_rates",
+      final_readings: "sell/final_readings",
     }),
   },
 

@@ -20,6 +20,7 @@ class Sell extends Model
     protected $appends = [
         'total_initial_reading',
         'total_final_reading',
+        'sold_quantity',
         'initial_reading_amount',
         'final_reading_amount',
         'total_amount', // total sell

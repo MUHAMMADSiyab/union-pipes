@@ -14,6 +14,11 @@ trait SellAttributesTrait
         return $this->final_readings()->sum('value');
     }
 
+    public function getSoldQuantityAttribute()
+    {
+        return $this->total_final_reading - $this->total_initial_reading;
+    }
+
     public function getInitialReadingAmountAttribute()
     {
         return $this->getReadingAmount('initial_readings');
