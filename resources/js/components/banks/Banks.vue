@@ -120,7 +120,7 @@ export default {
       headers: [
         { text: "S#", value: "sno" },
         { text: "Bank Name", value: "name" },
-        { text: "Bank No.", value: "account_no" },
+        { text: "Account No.", value: "account_no" },
         { text: "Branch Name", value: "branch_name" },
         { text: "Branch Code", value: "branch_code" },
         { text: "Balance", value: "balance" },
