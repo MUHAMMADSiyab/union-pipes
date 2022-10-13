@@ -22,8 +22,8 @@ class Dispenser extends Model
         return $this->belongsTo(Tank::class);
     }
 
-    public function nozzles(): HasMany
+    public function meters(): HasMany
     {
-        return $this->hasMany(Nozzle::class);
+        return $this->hasMany(Meter::class);
     }
 }

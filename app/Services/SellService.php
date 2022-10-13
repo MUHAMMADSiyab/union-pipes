@@ -8,11 +8,13 @@ class SellService
 {
     public function saveReadings($sell, $reading, $final)
     {
-        SellReading::create([
-            'sell_id' => $sell->id,
-            'nozzle_id' => $reading['nozzle_id'],
-            'value' => !$final ? $reading['value'] : 0,
-            'final_reading' => $final,
-        ]);
+        foreach ($reading['meters'] as $meter) {
+            SellReading::create([
+                'sell_id' => $sell->id,
+                'meter_id' => $meter['id'],
+                'value' => !$final ? $meter['value'] : 0,
+                'final_reading' => $final,
+            ]);
+        }
     }
 }

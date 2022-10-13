@@ -19,7 +19,7 @@ class DispenserController extends Controller
         Gate::authorize('dispenser_access');
 
         $companies = Dispenser::query()
-            ->with('tank')
+            ->with(['tank', 'tank.product', 'meters'])
             ->orderBy('name')
             ->get();
         return response()->json($companies);

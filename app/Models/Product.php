@@ -18,4 +18,9 @@ class Product extends Model
     {
         return $this->hasMany(Tank::class);
     }
+
+    public function rates(): HasMany
+    {
+        return $this->hasMany(Rate::class);
+    }
 }

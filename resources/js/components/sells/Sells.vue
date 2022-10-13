@@ -29,14 +29,14 @@
             }}</template>
 
             <!-- Amounts -->
-            <template slot="item.initial_reading_amount" slot-scope="props">
-              <span> {{ money(props.item.initial_reading_amount) }} </span>
+            <template slot="item.petrol_sold_amount" slot-scope="props">
+              <span> {{ money(props.item.petrol_sold_amount) }} </span>
             </template>
-            <template slot="item.final_reading_amount" slot-scope="props">
-              <span> {{ money(props.item.final_reading_amount) }} </span>
+            <template slot="item.diesel_sold_amount" slot-scope="props">
+              <span> {{ money(props.item.diesel_sold_amount) }} </span>
             </template>
-            <template slot="item.total_amount" slot-scope="props">
-              <span> {{ money(props.item.total_amount) }} </span>
+            <template slot="item.total_sell_amount" slot-scope="props">
+              <span> {{ money(props.item.total_sell_amount) }} </span>
             </template>
 
             <!-- Actions -->
@@ -181,14 +181,16 @@ export default {
         { text: "Petrol Price", value: "petrol_price" },
         { text: "Diesel Price", value: "diesel_price" },
         {
-          text: "Total Initial Reading (Ltrs.)",
-          value: "total_initial_reading",
+          text: "Petrol Sold Qty. (Ltrs.)",
+          value: "petrol_sold_quantity",
         },
-        { text: "Total Final Reading (Ltrs.)", value: "total_final_reading" },
-        { text: "Qty. Sold (Ltrs.)", value: "sold_quantity" },
-        { text: "Initial Reading Amount", value: "initial_reading_amount" },
-        { text: "Final Reading Amount", value: "final_reading_amount" },
-        { text: "Total Sell Amount", value: "total_amount" },
+        {
+          text: "Diesel Sold Qty. (Ltrs.)",
+          value: "diesel_sold_quantity",
+        },
+        { text: "Petrol Sell Amount", value: "petrol_sold_amount" },
+        { text: "Diesel Sell Amount", value: "diesel_sold_amount" },
+        { text: "Total Sell Amount", value: "total_sell_amount" },
         { text: "Actions", value: "actions", align: " d-print-none" },
       ],
       selectedItems: [],

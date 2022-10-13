@@ -52,61 +52,60 @@
                           <tr>
                             <th>S#</th>
                             <th>Product</th>
-                            <th>Tank</th>
+                            <th>Tank (Current Fuel Qty.)</th>
                             <th>Dispenser</th>
-                            <th>Nozzle</th>
-                            <th>Value (Ltrs.)</th>
+                            <th>Meter's Reading Value</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr
-                            v-for="(reading, i) in data.initial_readings"
-                            :key="i"
+                            v-for="(reading, index) in data.initial_readings"
+                            :key="index"
                           >
-                            <td>{{ i + 1 }}</td>
-                            <td>{{ reading.product }}</td>
-                            <td>{{ reading.tank }}</td>
-                            <td>{{ reading.dispenser }}</td>
-                            <td width="250">
-                              <small
-                                class="red--text"
-                                v-if="validation.hasErrors()"
-                                v-text="
-                                  validation.getMessage(
-                                    `initial_readings.${i}.nozzle_id`
-                                  )
-                                "
-                              ></small>
-                              <v-select
-                                class="mt-2"
-                                :items="detailed_nozzles"
-                                item-text="name"
-                                item-value="id"
-                                v-model="reading.nozzle_id"
-                                placeholder="Select Nozzle"
-                                autocomplete
-                                readonly
-                                filled
-                              ></v-select>
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ reading.product.name }}</td>
+                            <td>
+                              {{ reading.tank.name }}
+                              <v-chip color="indigo" class="white--text" pill>
+                                {{ reading.tank.current_fuel_quantity }}
+                              </v-chip>
                             </td>
-                            <td width="160">
-                              <small
-                                class="red--text"
-                                v-if="validation.hasErrors()"
-                                v-text="
-                                  validation.getMessage(
-                                    `initial_readings.${i}.value`
-                                  )
+                            <td>{{ reading.dispenser.name }}</td>
+                            <td>
+                              <ul
+                                style="
+                                  list-style: none;
+                                  padding-inline-start: 0;
                                 "
-                              ></small>
-                              <v-text-field
-                                v-model="reading.value"
-                                class="mt-1"
-                                type="number"
-                                label="Value"
-                                dense
-                                filled
-                              ></v-text-field>
+                              >
+                                <li
+                                  v-for="(meter, i) in reading.meters"
+                                  :key="i"
+                                  class="d-flex"
+                                >
+                                  <v-text-field
+                                    class="d-block"
+                                    v-model="meter.value"
+                                    :class="{ 'mt-1': i === 0 }"
+                                    type="number"
+                                    :suffix="meter.name"
+                                    prepend-inner-icon="mdi-speedometer"
+                                    required
+                                    dense
+                                    filled
+                                  ></v-text-field>
+
+                                  <small
+                                    class="red--text d-block ml-1"
+                                    v-if="validation.hasErrors()"
+                                    v-text="
+                                      validation.getMessage(
+                                        `initial_readings.${index}.meters.${i}.value`
+                                      )
+                                    "
+                                  ></small>
+                                </li>
+                              </ul>
                             </td>
                           </tr>
                         </tbody>
@@ -119,10 +118,8 @@
                         <tr>
                           <th>Petrol Reading</th>
                           <th>Diesel Reading</th>
-                          <th>Total Reading</th>
                           <th>Petrol Price</th>
                           <th>Diesel Price</th>
-                          <th>Total Price</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -134,24 +131,10 @@
                             {{ totals.totalDieselReading }}
                           </td>
                           <td>
-                            {{
-                              totals.totalPetrolReading +
-                              totals.totalDieselReading
-                            }}
-                          </td>
-                          <td>
                             {{ money(totals.totalPetrolPrice) }}
                           </td>
                           <td>
                             {{ money(totals.totalDieselPrice) }}
-                          </td>
-                          <td>
-                            {{
-                              money(
-                                totals.totalPetrolPrice +
-                                  totals.totalDieselPrice
-                              )
-                            }}
                           </td>
                         </tr>
                       </tbody>
@@ -203,7 +186,7 @@ export default {
 
   methods: {
     ...mapActions({
-      getDetailedNozzles: "nozzle/getDetailedNozzles",
+      getDetailedMeters: "meter/getDetailedMeters",
       getCurrentRates: "rate/getCurrentRates",
       getSell: "sell/getSell",
       updateSell: "sell/updateSell",
@@ -235,10 +218,14 @@ export default {
         let totalDieselReading = 0;
 
         readings.map((reading) => {
-          if (reading.product === "Petrol") {
-            totalPetrolReading += parseFloat(reading.value);
-          } else if (reading.product === "Diesel") {
-            totalDieselReading += parseFloat(reading.value);
+          if (reading.product.name === "Petrol") {
+            reading.meters.map((meter) => {
+              totalPetrolReading += meter.value ? parseFloat(meter.value) : 0;
+            });
+          } else if (reading.product.name === "Diesel") {
+            reading.meters.map((meter) => {
+              totalDieselReading += meter.value ? parseFloat(meter.value) : 0;
+            });
           }
         });
 
@@ -261,7 +248,7 @@ export default {
   computed: {
     ...mapGetters({
       validationErrors: "validationErrors",
-      detailed_nozzles: "nozzle/detailed_nozzles",
+      detailed_meters: "meter/detailed_meters",
       sell: "sell/sell",
       current_rates: "rate/current_rates",
     }),
@@ -269,22 +256,30 @@ export default {
 
   async mounted() {
     await Promise.all([
-      this.getDetailedNozzles(),
+      this.getDetailedMeters(),
       this.getSell(this.$route.params.id),
       this.getCurrentRates(),
     ]);
 
-    this.data.id = this.sell.id;
-    this.data.sell_date = this.sell.sell_date;
+    if (!this.sell) {
+      return this.$router.push({ name: "not_found" });
+    }
 
-    if (this.detailed_nozzles.length) {
-      this.data.initial_readings = this.detailed_nozzles.map(
-        (nozzle, index) => ({
-          product: nozzle.dispenser.tank.product.name,
-          tank: nozzle.dispenser.tank.name,
-          dispenser: nozzle.dispenser.name,
-          nozzle_id: this.sell.initial_readings[index].nozzle_id,
-          value: this.sell.initial_readings[index].value,
+    this.data.id = this.sell.sell.id;
+    this.data.sell_date = this.sell.sell.sell_date;
+
+    if (this.sell.initial_readings.length) {
+      this.data.initial_readings = this.sell.initial_readings.map(
+        (meter_readings) => ({
+          product: meter_readings[0].meter.dispenser.tank.product,
+          tank: meter_readings[0].meter.dispenser.tank,
+          dispenser: meter_readings[0].meter.dispenser,
+          meters: meter_readings.map((meter_reading) => ({
+            id: meter_reading.meter.id,
+            name: meter_reading.meter.name,
+            value: meter_reading.value,
+            existing_value: meter_reading.value,
+          })),
         })
       );
     }

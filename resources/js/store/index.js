@@ -13,7 +13,7 @@ import setting from "./modules/setting";
 import product from "./modules/product";
 import tank from "./modules/tank";
 import dispenser from "./modules/dispenser";
-import nozzle from "./modules/nozzle";
+import meter from "./modules/meter";
 import vehicle from "./modules/vehicle";
 import rate from "./modules/rate";
 import bank from "./modules/bank";
@@ -74,8 +74,8 @@ const store = new Vuex.Store({
             namespaced: true,
         },
 
-        nozzle: {
-            ...nozzle,
+        meter: {
+            ...meter,
             namespaced: true,
         },
 

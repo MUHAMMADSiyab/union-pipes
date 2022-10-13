@@ -54,11 +54,11 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'dispenser_show'],
             ['name' => 'dispenser_delete'],
 
-            ['name' => 'nozzle_access'],
-            ['name' => 'nozzle_create'],
-            ['name' => 'nozzle_edit'],
-            ['name' => 'nozzle_show'],
-            ['name' => 'nozzle_delete'],
+            ['name' => 'meter_access'],
+            ['name' => 'meter_create'],
+            ['name' => 'meter_edit'],
+            ['name' => 'meter_show'],
+            ['name' => 'meter_delete'],
 
             ['name' => 'rate_access'],
             ['name' => 'rate_edit'],

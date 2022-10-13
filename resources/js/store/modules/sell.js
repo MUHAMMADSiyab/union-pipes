@@ -86,20 +86,16 @@ const actions = {
     // Get sell final readings
     async getSellFinalReadings({ commit }, data) {
         try {
-            // if (typeof data !== "object") {
-            //     const res = await axios.get(
-            //         `/api/sells/${data}/get_sell_final_readings`
-            //     );
-            // } else {
-            //     const res = await axios.post(
-            //         `/api/sells/get_previous_sell_readings`,
-            //         data
-            //     );
-            // }
-
-            const res = await axios.get(
-                `/api/sells/${data}/get_sell_final_readings`
-            );
+            if (typeof data != "object") {
+                var res = await axios.get(
+                    `/api/sells/${data}/get_sell_final_readings`
+                );
+            } else {
+                var res = await axios.post(
+                    `/api/sells/get_previous_sell_readings`,
+                    data
+                );
+            }
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_SELL_FINAL_READINGS, res.data);
@@ -142,8 +138,6 @@ const actions = {
         try {
             const res = await axios.put(`/api/sells/${data.id}`, data);
 
-            commit(UPDATE_SELL, res.data.updated_sell);
-            commit(OLD_SELL, res.data.old_sell);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
             return dispatch(
@@ -155,6 +149,7 @@ const actions = {
                 { root: true }
             );
         } catch (error) {
+            console.log(error);
             if (error.response.status === 422) {
                 commit(SET_VALIDATION_ERRORS, error.response.data, {
                     root: true,

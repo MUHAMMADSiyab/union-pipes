@@ -215,23 +215,23 @@ export default {
         },
 
         {
-          text: "Nozzles",
+          text: "Meters",
           icon: "mdi-gas-station",
-          active: this.activeMenu("nozzles"),
-          gate: "nozzle_access",
+          active: this.activeMenu("meters"),
+          gate: "meter_access",
           submenu: [
             {
-              text: "Add Nozzle",
-              to: "/nozzles/add",
+              text: "Add Meter",
+              to: "/meters/add",
               icon: "mdi-chevron-double-right",
-              gate: "nozzle_create",
+              gate: "meter_create",
               exact: true,
             },
             {
-              text: "Manage Nozzles",
-              to: "/nozzles",
+              text: "Manage Meters",
+              to: "/meters",
               icon: "mdi-chevron-double-right",
-              gate: "nozzle_access",
+              gate: "meter_access",
               exact: true,
             },
           ],
@@ -278,6 +278,29 @@ export default {
               to: "/purchases",
               icon: "mdi-chevron-double-right",
               gate: "purchase_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
+          text: "Sells",
+          icon: "mdi-archive-arrow-up-outline",
+          active: this.activeMenu("sells"),
+          gate: "sell_access",
+          submenu: [
+            {
+              text: "Add Sell",
+              to: "/sells/add",
+              icon: "mdi-chevron-double-right",
+              gate: "sell_create",
+              exact: true,
+            },
+            {
+              text: "Manage Sells",
+              to: "/sells",
+              icon: "mdi-chevron-double-right",
+              gate: "sell_access",
               exact: true,
             },
           ],

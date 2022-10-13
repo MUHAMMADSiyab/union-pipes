@@ -28,9 +28,9 @@ import AddDispenser from "./components/dispensers/AddDispenser";
 import EditDispenser from "./components/dispensers/EditDispenser";
 import Dispensers from "./components/dispensers/Dispensers";
 
-import AddNozzle from "./components/nozzles/AddNozzle";
-import EditNozzle from "./components/nozzles/EditNozzle";
-import Nozzles from "./components/nozzles/Nozzles";
+import AddMeter from "./components/meters/AddMeter";
+import EditMeter from "./components/meters/EditMeter";
+import Meters from "./components/meters/Meters";
 
 import Rates from "./components/rates/Rates";
 
@@ -196,35 +196,35 @@ const router = new VueRouter({
         },
 
         {
-            path: "/nozzles/add",
-            name: "add_nozzle",
-            component: AddNozzle,
+            path: "/meters/add",
+            name: "add_meter",
+            component: AddMeter,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Add Nozzle - ${process.env.MIX_APP_NAME}`,
-                gate: "nozzle_create",
+                title: `Add Meter - ${process.env.MIX_APP_NAME}`,
+                gate: "meter_create",
             },
         },
 
         {
-            path: "/nozzles/edit/:id",
-            name: "nozzle_edit",
-            component: EditNozzle,
+            path: "/meters/edit/:id",
+            name: "meter_edit",
+            component: EditMeter,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Nozzle - ${process.env.MIX_APP_NAME}`,
-                gate: "nozzle_edit",
+                title: `Edit Meter - ${process.env.MIX_APP_NAME}`,
+                gate: "meter_edit",
             },
         },
 
         {
-            path: "/nozzles",
-            name: "nozzles",
-            component: Nozzles,
+            path: "/meters",
+            name: "meters",
+            component: Meters,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Nozzles - ${process.env.MIX_APP_NAME}`,
-                gate: "nozzle_access",
+                title: `Meters - ${process.env.MIX_APP_NAME}`,
+                gate: "meter_access",
             },
         },
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DispenserController;
 use App\Http\Controllers\ExportController;
-use App\Http\Controllers\NozzleController;
+use App\Http\Controllers\MeterController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentSettingController;
 use App\Http\Controllers\PermissionController;
@@ -72,10 +72,10 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'except' => ['create', 'edit']
     ]);
 
-    // Nozzle
-    Route::get('nozzles/detailed_nozzles', [NozzleController::class, 'detailed_nozzles']);
-    Route::delete('nozzles/delete_multiple', [NozzleController::class, 'destroy_multiple']);
-    Route::resource('nozzles', NozzleController::class, [
+    // Meter
+    Route::get('meters/detailed_meters', [MeterController::class, 'detailed_meters']);
+    Route::delete('meters/delete_multiple', [MeterController::class, 'destroy_multiple']);
+    Route::resource('meters', MeterController::class, [
         'except' => ['create', 'edit']
     ]);
 

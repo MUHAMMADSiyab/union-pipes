@@ -18,25 +18,32 @@
           :key="i"
         >
           <v-card class="mx-auto" max-width="344">
-            <v-img
+            <!-- <v-img
               src="/storage/common/tank-bg.png"
               height="200px"
               contain
-            ></v-img>
+            ></v-img> -->
+            <v-card-title>
+              <span>
+                <v-icon :size="80" color="gray">mdi-diving-scuba-tank</v-icon>
+              </span>
+
+              <v-chip class="ml-auto white--text" color="purple" small>
+                {{ tank.product.name }}</v-chip
+              >
+            </v-card-title>
 
             <v-card-title>
               {{ tank.name }} <span v-if="tank.code">({{ tank.code }})</span>
 
-              <v-chip
-                color="primary"
-                class="ml-auto"
-                title="Tank's Current Fuel Quantity"
-                >{{ tank.current_fuel_quantity }} Ltrs.</v-chip
+              <v-chip class="ml-auto" pill title="Tank's Current Fuel Quantity"
+                ><strong>{{ tank.current_fuel_quantity }}</strong> &nbsp;
+                Ltrs.</v-chip
               >
             </v-card-title>
 
             <v-card-subtitle class="mt-2">
-              <span title="Limit">
+              <span title="Limit / Capacity">
                 <v-icon color="success">mdi-arrow-collapse-up</v-icon>
                 {{ tank.limit }} <sub>Ltrs.</sub>
               </span>

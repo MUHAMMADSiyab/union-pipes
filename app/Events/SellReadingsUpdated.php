@@ -16,15 +16,17 @@ class SellReadingsUpdated
 
     public $readings;
     public $sell;
+    public $type;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($readings, $sell)
+    public function __construct($readings, $sell, $type)
     {
         $this->readings = $readings;
         $this->sell = $sell;
+        $this->type = $type;
     }
 }

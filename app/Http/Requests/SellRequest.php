@@ -26,8 +26,7 @@ class SellRequest extends FormRequest
         return [
             'sell_date' => 'date|required',
             'initial_readings' => 'required|array',
-            'initial_readings.*.nozzle_id' => 'required|exists:nozzles,id',
-            'initial_readings.*.value' => 'required|numeric',
+            'initial_readings.*.meters.*.value' => 'required|numeric',
         ];
     }
 
@@ -36,8 +35,7 @@ class SellRequest extends FormRequest
         return [
             'sell_date' => 'Sell Date',
             'initial_readings' => 'Initial Readings',
-            'initial_readings.*.nozzle_id' => 'Nozzle',
-            'initial_readings.*.value' => 'Value',
+            'initial_readings.*.meters.*.value' => 'Value',
         ];
     }
 }

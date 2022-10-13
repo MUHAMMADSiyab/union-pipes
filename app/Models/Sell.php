@@ -17,13 +17,18 @@ class Sell extends Model
         'diesel_price'
     ];
 
+    protected $with = ['initial_readings', 'final_readings'];
+
     protected $appends = [
-        'total_initial_reading',
-        'total_final_reading',
-        'sold_quantity',
-        'initial_reading_amount',
-        'final_reading_amount',
-        'total_amount', // total sell
+        'petrol_initial_reading',
+        'diesel_initial_reading',
+        'petrol_final_reading',
+        'diesel_final_reading',
+        'petrol_sold_quantity',
+        'diesel_sold_quantity',
+        'petrol_sold_amount',
+        'diesel_sold_amount',
+        'total_sell_amount',
     ];
 
     public function initial_readings(): HasMany

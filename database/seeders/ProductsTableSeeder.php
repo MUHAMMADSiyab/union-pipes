@@ -16,6 +16,5 @@ class ProductsTableSeeder extends Seeder
     {
         Product::query()->create(['name' => 'Petrol']);
         Product::query()->create(['name' => 'Diesel']);
-        Product::query()->create(['name' => 'Super+']);
     }
 }

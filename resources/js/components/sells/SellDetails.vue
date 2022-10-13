@@ -12,16 +12,24 @@
           <v-row>
             <!-- Sell Details -->
             <v-col cols="12">
-              <SellInfo :sell="sell" />
+              <SellInfo :sell="sell.sell" />
             </v-col>
 
             <!-- Readings -->
-            <v-col xl="6" lg="6" md="6" sm="12" cols="12">
-              <SellReadings type="Initial" :readings="sell.initial_readings" />
+            <v-col cols="12">
+              <SellReadings
+                type="Initial"
+                :readings="initial_readings"
+                v-if="initial_readings.length"
+              />
             </v-col>
 
-            <v-col xl="6" lg="6" md="6" sm="12" cols="12">
-              <SellReadings type="Final" :readings="sell.final_readings" />
+            <v-col cols="12">
+              <SellReadings
+                type="Final"
+                :readings="final_readings"
+                v-if="final_readings.length"
+              />
             </v-col>
           </v-row>
         </v-col>
@@ -40,6 +48,13 @@ import SellReadings from "./partial/SellReadings.vue";
 export default {
   mixins: [CurrencyMixin],
 
+  data() {
+    return {
+      initial_readings: [],
+      final_readings: [],
+    };
+  },
+
   components: {
     Navbar,
     SellInfo,
@@ -50,6 +65,20 @@ export default {
     ...mapActions({
       getSell: "sell/getSell",
     }),
+
+    getNormalizedReadings(readings) {
+      return readings.map((meter_readings) => ({
+        product: meter_readings[0].meter.dispenser.tank.product,
+        tank: meter_readings[0].meter.dispenser.tank,
+        dispenser: meter_readings[0].meter.dispenser,
+        meters: meter_readings.map((meter_reading) => ({
+          id: meter_reading.meter.id,
+          name: meter_reading.meter.name,
+          value: meter_reading.value,
+          existing_value: meter_reading.value,
+        })),
+      }));
+    },
   },
 
   computed: {
@@ -60,7 +89,12 @@ export default {
   },
 
   async mounted() {
-    this.getSell(parseInt(this.$route.params.id));
+    await this.getSell(parseInt(this.$route.params.id));
+
+    this.initial_readings = this.getNormalizedReadings(
+      this.sell.initial_readings
+    );
+    this.final_readings = this.getNormalizedReadings(this.sell.final_readings);
   },
 };
 </script>

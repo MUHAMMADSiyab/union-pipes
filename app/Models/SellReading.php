@@ -12,7 +12,7 @@ class SellReading extends Model
 
     protected $fillable = [
         'sell_id',
-        'nozzle_id',
+        'meter_id',
         'value',
         'final_reading',
     ];
@@ -22,8 +22,8 @@ class SellReading extends Model
         return $this->belongsTo(Sell::class);
     }
 
-    public function nozzle(): BelongsTo
+    public function meter(): BelongsTo
     {
-        return $this->belongsTo(Nozzle::class);
+        return $this->belongsTo(Meter::class);
     }
 }

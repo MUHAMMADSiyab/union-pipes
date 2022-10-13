@@ -11,21 +11,40 @@
             <tr>
               <th>S#</th>
               <th>Product</th>
-              <th>Tank</th>
+              <th>Tank (Current Fuel Qty.)</th>
               <th>Dispenser</th>
-              <th>Nozzle</th>
-              <th>Value (Ltrs.)</th>
+              <th>Meter</th>
+              <th>Reading Value</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(reading, i) in readings" :key="i">
-              <td>{{ i + 1 }}</td>
-              <td>{{ reading.nozzle.dispenser.tank.product.name }}</td>
-              <td>{{ reading.nozzle.dispenser.tank.name }}</td>
-              <td>{{ reading.nozzle.dispenser.name }}</td>
-              <td>{{ reading.nozzle.name }}</td>
-              <td>{{ reading.value }}</td>
-            </tr>
+            <template v-for="(reading, i) in readings">
+              <template v-for="(meter, index) in reading.meters">
+                <tr :key="meter.id">
+                  <td rowspan="2" v-if="index === 0">{{ i + 1 }}</td>
+                  <td rowspan="2" v-if="index === 0">
+                    {{ reading.product.name }}
+                  </td>
+                  <td rowspan="2" v-if="index === 0">
+                    {{ reading.tank.name }}
+                    <v-chip
+                      color="indigo"
+                      small
+                      outlined
+                      class="white--text"
+                      pill
+                    >
+                      <strong>{{ reading.tank.current_fuel_quantity }}</strong>
+                    </v-chip>
+                  </td>
+                  <td rowspan="2" v-if="index === 0">
+                    {{ reading.dispenser.name }}
+                  </td>
+                  <td>{{ meter.name }}</td>
+                  <td>{{ meter.value }}</td>
+                </tr>
+              </template>
+            </template>
           </tbody>
         </template>
       </v-simple-table>

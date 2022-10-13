@@ -20,31 +20,50 @@
               <td>Diesel Price</td>
               <td>{{ sell.diesel_price }}</td>
             </tr>
+
             <tr>
-              <td>Total Initial Reading (Ltrs.)</td>
-              <td>{{ sell.total_initial_reading }}</td>
+              <td>Petrol Initial Reading</td>
+              <td>{{ sell.petrol_initial_reading }}</td>
             </tr>
+
             <tr>
-              <td>Total Final Reading (Ltrs.)</td>
-              <td>{{ sell.total_final_reading }}</td>
+              <td>Petrol Final Reading</td>
+              <td>{{ sell.petrol_final_reading }}</td>
             </tr>
+
             <tr>
-              <td>Quantity Sold (Ltrs.)</td>
-              <td>
-                {{ sell.total_final_reading - sell.total_initial_reading }}
-              </td>
+              <td>Diesel Initial Reading</td>
+              <td>{{ sell.diesel_initial_reading }}</td>
             </tr>
+
             <tr>
-              <td>Initial Reading Amount</td>
-              <td>{{ money(sell.initial_reading_amount) }}</td>
+              <td>Diesel Final Reading</td>
+              <td>{{ sell.diesel_final_reading }}</td>
             </tr>
+
             <tr>
-              <td>Final Reading Amount</td>
-              <td>{{ money(sell.final_reading_amount) }}</td>
+              <td>Petrol Sold Quantity</td>
+              <td>{{ sell.petrol_sold_quantity }}</td>
             </tr>
+
+            <tr>
+              <td>Diesel Sold Quantity</td>
+              <td>{{ sell.diesel_sold_quantity }}</td>
+            </tr>
+
+            <tr>
+              <td>Petrol Sold Amount</td>
+              <td>{{ sell.petrol_sold_amount }}</td>
+            </tr>
+
+            <tr>
+              <td>Diesel Sold Amount</td>
+              <td>{{ sell.diesel_sold_amount }}</td>
+            </tr>
+
             <tr>
               <td>Total Sell Amount</td>
-              <td>{{ money(sell.total_amount) }}</td>
+              <td>{{ money(sell.total_sell_amount) }}</td>
             </tr>
           </tbody>
         </template>

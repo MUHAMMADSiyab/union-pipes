@@ -24,16 +24,14 @@ class FinalReadingRequest extends FormRequest
     public function rules()
     {
         return [
-            'final_readings.*.nozzle_id' => 'required|exists:nozzles,id',
-            'final_readings.*.value' => 'required|numeric',
+            'final_readings.*.meters.*.value' => 'required|numeric',
         ];
     }
 
     public function attributes()
     {
         return [
-            'final_readings.*.nozzle_id' => 'Nozzle',
-            'final_readings.*.value' => 'Value',
+            'final_readings.*.meters.*.value' => 'Value',
         ];
     }
 }
