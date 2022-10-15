@@ -376,6 +376,29 @@ export default {
         },
 
         {
+          text: "Customers",
+          icon: "mdi-account-group-outline",
+          active: this.activeMenu("customers"),
+          gate: "customer_access",
+          submenu: [
+            {
+              text: "Add Company",
+              to: "/customers/add",
+              icon: "mdi-chevron-double-right",
+              gate: "customer_create",
+              exact: true,
+            },
+            {
+              text: "Manage Customers",
+              to: "/customers",
+              icon: "mdi-chevron-double-right",
+              gate: "customer_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
           text: "Banks",
           icon: "mdi-bank",
           to: "/banks",

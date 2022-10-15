@@ -105,6 +105,18 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'sell_show'],
             ['name' => 'sell_delete'],
 
+            ['name' => 'customer_access'],
+            ['name' => 'customer_create'],
+            ['name' => 'customer_edit'],
+            ['name' => 'customer_show'],
+            ['name' => 'customer_delete'],
+
+            ['name' => 'account_access'],
+            ['name' => 'account_create'],
+            ['name' => 'account_edit'],
+            ['name' => 'account_show'],
+            ['name' => 'account_delete'],
+
             ['name' => 'payment_setting_edit'],
 
             ['name' => 'app_setting_edit'],

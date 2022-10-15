@@ -127,6 +127,22 @@ export const DELETE_SELL = "DELETE_SELL";
 export const DELETE_SELLS = "DELETE_SELLS";
 export const OLD_SELL = "OLD_SELL";
 
+export const GET_CUSTOMERS = "GET_CUSTOMERS";
+export const NEW_CUSTOMER = "NEW_CUSTOMER";
+export const OLD_CUSTOMER = "OLD_CUSTOMER";
+export const GET_CUSTOMER = "GET_CUSTOMER";
+export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
+export const DELETE_CUSTOMER = "DELETE_CUSTOMER";
+export const DELETE_CUSTOMERS = "DELETE_CUSTOMERS";
+
+export const GET_ACCOUNTS = "GET_ACCOUNTS";
+export const NEW_ACCOUNT = "NEW_ACCOUNT";
+export const OLD_ACCOUNT = "OLD_ACCOUNT";
+export const GET_ACCOUNT = "GET_ACCOUNT";
+export const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
+export const DELETE_ACCOUNT = "DELETE_ACCOUNT";
+export const DELETE_ACCOUNTS = "DELETE_ACCOUNTS";
+
 export const GET_CURRENT_RATES = "GET_CURRENT_RATES";
 export const UPDATE_RATES = "UPDATE_RATES";
 export const GET_RATES = "GET_RATES";

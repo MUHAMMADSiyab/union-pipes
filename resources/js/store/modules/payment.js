@@ -62,6 +62,7 @@ const actions = {
             cheque_due_date,
             cheque_images,
             description,
+            type, // add or edit
         }
     ) {
         try {
@@ -127,6 +128,17 @@ const actions = {
                 const id = store.getters["purchase/recent_purchase"].id;
 
                 await axios.delete(`/api/purchases/${id}`);
+            }
+
+            // If the payment belongs to an account entry
+            if (model === "App\\Models\\Account") {
+                if (type === "account_edit") {
+                    const account = store.getters["account/old_account"];
+                    axios.put(`/api/accounts/${paymentable_id}`, account);
+                } else {
+                    const id = store.getters["account/recent_account"].id;
+                    await axios.delete(`/api/accounts/${id}`);
+                }
             }
         }
     },
@@ -211,6 +223,12 @@ const actions = {
             if (model === "App\\Models\\Purchase") {
                 const purchase = store.getters["purchase/old_purchase"];
                 axios.put(`/api/purchases/${paymentable_id}`, purchase);
+            }
+
+            // If the payment belongs to a an account entry
+            if (model === "App\\Models\\Account") {
+                const account = store.getters["account/old_account"];
+                axios.put(`/api/accounts/${paymentable_id}`, account);
             }
         }
     },

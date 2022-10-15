@@ -28,21 +28,12 @@ const getters = {
 
 const actions = {
     // Add purchase
-    async addPurchase({ dispatch, commit }, data) {
+    async addPurchase({ commit }, data) {
         try {
             const res = await axios.post("/api/purchases", data);
 
             commit(NEW_PURCHASE, res.data);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
-
-            return dispatch(
-                "alert/setAlert",
-                {
-                    type: "success",
-                    message: "Purchase added successfully",
-                },
-                { root: true }
-            );
         } catch (error) {
             if (error.response.status === 422) {
                 commit(SET_VALIDATION_ERRORS, error.response.data, {

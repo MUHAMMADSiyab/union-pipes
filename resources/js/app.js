@@ -13,14 +13,13 @@ import vuetify from "./plugins/vuetify";
 import store from "./store";
 import router from "./router";
 import DatetimePicker from "vuetify-datetime-picker";
+Vue.use(DatetimePicker);
 
 // vue-apex-charts
 import VueApexCharts from "vue-apexcharts";
 Vue.use(VueApexCharts);
 
 Vue.component("apexchart", VueApexCharts);
-
-Vue.use(DatetimePicker);
 
 Vue.config.productionTip = false;
 

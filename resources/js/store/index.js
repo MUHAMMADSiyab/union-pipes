@@ -22,6 +22,8 @@ import utility from "./modules/utility";
 import company from "./modules/company";
 import purchase from "./modules/purchase";
 import sell from "./modules/sell";
+import customer from "./modules/customer";
+import account from "./modules/account";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
 
@@ -116,6 +118,16 @@ const store = new Vuex.Store({
 
         sell: {
             ...sell,
+            namespaced: true,
+        },
+
+        customer: {
+            ...customer,
+            namespaced: true,
+        },
+
+        account: {
+            ...account,
             namespaced: true,
         },
 

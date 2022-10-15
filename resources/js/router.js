@@ -49,6 +49,7 @@ import EditUtility from "./components/utilities/EditUtility";
 import Utilities from "./components/utilities/Utilities";
 
 import AddCompany from "./components/companies/AddCompany";
+import EditCompany from "./components/companies/EditCompany";
 import Companies from "./components/companies/Companies";
 
 import AddPurchase from "./components/purchases/AddPurchase";
@@ -60,6 +61,14 @@ import AddSell from "./components/sells/AddSell";
 import EditSell from "./components/sells/EditSell";
 import Sells from "./components/sells/Sells";
 import SellDetails from "./components/sells/SellDetails";
+
+import AddCustomer from "./components/customers/AddCustomer";
+import EditCustomer from "./components/customers/EditCustomer";
+import Customers from "./components/customers/Customers";
+
+import AddAccount from "./components/accounts/AddAccount";
+import EditAccount from "./components/accounts/EditAccount";
+import Accounts from "./components/accounts/Accounts";
 
 import EditSetting from "./components/settings/Edit";
 
@@ -372,6 +381,17 @@ const router = new VueRouter({
         },
 
         {
+            path: "/companies/edit/:id",
+            name: "company_edit",
+            component: EditCompany,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Company - ${process.env.MIX_APP_NAME}`,
+                gate: "company_edit",
+            },
+        },
+
+        {
             path: "/purchases/add",
             name: "purchase_add",
             component: AddPurchase,
@@ -456,6 +476,72 @@ const router = new VueRouter({
             meta: {
                 title: `Sell Details - ${process.env.MIX_APP_NAME}`,
                 gate: "sell_show",
+            },
+        },
+
+        {
+            path: "/customers/add",
+            name: "customer_add",
+            component: AddCustomer,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Customer - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_create",
+            },
+        },
+
+        {
+            path: "/customers",
+            name: "customers",
+            component: Customers,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Customers - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_access",
+            },
+        },
+
+        {
+            path: "/customers/edit/:id",
+            name: "customer_edit",
+            component: EditCustomer,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Customer - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_edit",
+            },
+        },
+
+        {
+            path: "/accounts/add",
+            name: "account_add",
+            component: AddAccount,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Account - ${process.env.MIX_APP_NAME}`,
+                gate: "account_create",
+            },
+        },
+
+        {
+            path: "/accounts/edit/:id",
+            name: "account_edit",
+            component: EditAccount,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Account - ${process.env.MIX_APP_NAME}`,
+                gate: "account_edit",
+            },
+        },
+
+        {
+            path: "/accounts/customer/:id",
+            name: "account_access",
+            component: Accounts,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Account Entries - ${process.env.MIX_APP_NAME}`,
+                gate: "account_access",
             },
         },
 

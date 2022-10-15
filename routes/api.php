@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AbilityController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DispenserController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\MeterController;
@@ -128,6 +130,19 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::delete('sells/delete_multiple', [SellController::class, 'destroy_multiple']);
     Route::resource('sells', SellController::class, [
         'except' => ['create', 'edit']
+    ]);
+
+    // Customer
+    Route::delete('customers/delete_multiple', [CustomerController::class, 'destroy_multiple']);
+    Route::resource('customers', CustomerController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Account
+    Route::get('accounts/get_customer_accounts/{customer}', [AccountController::class, 'get_customer_accounts']);
+    Route::delete('accounts/delete_multiple', [AccountController::class, 'destroy_multiple']);
+    Route::resource('accounts', AccountController::class, [
+        'except' => ['index', 'create', 'edit']
     ]);
 
     // Rate

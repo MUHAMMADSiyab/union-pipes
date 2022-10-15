@@ -28,7 +28,7 @@ const getters = {
 
 const actions = {
     // Add transaction
-    async addTransaction({ dispatch, commit }, data) {
+    async addTransaction({ commit }, data) {
         try {
             const res = await axios.post("/api/transactions", data);
 
