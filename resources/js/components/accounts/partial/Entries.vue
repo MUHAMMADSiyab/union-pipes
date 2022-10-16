@@ -260,9 +260,15 @@ export default {
     },
 
     handleVehicleChange(vehicle_no) {
-      this.account_entries = this.entries.filter(
+      const vehicleFiltered = this.entries.filter(
         (entry) => entry.vehicle_no === vehicle_no
       );
+
+      this.account_entries = vehicleFiltered.filter(this.onlyUnique);
+    },
+
+    onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
     },
   },
 

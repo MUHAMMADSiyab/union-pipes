@@ -17,8 +17,17 @@
           v-for="(customer, i) in customers"
           :key="i"
         >
-          <v-card class="mx-auto" max-width="344">
-            <v-img :src="customer.photo" height="220px"></v-img>
+          <v-card class="mx-auto" max-width="344" ripple>
+            <v-img
+              :src="customer.photo"
+              v-if="customer.photo"
+              height="220px"
+            ></v-img>
+            <v-img
+              src="/storage/common/user-placeholder.jpg"
+              height="220px"
+              v-else
+            ></v-img>
 
             <v-card-title>
               {{ customer.name }}
@@ -49,6 +58,17 @@
                 v-if="can('customer_delete')"
               >
                 <v-icon small>mdi-delete</v-icon>
+              </v-btn>
+
+              <v-btn
+                x-small
+                text
+                color="info darken-2"
+                :to="`/accounts/customer/${customer.id}`"
+                title="Accounts (کھاتے)"
+                v-if="can('account_access')"
+              >
+                <v-icon small>mdi-account-cash-outline</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
