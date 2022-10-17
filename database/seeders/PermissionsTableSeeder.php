@@ -117,6 +117,12 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'account_show'],
             ['name' => 'account_delete'],
 
+            ['name' => 'invoice_access'],
+            ['name' => 'invoice_create'],
+            ['name' => 'invoice_edit'],
+            ['name' => 'invoice_show'],
+            ['name' => 'invoice_delete'],
+
             ['name' => 'payment_setting_edit'],
 
             ['name' => 'app_setting_edit'],

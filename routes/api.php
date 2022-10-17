@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DispenserController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentSettingController;
@@ -143,6 +144,12 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::delete('accounts/delete_multiple', [AccountController::class, 'destroy_multiple']);
     Route::resource('accounts', AccountController::class, [
         'except' => ['index', 'create', 'edit']
+    ]);
+
+    // Invoice
+    Route::delete('invoices/delete_multiple', [InvoiceController::class, 'destroy_multiple']);
+    Route::resource('invoices', InvoiceController::class, [
+        'except' => ['create', 'edit']
     ]);
 
     // Rate

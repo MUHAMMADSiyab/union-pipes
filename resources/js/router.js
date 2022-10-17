@@ -70,6 +70,10 @@ import AddAccount from "./components/accounts/AddAccount";
 import EditAccount from "./components/accounts/EditAccount";
 import Accounts from "./components/accounts/Accounts";
 
+import AddInvoice from "./components/invoices/AddInvoice";
+import EditInvoice from "./components/invoices/EditInvoice";
+import Invoices from "./components/invoices/Invoices";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -542,6 +546,39 @@ const router = new VueRouter({
             meta: {
                 title: `Account Entries - ${process.env.MIX_APP_NAME}`,
                 gate: "account_access",
+            },
+        },
+
+        {
+            path: "/invoices/add",
+            name: "invoice_add",
+            component: AddInvoice,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Invoice - ${process.env.MIX_APP_NAME}`,
+                gate: "invoice_create",
+            },
+        },
+
+        {
+            path: "/invoices/edit/:id",
+            name: "invoice_edit",
+            component: EditInvoice,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Invoice - ${process.env.MIX_APP_NAME}`,
+                gate: "invoice_edit",
+            },
+        },
+
+        {
+            path: "/invoices",
+            name: "invoice_access",
+            component: Invoices,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Invoices - ${process.env.MIX_APP_NAME}`,
+                gate: "invoice_access",
             },
         },
 
