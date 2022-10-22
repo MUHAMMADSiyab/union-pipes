@@ -16,10 +16,9 @@ class DashboardController extends Controller
             ->with('product')
             ->get()
             ->map(function ($tank) {
-                return [
-                    ...$tank->toArray(),
+                return array_merge([
                     'color' => '#' . substr(md5(rand()), 0, 6),
-                ];
+                ], $tank->toArray());
             });
 
         return response()->json(compact(
