@@ -59,32 +59,6 @@ trait SellAttributesTrait
     }
 
 
-    // public function getReadingAmount($reading_type)
-    // {
-    //     $readings = $this->{$reading_type}()
-    //         ->with([
-    //             'meter',
-    //             'meter.dispenser',
-    //             'meter.dispenser.tank',
-    //             'meter.dispenser.tank.product'
-    //         ])
-    //         ->get();
-
-    //     $petrolAmount = $readings->sum(function ($reading) {
-    //         if ($reading->meter->dispenser->tank->product->name === "Petrol") {
-    //             return $this->petrol_price * $reading->value;
-    //         }
-    //     });
-
-    //     $dieselAmount = $readings->sum(function ($reading) {
-    //         if ($reading->meter->dispenser->tank->product->name === "Diesel") {
-    //             return $this->diesel_price * $reading->value;
-    //         }
-    //     });
-
-    //     return $petrolAmount + $dieselAmount;
-    // }
-
     public function getReading($type, $product)
     {
         $readings = $this->{$type}()->with([

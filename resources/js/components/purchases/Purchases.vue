@@ -28,9 +28,17 @@
               props.index + 1
             }}</template>
 
-            <!-- Amount -->
-            <template slot="item.amount" slot-scope="props">
-              <span> {{ money(props.item.amount) }} </span>
+            <!-- Amounts -->
+            <template slot="item.total_amount" slot-scope="props">
+              <span> {{ money(props.item.total_amount) }} </span>
+            </template>
+
+            <template slot="item.payment.amount" slot-scope="props">
+              <span> {{ money(props.item.payment.amount) }} </span>
+            </template>
+
+            <template slot="item.vehicle_charges" slot-scope="props">
+              <span> {{ money(props.item.vehicle_charges) }} </span>
             </template>
 
             <!-- Cheque Images (Button) -->
@@ -205,8 +213,10 @@ export default {
         { text: "Diesel Qty.", value: "diesel_quantity" },
         { text: "Petrol/Ltr.", value: "petrol_price" },
         { text: "Diesel/Ltr.", value: "diesel_price" },
+        { text: "Vehicle Charges", value: "vehicle_charges" },
+        { text: "Per Ltr. Add. Cost", value: "per_litre_additional_cost" },
         { text: "Total Amount", value: "total_amount" },
-        { text: "Amount", value: "payment.amount" },
+        { text: "Paid Amount", value: "payment.amount" },
         { text: "Payment Method", value: "payment.payment_method" },
         { text: "Date", value: "payment.payment_date" },
         { text: "Bank", value: "payment.bank.name" },

@@ -21,8 +21,16 @@ class Purchase extends Model
         'petrol_price',
         'diesel_price',
         'total_amount',
+        'per_litre_additional_cost',
+        'vehicle_charges',
     ];
 
+    protected $appends = ['old_total_per_litre'];
+
+    public function getOldTotalPerLitreAttribute()
+    {
+        return $this->vehicle_charges / $this->per_litre_additional_cost;
+    }
 
     public function company(): BelongsTo
     {
@@ -47,5 +55,13 @@ class Purchase extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class, 'paymentable_id')->where('model', Purchase::class);
+    }
+
+    public static function booted()
+    {
+        static::creating(function ($purchase) {
+            $purchase->petrol_price = $purchase->petrol_price + request('per_litre_additional_cost');
+            $purchase->diesel_price = $purchase->diesel_price + request('per_litre_additional_cost');
+        });
     }
 }

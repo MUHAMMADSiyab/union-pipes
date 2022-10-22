@@ -1,8 +1,8 @@
 <template>
-  <v-card>
-    <v-card-subtitle class="font-weight-bold">
-      Vehicles Purchase & Sale during current year
-    </v-card-subtitle>
+  <v-card class="mt-3">
+    <v-card-title>
+      <h6 class="text-uppercase grey--text">Sell Last 30 Days</h6>
+    </v-card-title>
 
     <v-card-text>
       <apexchart
@@ -16,10 +16,8 @@
 </template>
 
 <script>
-import _ from "lodash";
-
 export default {
-  props: ["yearlyTotals"],
+  props: ["last_thirty_days_sell"],
 
   data() {
     return {
@@ -47,32 +45,24 @@ export default {
           },
         },
         xaxis: {
-          categories: Object.keys(this.yearlyTotals),
+          categories: this.last_thirty_days_sell.map((item) => item.sell_date),
         },
       },
       series: [
         {
-          name: "Purchased Vehicles",
-          data: this.getTotals("purchasedVehiclesCount"),
+          name: "Diesel",
+          data: this.last_thirty_days_sell.map(
+            (item) => item.diesel_sold_amount
+          ),
         },
         {
-          name: "Sold Vehicles",
-          data: this.getTotals("soldVehiclesCount"),
+          name: "Petrol",
+          data: this.last_thirty_days_sell.map(
+            (item) => item.petrol_sold_amount
+          ),
         },
       ],
     };
-  },
-
-  methods: {
-    getTotals(type) {
-      const vehiclesTotals = [];
-
-      _.toArray(this.yearlyTotals).forEach((d) => {
-        vehiclesTotals.push(d[type]);
-      });
-
-      return vehiclesTotals;
-    },
   },
 };
 </script>

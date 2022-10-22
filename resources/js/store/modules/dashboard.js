@@ -2,11 +2,11 @@ import axios from "axios";
 import { SET_LOADING, GET_DASHBOARD_DATA } from "../../mutation_constants";
 
 const state = {
-    dashboardData: []
+    dashboardData: null,
 };
 
 const getters = {
-    dashboardData: state => state.dashboardData
+    dashboardData: (state) => state.dashboardData,
 };
 
 const actions = {
@@ -21,16 +21,16 @@ const actions = {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
         }
-    }
+    },
 };
 
 const mutations = {
-    GET_DASHBOARD_DATA: (state, payload) => (state.dashboardData = payload)
+    GET_DASHBOARD_DATA: (state, payload) => (state.dashboardData = payload),
 };
 
 export default {
     state,
     getters,
     actions,
-    mutations
+    mutations,
 };

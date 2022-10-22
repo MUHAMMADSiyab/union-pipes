@@ -122,7 +122,10 @@ class PurchaseController extends Controller
             DB::beginTransaction();
 
             $updated_purchase = tap($purchase)->update(
-                $request->except(['chamber_readings', 'distributions'])
+                [...$request->except(['chamber_readings', 'distributions']), ...[
+                    'petrol_price' => $purchase->petrol_price + $request->per_litre_additional_cost - $purchase->per_litre_additional_cost,
+                    'diesel_price' => $purchase->diesel_price +  $request->per_litre_additional_cost - $purchase->per_litre_additional_cost,
+                ]]
             );
 
             foreach ($request->chamber_readings as $reading) {

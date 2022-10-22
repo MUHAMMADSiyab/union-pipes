@@ -399,6 +399,29 @@ export default {
         },
 
         {
+          text: "Invoices",
+          icon: "mdi-receipt",
+          active: this.activeMenu("invoices"),
+          gate: "invoice_access",
+          submenu: [
+            {
+              text: "Add Invoice",
+              to: "/invoices/add",
+              icon: "mdi-chevron-double-right",
+              gate: "invoice_create",
+              exact: true,
+            },
+            {
+              text: "Manage Invoices",
+              to: "/invoices",
+              icon: "mdi-chevron-double-right",
+              gate: "invoice_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
           text: "Banks",
           icon: "mdi-bank",
           to: "/banks",

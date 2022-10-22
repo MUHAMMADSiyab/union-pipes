@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DispenserController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\InvoiceController;
@@ -173,6 +174,9 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     // Export 
     Route::post('export', [ExportController::class, 'export']);
+
+    // Dashboard
+    Route::post('dashboard', DashboardController::class);
 });
 
 // Public routes

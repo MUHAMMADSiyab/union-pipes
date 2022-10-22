@@ -121,7 +121,7 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
+                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
@@ -136,7 +136,7 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
+                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
@@ -151,7 +151,22 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
+                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
+                    <small
+                      class="red--text"
+                      v-if="validation.hasErrors()"
+                      v-text="validation.getMessage('vehicle_charges')"
+                    ></small>
+                    <v-text-field
+                      type="number"
+                      v-model="data.vehicle_charges"
+                      label="Vehicle Charges"
+                      dense
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
@@ -161,6 +176,19 @@
                       type="number"
                       v-model="data.total_amount"
                       label="Total Amount"
+                      dense
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
+                    <v-text-field
+                      type="number"
+                      v-model="data.per_litre_additional_cost"
+                      label="Per Litre Additional Cost"
+                      disabled
                       dense
                       outlined
                     ></v-text-field>
@@ -668,6 +696,8 @@ export default {
         diesel_quantity: 0,
         petrol_price: 0,
         diesel_price: 0,
+        vehicle_charges: 0,
+        per_litre_additional_cost: 0,
         total_amount: 0,
         chamber_readings: [],
         distributions: [],
@@ -769,7 +799,17 @@ export default {
           reading.excess_quantity =
             reading.capacity - reading.available_quantity;
         });
+
+        // Additional per litre cost
+        if (data.vehicle_charges) {
+          const per_litre_additional_cost =
+            parseFloat(data.vehicle_charges) /
+            parseFloat(this.purchase.old_total_per_litre);
+
+          this.data.per_litre_additional_cost = per_litre_additional_cost;
+        }
       },
+
       deep: true,
     },
   },
@@ -797,6 +837,7 @@ export default {
     this.data.diesel_quantity = this.purchase.diesel_quantity;
     this.data.petrol_price = this.purchase.petrol_price;
     this.data.diesel_price = this.purchase.diesel_price;
+    this.data.vehicle_charges = this.purchase.vehicle_charges;
     this.data.total_amount = this.purchase.total_amount;
 
     this.data.chamber_readings = this.purchase.chamber_readings.map(

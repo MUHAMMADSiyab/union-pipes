@@ -1,8 +1,8 @@
 <template>
-  <v-card>
-    <v-card-subtitle class="font-weight-bold">
-      Utilities during current year
-    </v-card-subtitle>
+  <v-card class="mt-3">
+    <v-card-title>
+      <h6 class="text-uppercase grey--text">Utilities during Last 6 Months</h6>
+    </v-card-title>
 
     <v-card-text>
       <apexchart height="350" :options="options" :series="series"></apexchart>
@@ -14,13 +14,13 @@
 import _ from "lodash";
 
 export default {
-  props: ["yearlyUtilities"],
+  props: ["sixMonthUtilities"],
 
   data() {
     return {
       series: [
         {
-          data: Object.values(this.yearlyUtilities),
+          data: this.sixMonthUtilities.map((utility) => utility.total),
         },
       ],
       options: {
@@ -48,8 +48,8 @@ export default {
             shade: "light",
             type: "horizontal",
             shadeIntensity: 0.5,
-            gradientToColors: ["#2397b5", "#870cf2"], // optional, if not defined - uses the shades of same color in series
-            inverseColors: true,
+            gradientToColors: ["purple", "indigo"], // optional, if not defined - uses the shades of same color in series
+            // inverseColors: true,
             opacityFrom: 1,
             opacityTo: 1,
             stops: [0, 50, 100],
@@ -66,7 +66,7 @@ export default {
           enabled: false,
         },
         xaxis: {
-          categories: Object.keys(this.yearlyUtilities),
+          categories: this.sixMonthUtilities.map((utility) => utility.month),
         },
       },
     };
