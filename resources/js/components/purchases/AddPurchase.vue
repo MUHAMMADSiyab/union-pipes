@@ -121,14 +121,13 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
+                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
                       v-text="validation.getMessage('petrol_price')"
                     ></small>
                     <v-text-field
-                      type="number"
                       v-model="data.petrol_price"
                       label="Petrol Price"
                       dense
@@ -136,14 +135,13 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
+                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
                       v-text="validation.getMessage('diesel_price')"
                     ></small>
                     <v-text-field
-                      type="number"
                       v-model="data.diesel_price"
                       label="Diesel Price"
                       dense
@@ -151,22 +149,7 @@
                     ></v-text-field>
                   </v-col>
 
-                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('vehicle_charges')"
-                    ></small>
-                    <v-text-field
-                      type="number"
-                      v-model="data.vehicle_charges"
-                      label="Vehicle Charges"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
+                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                     <small
                       class="red--text"
                       v-if="validation.hasErrors()"
@@ -176,19 +159,6 @@
                       type="number"
                       v-model="data.total_amount"
                       label="Total Amount"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="py-0">
-                    <v-text-field
-                      type="number"
-                      v-model="data.per_litre_additional_cost"
-                      label="Per Litre Additional Cost"
-                      disabled
                       dense
                       outlined
                     ></v-text-field>
@@ -693,10 +663,9 @@ export default {
         vehicle_id: "",
         petrol_quantity: 0,
         diesel_quantity: 0,
-        petrol_price: 0,
-        diesel_price: 0,
-        vehicle_charges: 0,
-        per_litre_additional_cost: 0,
+        petrol_price: "0",
+        diesel_price: "0",
+
         total_amount: 0,
         chamber_readings: [],
         distributions: [],
@@ -747,6 +716,13 @@ export default {
       }));
     },
 
+    getCalculatedPrice(data, type) {
+      const splitted = data[`${type}_price`].split("+");
+      const price = splitted[0];
+      const vehicle_charges_rate = splitted[1];
+      return (parseFloat(price) || 0) + (parseFloat(vehicle_charges_rate) || 0);
+    },
+
     async add() {
       this.formLoading = true;
 
@@ -772,7 +748,6 @@ export default {
         this.data.petrol_quantity = "";
         this.data.diesel_price = "";
         this.data.diesel_quantity = "";
-        this.data.vehicle_charges = "";
         this.data.total_amount = "";
         this.data.payment.amount = "";
         this.data.payment.payment_date = "";
@@ -806,28 +781,32 @@ export default {
   watch: {
     data: {
       handler(data) {
+        let petrol_result = 0;
+        let diesel_result = 0;
+
+        if (data.petrol_price.indexOf("+") !== -1) {
+          petrol_result = this.getCalculatedPrice(data, "petrol");
+        } else {
+          petrol_result = data.petrol_price;
+        }
+
+        if (data.diesel_price.indexOf("+") !== -1) {
+          diesel_result = this.getCalculatedPrice(data, "diesel");
+        } else {
+          diesel_result = data.diesel_price;
+        }
+
         this.data.total_amount =
-          data.petrol_price * data.petrol_quantity +
-          data.diesel_price * data.diesel_quantity;
+          data.petrol_quantity * petrol_result +
+          data.diesel_quantity * diesel_result;
 
         this.data.chamber_readings.forEach((reading) => {
           reading.available_quantity =
-            (reading.rod_value * reading.dip_value) / reading.capacity;
+            (reading.rod_value * reading.capacity) / reading.dip_value;
 
           reading.excess_quantity =
-            reading.capacity - reading.available_quantity;
+            reading.available_quantity - reading.capacity;
         });
-
-        // Additional per litre cost
-        if (data.vehicle_charges) {
-          const total_per_litre_price =
-            parseFloat(data.petrol_price) + parseFloat(data.diesel_price);
-          const per_litre_additional_cost =
-            parseFloat(data.vehicle_charges) /
-            parseFloat(total_per_litre_price);
-
-          this.data.per_litre_additional_cost = per_litre_additional_cost;
-        }
       },
       deep: true,
     },

@@ -30,11 +30,19 @@
             </tr>
             <tr>
               <td>Petrol Price / Ltr.</td>
-              <td>{{ purchase.petrol_price }}</td>
+              <td>
+                {{
+                  purchase.petrol_price + purchase.vehicle_charges_petrol_rate
+                }}
+              </td>
             </tr>
             <tr>
               <td>Diesel Price / Ltr.</td>
-              <td>{{ purchase.diesel_price }}</td>
+              <td>
+                {{
+                  purchase.diesel_price + purchase.vehicle_charges_diesel_rate
+                }}
+              </td>
             </tr>
             <tr>
               <td>Total Amount</td>

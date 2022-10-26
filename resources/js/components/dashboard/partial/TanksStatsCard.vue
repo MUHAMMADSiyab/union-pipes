@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <div class="d-block mb-4" v-for="(tank, i) in tanks" :key="i">
-        <div class="progress-caption d-flex mt-1" style="font-size: 0.8rem">
+        <div class="progress-caption d-flex mt-1" style="font-size: 0.85rem">
           <span class="text-left font-weight-bold text-uppercase flex-grow-1"
             >{{ tank.name }}
             <span class="blue-grey--text font-weight-normal"
@@ -20,7 +20,7 @@
         <v-progress-linear
           :value="`${(tank.current_fuel_quantity / tank.limit) * 100}`"
           :height="10"
-          :color="tank.color"
+          color="#3bbc2d"
         >
         </v-progress-linear>
       </div>

@@ -382,7 +382,7 @@ export default {
           gate: "customer_access",
           submenu: [
             {
-              text: "Add Company",
+              text: "Add Customer",
               to: "/customers/add",
               icon: "mdi-chevron-double-right",
               gate: "customer_create",

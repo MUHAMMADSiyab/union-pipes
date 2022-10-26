@@ -72,18 +72,6 @@
           ><v-icon left>mdi-trash-can-outline</v-icon> Delete Selected</v-btn
         >
 
-        <v-btn
-          color="success"
-          small
-          link
-          to="/accounts/add"
-          class="ma-2 text-right"
-          v-if="can('account_create')"
-        >
-          <v-icon left>mdi-account-plus-outline</v-icon>
-          New Entry</v-btn
-        >
-
         <Excel
           module="accounts"
           :ids="selectedItems.map((item) => item.id)"

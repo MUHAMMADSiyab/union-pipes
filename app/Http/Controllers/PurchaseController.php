@@ -10,6 +10,7 @@ use App\Models\PurchaseReading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class PurchaseController extends Controller
 {
@@ -121,10 +122,39 @@ class PurchaseController extends Controller
         try {
             DB::beginTransaction();
 
+            $petrol_price = 0;
+            $diesel_price = 0;
+            $vehicle_charges_petrol_rate = 0;
+            $vehicle_charges_diesel_rate = 0;
+
+            if (Str::contains($request->petrol_price, '+')) {
+                $exploded = explode('+', $request->petrol_price);
+                $price = $exploded[0];
+                $rate = $exploded[1];
+
+                $petrol_price = $price;
+                $vehicle_charges_petrol_rate = $rate;
+            } else {
+                $petrol_price = $request->petrol_price;
+            }
+
+            if (Str::contains($request->diesel_price, '+')) {
+                $exploded = explode('+', $request->diesel_price);
+                $price = $exploded[0];
+                $rate = $exploded[1];
+
+                $diesel_price = $price;
+                $vehicle_charges_diesel_rate = $rate;
+            } else {
+                $diesel_price = $request->diesel_price;
+            }
+
             $updated_purchase = tap($purchase)->update(
                 [...$request->except(['chamber_readings', 'distributions']), ...[
-                    'petrol_price' => $purchase->petrol_price + $request->per_litre_additional_cost - $purchase->per_litre_additional_cost,
-                    'diesel_price' => $purchase->diesel_price +  $request->per_litre_additional_cost - $purchase->per_litre_additional_cost,
+                    'petrol_price' => $petrol_price,
+                    'diesel_price' => $diesel_price,
+                    'vehicle_charges_petrol_rate' => $vehicle_charges_petrol_rate,
+                    'vehicle_charges_diesel_rate' => $vehicle_charges_diesel_rate,
                 ]]
             );
 

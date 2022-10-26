@@ -5,7 +5,21 @@
     <print-button />
 
     <v-container class="mt-4" v-if="accounts.customer">
-      <h5 class="text-subtitle-1 mb-2">Account Entries</h5>
+      <h5 class="text-subtitle-1 mb-2">
+        Account Entries
+
+        <v-btn
+          color="success"
+          small
+          link
+          to="/accounts/add"
+          class="ma-2 text-right"
+          v-if="can('account_create')"
+        >
+          <v-icon left>mdi-account-plus-outline</v-icon>
+          New Entry</v-btn
+        >
+      </h5>
 
       <v-row>
         <v-col xl="6" lg="6" md="6" sm="12" cols="12"

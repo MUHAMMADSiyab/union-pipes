@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Purchase extends Model
 {
@@ -20,16 +21,24 @@ class Purchase extends Model
         'diesel_quantity',
         'petrol_price',
         'diesel_price',
+        'vehicle_charges_petrol_rate',
+        'vehicle_charges_diesel_rate',
         'total_amount',
-        'per_litre_additional_cost',
-        'vehicle_charges',
     ];
 
-    protected $appends = ['old_total_per_litre'];
+    protected $appends = [
+        'total_petrol_price',
+        'total_diesel_price',
+    ];
 
-    public function getOldTotalPerLitreAttribute()
+    public function getTotalPetrolPriceAttribute()
     {
-        return $this->vehicle_charges / $this->per_litre_additional_cost;
+        return $this->petrol_price + $this->vehicle_charges_petrol_rate;
+    }
+
+    public function getTotalDieselPriceAttribute()
+    {
+        return $this->diesel_price + $this->vehicle_charges_diesel_rate;
     }
 
     public function company(): BelongsTo
@@ -60,8 +69,27 @@ class Purchase extends Model
     public static function booted()
     {
         static::creating(function ($purchase) {
-            $purchase->petrol_price = $purchase->petrol_price + request('per_litre_additional_cost');
-            $purchase->diesel_price = $purchase->diesel_price + request('per_litre_additional_cost');
+            if (Str::contains(request('petrol_price'), '+')) {
+                $exploded = explode('+', request('petrol_price'));
+                $price = $exploded[0];
+                $rate = $exploded[1];
+
+                $purchase->petrol_price = $price;
+                $purchase->vehicle_charges_petrol_rate = $rate;
+            } else {
+                $purchase->petrol_price = request('petrol_price');
+            }
+
+            if (Str::contains(request('diesel_price'), '+')) {
+                $exploded = explode('+', request('diesel_price'));
+                $price = $exploded[0];
+                $rate = $exploded[1];
+
+                $purchase->diesel_price = $price;
+                $purchase->vehicle_charges_diesel_rate = $rate;
+            } else {
+                $purchase->diesel_price = request('diesel_price');
+            }
         });
     }
 }
