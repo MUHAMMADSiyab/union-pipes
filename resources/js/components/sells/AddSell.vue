@@ -42,8 +42,22 @@
                   </v-col>
                 </v-row>
 
+                <v-row v-if="dispensersLoading">
+                  <v-col cols="4" class="mx-auto">
+                    <v-progress-circular
+                      indeterminate
+                      class="mx-auto"
+                      :size="80"
+                      color="primary"
+                    ></v-progress-circular>
+                  </v-col>
+                </v-row>
+
                 <!-- Sell Readings (Initial) -->
-                <v-row class="mt-3 mb-2" v-if="data.initial_readings.length">
+                <v-row
+                  class="mt-3 mb-2"
+                  v-if="!dispensersLoading && data.initial_readings.length"
+                >
                   <v-col cols="12" class="py-0">
                     <h3 class="ml-3 mb-4">Initial Readings</h3>
 
@@ -171,6 +185,7 @@ export default {
   data() {
     return {
       formLoading: false,
+      dispensersLoading: true,
       totals: {
         totalPetrolReading: 0,
         totalDieselReading: 0,
@@ -197,18 +212,20 @@ export default {
     async handleSellDateChange(date) {
       await this.getSellFinalReadings({ date });
 
-      this.data.initial_readings = this.dispensers.map((dispenser) => ({
-        product: dispenser.tank.product,
-        tank: dispenser.tank,
-        dispenser: dispenser,
-        meters: dispenser.meters.map((meter) => ({
-          ...meter,
-          value: this.final_readings.find(
-            (r) =>
-              r.meter.dispenser_id == dispenser.id && r.meter.id == meter.id
-          ).value,
-        })),
-      }));
+      if (this.final_readings.length) {
+        this.data.initial_readings = this.dispensers.map((dispenser) => ({
+          product: dispenser.tank.product,
+          tank: dispenser.tank,
+          dispenser: dispenser,
+          meters: dispenser.meters.map((meter) => ({
+            ...meter,
+            value: this.final_readings.find(
+              (r) =>
+                r.meter.dispenser_id == dispenser.id && r.meter.id == meter.id
+            ).value,
+          })),
+        }));
+      }
     },
 
     async add() {
@@ -281,6 +298,8 @@ export default {
 
   async mounted() {
     await Promise.all([this.getDispensers(), this.getCurrentRates()]);
+
+    this.dispensersLoading = false;
 
     this.data.petrol_price = this.current_rates.find(
       (rate) => rate.product.name === "Petrol"

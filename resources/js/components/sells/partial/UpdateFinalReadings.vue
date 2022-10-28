@@ -5,7 +5,18 @@
 
     <v-card-text>
       <form @submit.prevent="update">
-        <div class="mt-1 mb-1">
+        <v-row v-if="readingsLoading">
+          <v-col cols="4" class="mx-auto">
+            <v-progress-circular
+              indeterminate
+              class="mx-auto"
+              :size="80"
+              color="primary"
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
+
+        <div class="mt-1 mb-1" v-if="!readingsLoading && final_readings.length">
           <v-simple-table dense>
             <template v-slot:default>
               <thead>
@@ -102,6 +113,7 @@
             type="submit"
             class="mt-3"
             :disabled="formLoading"
+            v-if="!readingsLoading && final_readings.length"
             >Update</v-btn
           >
           <v-btn color="secondary" @click="closeDialog" class="mt-3"
@@ -125,6 +137,7 @@ export default {
 
   data() {
     return {
+      readingsLoading: true,
       totals: {
         totalPetrolReading: 0,
         totalDieselReading: 0,
@@ -243,6 +256,8 @@ export default {
 
     if (this.sellId) {
       await this.getSellFinalReadings(this.sellId);
+
+      this.readingsLoading = false;
 
       this.data.final_readings = this.getNormalizedReadings(
         this.final_readings
