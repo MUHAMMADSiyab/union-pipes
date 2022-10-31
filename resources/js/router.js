@@ -74,6 +74,10 @@ import AddInvoice from "./components/invoices/AddInvoice";
 import EditInvoice from "./components/invoices/EditInvoice";
 import Invoices from "./components/invoices/Invoices";
 
+import AddVehicleTransaction from "./components/vehicle_transactions/AddVehicleTransaction";
+import EditVehicleTransaction from "./components/vehicle_transactions/EditVehicleTransaction";
+import VehicleTransactions from "./components/vehicle_transactions/VehicleTransactions";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -579,6 +583,39 @@ const router = new VueRouter({
             meta: {
                 title: `Invoices - ${process.env.MIX_APP_NAME}`,
                 gate: "invoice_access",
+            },
+        },
+
+        {
+            path: "/vehicle_transactions/add",
+            name: "vehicle_transaction_add",
+            component: AddVehicleTransaction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Vehicle Transaction - ${process.env.MIX_APP_NAME}`,
+                gate: "vehicle_transaction_create",
+            },
+        },
+
+        {
+            path: "/vehicle_transactions/edit/:id",
+            name: "vehicle_transaction_edit",
+            component: EditVehicleTransaction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Vehicle Transaction - ${process.env.MIX_APP_NAME}`,
+                gate: "vehicle_transaction_edit",
+            },
+        },
+
+        {
+            path: "/vehicle_transactions/vehicle/:id",
+            name: "vehicle_transaction_access",
+            component: VehicleTransactions,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Vehicle Transactions - ${process.env.MIX_APP_NAME}`,
+                gate: "vehicle_transaction_access",
             },
         },
 

@@ -54,6 +54,16 @@
               >
                 <v-icon small>mdi-delete</v-icon>
               </v-btn>
+              <v-btn
+                x-small
+                text
+                color="info darken-2"
+                :to="`/vehicle_transactions/vehicle/${vehicle.id}`"
+                title="Vehicle Transactions (کھاتے)"
+                v-if="can('vehicle_transaction_access')"
+              >
+                <v-icon small>mdi-account-cash-outline</v-icon>
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>

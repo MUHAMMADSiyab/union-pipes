@@ -25,6 +25,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtilityController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VehicleTransactionController;
 use App\Http\Middleware\AuthGates;
 use App\Http\Middleware\NullToEmptyString;
 use Illuminate\Support\Facades\Route;
@@ -151,6 +152,13 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::delete('invoices/delete_multiple', [InvoiceController::class, 'destroy_multiple']);
     Route::resource('invoices', InvoiceController::class, [
         'except' => ['create', 'edit']
+    ]);
+
+    // Vehicle Transaction
+    Route::get('vehicle_transactions/get_vehicle_transactions/{vehicle}', [VehicleTransactionController::class, 'get_vehicle_transactions']);
+    Route::delete('vehicle_transactions/delete_multiple', [VehicleTransactionController::class, 'destroy_multiple']);
+    Route::resource('vehicle_transactions', VehicleTransactionController::class, [
+        'except' => ['index', 'create', 'edit']
     ]);
 
     // Rate

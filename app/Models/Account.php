@@ -26,7 +26,6 @@ class Account extends Model
 
     public function getBalanceAttribute()
     {
-
         $previous_record = $this->where('date', '<', $this->date)
             ->where('customer_id', $this->customer_id)
             ->orderBy('date', 'desc')
