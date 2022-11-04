@@ -422,6 +422,13 @@ export default {
         },
 
         {
+          text: "Billing",
+          icon: "mdi-file-document",
+          to: "/billing",
+          active: this.activeMenu("billing"),
+        },
+
+        {
           text: "Banks",
           icon: "mdi-bank",
           to: "/banks",

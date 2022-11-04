@@ -78,6 +78,8 @@ import AddVehicleTransaction from "./components/vehicle_transactions/AddVehicleT
 import EditVehicleTransaction from "./components/vehicle_transactions/EditVehicleTransaction";
 import VehicleTransactions from "./components/vehicle_transactions/VehicleTransactions";
 
+import Billing from "./components/billings/Billing";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -616,6 +618,17 @@ const router = new VueRouter({
             meta: {
                 title: `Vehicle Transactions - ${process.env.MIX_APP_NAME}`,
                 gate: "vehicle_transaction_access",
+            },
+        },
+
+        {
+            path: "/billing",
+            name: "billing",
+            component: Billing,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Customer Billing - ${process.env.MIX_APP_NAME}`,
+                gate: "billing_access",
             },
         },
 

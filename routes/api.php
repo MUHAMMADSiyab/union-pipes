@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerBillingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DispenserController;
@@ -160,6 +161,8 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::resource('vehicle_transactions', VehicleTransactionController::class, [
         'except' => ['index', 'create', 'edit']
     ]);
+
+    Route::post('billing', CustomerBillingController::class);
 
     // Rate
     Route::get('rates/current', [RateController::class, 'get_current_rates']);

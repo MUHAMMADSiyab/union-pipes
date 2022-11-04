@@ -9,16 +9,19 @@ import {
     UPDATE_CUSTOMER,
     DELETE_CUSTOMER,
     DELETE_CUSTOMERS,
+    GET_BILLING_DATA,
 } from "../../mutation_constants";
 
 const state = {
     customers: [],
     customer: null,
+    billing_data: null,
 };
 
 const getters = {
     customers: (state) => state.customers,
     customer: (state) => state.customer,
+    billing_data: (state) => state.billing_data,
 };
 
 const actions = {
@@ -67,6 +70,19 @@ const actions = {
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_CUSTOMERS, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
+    // Get customer's billing data
+    async getBillingData({ commit }, data) {
+        try {
+            const res = await axios.post("/api/billing", data);
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_BILLING_DATA, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
@@ -199,6 +215,8 @@ const mutations = {
             state.customers.splice(index, 1);
         });
     },
+
+    GET_BILLING_DATA: (state, payload) => (state.billing_data = payload),
 };
 
 export default {

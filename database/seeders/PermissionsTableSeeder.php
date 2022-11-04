@@ -129,6 +129,8 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'vehicle_transaction_show'],
             ['name' => 'vehicle_transaction_delete'],
 
+            ['name' => 'billing_access'],
+
             ['name' => 'payment_setting_edit'],
 
             ['name' => 'app_setting_edit'],
