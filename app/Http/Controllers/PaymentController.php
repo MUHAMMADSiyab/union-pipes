@@ -45,9 +45,9 @@ class PaymentController extends Controller
     {
         if ($payment = $paymentService->addNewPayment($request)) {
 
-            // if ($request->model === Salary::class) {
-            //     $this->paymentable = $this->getSalaryRecord($request->paymentable_id);
-            // }
+            if ($request->model === Salary::class) {
+                $this->paymentable = $this->getSalaryRecord($request->paymentable_id);
+            }
 
             return response()->json($this->paymentable, 201);
         }
@@ -146,5 +146,18 @@ class PaymentController extends Controller
 
             return response()->json($this->paymentable);
         }
+    }
+
+    /**
+     * Get salary record
+     *
+     * @param integer $paymentable_id
+     * @return App\Models\Salary $salary
+     */
+    public function getSalaryRecord(int $paymentable_id)
+    {
+        $salary = Salary::with('payments')->find($paymentable_id);
+
+        return $salary;
     }
 }

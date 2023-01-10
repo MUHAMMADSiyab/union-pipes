@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Payment;
+use App\Models\Salary;
 
 class PaymentObserver
 {
@@ -20,6 +21,11 @@ class PaymentObserver
 
         if ($payment->transaction_type === 'Debit') {
             $payment->bank()->increment('balance', $payment->amount);
+        }
+
+        // Salary Payments
+        if ($payment->model === Salary::class && !$payment->first_payment) {
+            Salary::find($payment->paymentable_id)->increment('total_paid', $payment->amount);
         }
     }
 
@@ -40,6 +46,13 @@ class PaymentObserver
             $payment->bank()->decrement('balance', $payment->getOriginal('amount'));
             $payment->bank()->increment('balance', $payment->amount);
         }
+
+        // Salary Payments
+        if ($payment->model === Salary::class && !$payment->first_payment) {
+            $salary = Salary::find($payment->paymentable_id);
+            $salary->decrement('total_paid', $payment->getOriginal('amount'));
+            $salary->increment('total_paid', $payment->amount);
+        }
     }
 
     /**
@@ -56,6 +69,12 @@ class PaymentObserver
 
         if ($payment->transaction_type === 'Debit') {
             $payment->bank()->decrement('balance', $payment->amount);
+        }
+
+        // Salary Payments 
+        if ($payment->model === Salary::class && !$payment->first_payment) {
+            Salary::find($payment->paymentable_id)
+                ->decrement('total_paid', $payment->getOriginal('amount'));
         }
     }
 }

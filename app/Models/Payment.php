@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -26,6 +25,7 @@ class Payment extends Model implements HasMedia
         'payment_date',
         'transaction_type',
         'bank_id',
+        'first_payment',
         'description',
     ];
 

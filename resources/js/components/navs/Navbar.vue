@@ -399,6 +399,29 @@ export default {
         },
 
         {
+          text: "Employees",
+          icon: "mdi-account-box-multiple",
+          active: this.activeMenu("employees"),
+          gate: "employee_access",
+          submenu: [
+            {
+              text: "Add Employee",
+              to: "/employees/add",
+              icon: "mdi-chevron-double-right",
+              gate: "employee_create",
+              exact: true,
+            },
+            {
+              text: "Manage Employees",
+              to: "/employees",
+              icon: "mdi-chevron-double-right",
+              gate: "employee_access",
+              exact: true,
+            },
+          ],
+        },
+
+        {
           text: "Invoices",
           icon: "mdi-receipt",
           active: this.activeMenu("invoices"),

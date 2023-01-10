@@ -62,7 +62,8 @@ const actions = {
             cheque_due_date,
             cheque_images,
             description,
-            type, // add or edit
+            type, // add or edit,
+            employeeId,
         }
     ) {
         try {
@@ -91,6 +92,12 @@ const actions = {
             fd.append("description", description);
 
             const res = await axios.post("/api/payments", fd);
+
+            if (model === "App\\Models\\Salary") {
+                commit("salary/PAYMENT", res.data, { root: true });
+
+                dispatch("salary/getTotals", employeeId, { root: true });
+            }
 
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
@@ -140,6 +147,13 @@ const actions = {
                     await axios.delete(`/api/accounts/${id}`);
                 }
             }
+
+            // If the payment belongs to a a salary
+            if (model === "App\\Models\\Salary") {
+                const id = store.getters["salary/recent_salary"].id;
+
+                await axios.delete(`/api/salaries/${id}`);
+            }
         }
     },
 
@@ -159,6 +173,7 @@ const actions = {
             cheque_images,
             description,
             paymentable_id,
+            employeeId,
         }
     ) {
         try {
@@ -187,6 +202,14 @@ const actions = {
             const res = await axios.post(`/api/payments/${id}`, fd);
 
             commit(UPDATE_PAYMENT, res.data.payment);
+
+            if (model === "App\\Models\\Salary") {
+                commit("salary/PAYMENT", res.data.paymentable, {
+                    root: true,
+                });
+
+                dispatch("salary/getTotals", employeeId, { root: true });
+            }
 
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
@@ -230,6 +253,20 @@ const actions = {
                 const account = store.getters["account/old_account"];
                 axios.put(`/api/accounts/${paymentable_id}`, account);
             }
+
+            // If the payment belongs to a salary
+            if (model === "App\\Models\\Salary") {
+                const salary = store.getters["salary/old_salary"];
+                const data = {
+                    month: salary.month,
+                    date: salary.date,
+                    total_paid: salary.total_paid,
+                    additional_amount: salary.additional_amount,
+                    deducted_amount: salary.deducted_amount,
+                };
+
+                await axios.put(`/api/salaries/${paymentable_id}`, data);
+            }
         }
     },
 
@@ -239,6 +276,14 @@ const actions = {
             const res = await axios.delete(`/api/payments/${id}`);
 
             commit(DELETE_PAYMENT, id);
+
+            if (model === "App\\Models\\Salary") {
+                commit("salary/PAYMENT", res.data, {
+                    root: true,
+                });
+
+                dispatch("salary/getTotals", employeeId, { root: true });
+            }
 
             return dispatch(
                 "alert/setAlert",

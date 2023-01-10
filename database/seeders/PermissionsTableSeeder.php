@@ -87,6 +87,18 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'utility_show'],
             ['name' => 'utility_delete'],
 
+            ['name' => 'employee_access'],
+            ['name' => 'employee_create'],
+            ['name' => 'employee_edit'],
+            ['name' => 'employee_show'],
+            ['name' => 'employee_delete'],
+
+            ['name' => 'salary_access'],
+            ['name' => 'salary_create'],
+            ['name' => 'salary_edit'],
+            ['name' => 'salary_show'],
+            ['name' => 'salary_delete'],
+
             ['name' => 'company_access'],
             ['name' => 'company_create'],
             ['name' => 'company_edit'],
@@ -128,6 +140,12 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'vehicle_transaction_edit'],
             ['name' => 'vehicle_transaction_show'],
             ['name' => 'vehicle_transaction_delete'],
+
+            ['name' => 'payment_access'],
+            ['name' => 'payment_create'],
+            ['name' => 'payment_edit'],
+            ['name' => 'payment_show'],
+            ['name' => 'payment_delete'],
 
             ['name' => 'billing_access'],
 

@@ -19,6 +19,8 @@ import rate from "./modules/rate";
 import bank from "./modules/bank";
 import transaction from "./modules/transaction";
 import utility from "./modules/utility";
+import employee from "./modules/employee";
+import salary from "./modules/salary";
 import company from "./modules/company";
 import purchase from "./modules/purchase";
 import sell from "./modules/sell";
@@ -105,6 +107,16 @@ const store = new Vuex.Store({
 
         utility: {
             ...utility,
+            namespaced: true,
+        },
+
+        employee: {
+            ...employee,
+            namespaced: true,
+        },
+
+        salary: {
+            ...salary,
             namespaced: true,
         },
 

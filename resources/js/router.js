@@ -48,6 +48,11 @@ import AddUtility from "./components/utilities/AddUtility";
 import EditUtility from "./components/utilities/EditUtility";
 import Utilities from "./components/utilities/Utilities";
 
+import AddEmployee from "./components/employees/AddEmployee";
+import Employees from "./components/employees/Employees";
+
+import SalariesView from "./components/salaries/View.vue";
+
 import AddCompany from "./components/companies/AddCompany";
 import EditCompany from "./components/companies/EditCompany";
 import Companies from "./components/companies/Companies";
@@ -369,6 +374,28 @@ const router = new VueRouter({
         },
 
         {
+            path: "/employees/add",
+            name: "employee_add",
+            component: AddEmployee,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Employee - ${process.env.MIX_APP_NAME}`,
+                gate: "employee_create",
+            },
+        },
+
+        {
+            path: "/employees",
+            name: "employees",
+            component: Employees,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Employees - ${process.env.MIX_APP_NAME}`,
+                gate: "employee_access",
+            },
+        },
+
+        {
             path: "/companies/add",
             name: "company_add",
             component: AddCompany,
@@ -376,6 +403,17 @@ const router = new VueRouter({
             meta: {
                 title: `New Company - ${process.env.MIX_APP_NAME}`,
                 gate: "company_create",
+            },
+        },
+
+        {
+            path: "/salaries/:employee_id",
+            name: "salaries_view",
+            component: SalariesView,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Employee's Salaries - ${process.env.MIX_APP_NAME}`,
+                gate: "salary_access",
             },
         },
 

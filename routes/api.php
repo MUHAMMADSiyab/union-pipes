@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomerBillingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DispenserController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MeterController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TankController;
@@ -113,6 +115,21 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::delete('utilities/delete_multiple', [UtilityController::class, 'destroy_multiple']);
     Route::resource('utilities', UtilityController::class, [
         'except' => ['create', 'edit']
+    ]);
+
+    // Employee
+    Route::delete('employees/delete_multiple', [
+        EmployeeController::class, 'destroy_multiple'
+    ]);
+    Route::resource('employees', EmployeeController::class)->except([
+        'create', 'edit'
+    ]);
+
+    // Salary
+    Route::get('salaries/{employee}/get_totals', [SalaryController::class, 'getTotals']);
+    Route::get('salaries/{employee}/get_records', [SalaryController::class, 'salaryRecords']);
+    Route::resource('salaries', SalaryController::class)->except([
+        'create', 'edit'
     ]);
 
     // Purchase

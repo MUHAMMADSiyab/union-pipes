@@ -30,6 +30,7 @@ class PaymentService
             'cheque_due_date' => $request->cheque_due_date,
             'payment_date' => $request->payment_date,
             'bank_id' => $request->bank_id,
+            'first_payment' => $first_payment,
             'description' => $request->description,
         ];
 
