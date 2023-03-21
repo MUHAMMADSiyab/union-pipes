@@ -71,7 +71,9 @@ class CustomerController extends Controller
         $customer->update($request->all());
 
         if ($request->hasFile('photo')) {
-            $customer->getFirstMedia('customers')->delete();
+            if ($media = $customer->getFirstMedia('customers')) {
+                $media->delete();
+            }
             $customer->addMediaFromRequest('photo')->toMediaCollection('customers');
         }
 

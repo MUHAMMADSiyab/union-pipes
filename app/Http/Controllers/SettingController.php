@@ -26,7 +26,7 @@ class SettingController extends Controller
 
         if ($request->hasFile('app_logo')) {
             if ($media = $setting->getFirstMedia('settings')) {
-                $setting->getFirstMedia('settings')->delete();
+                $media->delete();
             }
 
             $setting->addMediaFromRequest('app_logo')->toMediaCollection('settings');

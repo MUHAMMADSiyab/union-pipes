@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Services\ExportService;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -11,12 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
-class PurchasesExport implements
-    FromCollection,
-    WithHeadings,
-    WithMapping,
-    WithEvents,
-    WithCustomStartCell
+class PurchasesExport implements FromCollection, WithHeadings, WithMapping, WithEvents, WithCustomStartCell
 {
     private $ids;
 
@@ -30,10 +26,10 @@ class PurchasesExport implements
      */
     public function collection()
     {
-        return Purchase::whereIn('id', $this->ids)
-            ->with(['payment', 'payment.bank', 'company'])
-            ->orderBy('id', 'desc')
-            ->get();;
+        return Purchase::query()
+            ->with('company')
+            ->whereIn('id', $this->ids)
+            ->get();
     }
 
     public function map($purchase): array
@@ -42,18 +38,13 @@ class PurchasesExport implements
             $purchase->id,
             $purchase->date,
             $purchase->invoice_no,
-            $purchase->company->name,
-            $purchase->petrol_quantity,
-            $purchase->diesel_quantity,
-            $purchase->petrol_price,
-            $purchase->diesel_price,
+            $purchase->company_id,
+            $purchase->sales_tax_percentage,
+            $purchase->category,
             $purchase->total_amount,
-            $purchase->payment->amount,
-            $purchase->payment->payment_method,
-            $purchase->payment->bank->name,
-            $purchase->payment->cheque_no,
-            $purchase->payment->cheque_type,
-            $purchase->payment->cheque_due_date,
+            $purchase->paid,
+            $purchase->balance == 0 ? "0.00" : $purchase->balance,
+            $purchase->status,
         ];
     }
 
@@ -64,17 +55,12 @@ class PurchasesExport implements
             'Date',
             'Invoice #',
             'Company',
-            'Petrol Quantity',
-            'Diesel Quantity',
-            'Petrol Price',
-            'Diesel Price',
+            'Sales Tax %',
+            'Category',
             'Total Amount',
-            'Amount Paid',
-            'Payment method',
-            'Bank',
-            'Cheque no.',
-            'Cheque type',
-            'Cheque due date',
+            'Total Paid',
+            'Balance',
+            'Status'
         ];
     }
 
@@ -87,9 +73,9 @@ class PurchasesExport implements
     {
         $exportService = new ExportService();
         return $exportService->registerExportEvents(
-            "Purchases",
+            "Products",
             $exportService->getHeadingCellsRange($this->headings()),
-            PageSetup::ORIENTATION_LANDSCAPE,
+            PageSetup::ORIENTATION_PORTRAIT,
             $this->collection()->count(),
         );
     }

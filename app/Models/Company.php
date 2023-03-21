@@ -30,8 +30,10 @@ class Company extends Model implements HasMedia
 
     public function getLogoAttribute()
     {
+        $avatar = "https://ui-avatars.com/api/?name={$this->name}&background=0D8ABC&color=fff&font-size=0.25";
+
         return $this->getFirstMedia('companies') ?
             $this->getFirstMedia('companies')->getUrl('logo') :
-            NULL;
+            $avatar;
     }
 }

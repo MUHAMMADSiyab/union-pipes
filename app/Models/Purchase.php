@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
 
 class Purchase extends Model
 {
@@ -16,80 +13,67 @@ class Purchase extends Model
         'date',
         'invoice_no',
         'company_id',
-        'vehicle_id',
-        'petrol_quantity',
-        'diesel_quantity',
-        'petrol_price',
-        'diesel_price',
-        'vehicle_charges_petrol_rate',
-        'vehicle_charges_diesel_rate',
-        'total_amount',
+        'sales_tax_percentage',
+        'category',
+        'total_amount'
     ];
 
     protected $appends = [
-        'total_petrol_price',
-        'total_diesel_price',
+        'paid',
+        'balance',
+        'status'
     ];
 
-    public function getTotalPetrolPriceAttribute()
+    public function getPaidAttribute()
     {
-        return $this->petrol_price + $this->vehicle_charges_petrol_rate;
+        $amountPaid = Payment::whereModel(Purchase::class)
+            ->wherePaymentableId($this->id)
+            ->sum('amount');
+
+        return $amountPaid;
     }
 
-    public function getTotalDieselPriceAttribute()
+    public function getBalanceAttribute()
     {
-        return $this->diesel_price + $this->vehicle_charges_diesel_rate;
+        return $this->total_amount - $this->paid;
     }
 
-    public function company(): BelongsTo
+    public function getStatusAttribute()
+    {
+        $status = "";
+
+        if ($this->balance > 0 && $this->paid > 0) {
+            $status = "Partial";
+        } elseif ($this->balance > 0 && $this->paid === 0) {
+            $status = "Unpaid";
+        } elseif ($this->balance == 0) {
+            $status = "Paid";
+        }
+
+        return $status;
+    }
+
+
+    public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function vehicle(): BelongsTo
+    public function purchased_items()
     {
-        return $this->belongsTo(Vehicle::class);
-    }
-
-    public function chamber_readings(): HasMany
-    {
-        return $this->hasMany(PurchaseReading::class);
-    }
-
-    public function distributions(): HasMany
-    {
-        return $this->hasMany(Distribution::class);
-    }
-
-    public function payment()
-    {
-        return $this->hasOne(Payment::class, 'paymentable_id')->where('model', Purchase::class);
+        return $this->hasMany(PurchasedItem::class);
     }
 
     public static function booted()
     {
-        static::creating(function ($purchase) {
-            if (Str::contains(request('petrol_price'), '+')) {
-                $exploded = explode('+', request('petrol_price'));
-                $price = $exploded[0];
-                $rate = $exploded[1];
+        static::saving(function ($purchase) {
+            $total_amount = 0;
 
-                $purchase->petrol_price = $price;
-                $purchase->vehicle_charges_petrol_rate = $rate;
-            } else {
-                $purchase->petrol_price = request('petrol_price');
+            foreach (request('items') as $item) {
+                $total_amount += $item['grand_total'];
             }
 
-            if (Str::contains(request('diesel_price'), '+')) {
-                $exploded = explode('+', request('diesel_price'));
-                $price = $exploded[0];
-                $rate = $exploded[1];
-
-                $purchase->diesel_price = $price;
-                $purchase->vehicle_charges_diesel_rate = $rate;
-            } else {
-                $purchase->diesel_price = request('diesel_price');
-            }
+            $purchase->total_amount = $total_amount;
         });
     }
 }

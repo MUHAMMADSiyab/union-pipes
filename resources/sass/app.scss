@@ -9,7 +9,15 @@ body {
 }
 
 @media print {
+    v-data-table {
+        font-size: x-small !important;
+    }
+
     .v-data-footer {
         display: none !important;
+    }
+
+    body {
+        margin: 0 !important;
     }
 }

@@ -93,6 +93,10 @@ const actions = {
 
             const res = await axios.post("/api/payments", fd);
 
+            if (model === "App\\Models\\Purchase") {
+                commit("purchase/PAYMENT", res.data, { root: true });
+            }
+
             if (model === "App\\Models\\Salary") {
                 commit("salary/PAYMENT", res.data, { root: true });
 
@@ -123,18 +127,11 @@ const actions = {
                 await axios.delete(`/api/transactions/${id}`);
             }
 
-            // If the payment belongs to a utility
-            if (model === "App\\Models\\Utility") {
-                const id = store.getters["utility/recent_utility"].id;
+            // If the payment belongs to a expense
+            if (model === "App\\Models\\Expense") {
+                const id = store.getters["expense/recent_expense"].id;
 
-                await axios.delete(`/api/utilities/${id}`);
-            }
-
-            // If the payment belongs to a purchase
-            if (model === "App\\Models\\Purchase") {
-                const id = store.getters["purchase/recent_purchase"].id;
-
-                await axios.delete(`/api/purchases/${id}`);
+                await axios.delete(`/api/expenses/${id}`);
             }
 
             // If the payment belongs to an account entry
@@ -202,6 +199,12 @@ const actions = {
             const res = await axios.post(`/api/payments/${id}`, fd);
 
             commit(UPDATE_PAYMENT, res.data.payment);
+
+            if (model === "App\\Models\\Purchase") {
+                commit("purchase/PAYMENT", res.data.paymentable, {
+                    root: true,
+                });
+            }
 
             if (model === "App\\Models\\Salary") {
                 commit("salary/PAYMENT", res.data.paymentable, {
@@ -276,6 +279,12 @@ const actions = {
             const res = await axios.delete(`/api/payments/${id}`);
 
             commit(DELETE_PAYMENT, id);
+
+            if (model === "App\\Models\\Purchase") {
+                commit("purchase/PAYMENT", res.data, {
+                    root: true,
+                });
+            }
 
             if (model === "App\\Models\\Salary") {
                 commit("salary/PAYMENT", res.data, {

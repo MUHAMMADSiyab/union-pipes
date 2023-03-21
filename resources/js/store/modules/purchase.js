@@ -28,12 +28,21 @@ const getters = {
 
 const actions = {
     // Add purchase
-    async addPurchase({ commit }, data) {
+    async addPurchase({ commit, dispatch }, data) {
         try {
             const res = await axios.post("/api/purchases", data);
 
             commit(NEW_PURCHASE, res.data);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+
+            return dispatch(
+                "alert/setAlert",
+                {
+                    type: "success",
+                    message: "Product added successfully",
+                },
+                { root: true }
+            );
         } catch (error) {
             if (error.response.status === 422) {
                 commit(SET_VALIDATION_ERRORS, error.response.data, {
@@ -76,8 +85,7 @@ const actions = {
         try {
             const res = await axios.put(`/api/purchases/${data.id}`, data);
 
-            commit(UPDATE_PURCHASE, res.data.updated_purchase);
-            commit(OLD_PURCHASE, res.data.old_purchase);
+            // commit(UPDATE_PURCHASE, res.data.updated_purchase);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
             return dispatch(
@@ -149,6 +157,13 @@ const mutations = {
 
     NEW_PURCHASE: (state, payload) => {
         state.recent_purchase = payload;
+    },
+
+    PAYMENT: (state, payload) => {
+        const index = state.purchases.findIndex(
+            (purchase) => purchase.id === payload.id
+        );
+        state.purchases.splice(index, 1, payload);
     },
 
     OLD_PURCHASE: (state, payload) => {

@@ -12,7 +12,12 @@ class Product extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'per_kg_price',
+        'size',
+        'type',
+    ];
 
     public function tanks(): HasMany
     {

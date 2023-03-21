@@ -25,32 +25,29 @@ class PurchaseRequest extends FormRequest
     {
         return [
             'date' => 'required|date',
-            'company_id' => 'required|exists:companies,id',
             'invoice_no' => 'nullable|max:50',
-            'vehicle_id' => 'required|exists:vehicles,id',
-            'petrol_quantity' => 'required|numeric',
-            'diesel_quantity' => 'required|numeric',
-            'petrol_price' => 'required',
-            'diesel_price' => 'required',
-            'total_amount' => 'required|numeric',
-            'chamber_readings' => 'required|array',
-            'chamber_readings.*.rod_value' => 'required|numeric',
-            'chamber_readings.*.available_quantity' => 'required|numeric',
-            'distributions' => 'required|array',
-            'distributions.*.new_stock_quantity' => 'required|numeric',
+            'company_id' => 'required|exists:companies,id',
+            'sales_tax_percentage' => 'numeric',
+            'category' => 'required|max:100',
+            'items' => 'required|array',
+            'items.*.purchase_item_id' => 'required|exists:purchase_items,id',
+            'items.*.quantity' => 'required|numeric',
+            'items.*.rate' => 'required|numeric',
+            'items.*.total' => 'required|numeric',
+            'items.*.sales_tax' => 'required|numeric',
+            'items.*.grand_total' => 'required|numeric',
         ];
     }
 
     public function attributes()
     {
         return [
-            'company_id' => 'Company',
-            'vehicle_id' => 'Vehicle',
-            'chamber_readings' => 'Chamber Readings',
-            'chamber_readings.*.rod_value' => 'Rod Value',
-            'chamber_readings.*.available_quantity' => 'Available Quantity',
-            'chamber_readings.*.excess_quantity' => 'Excess Quantity',
-            'distributions.*.new_stock_quantity' => 'New Stock Qty.',
+            'items.*.purchase_item_id' => 'purchase item',
+            'items.*.quantity' => 'quantity',
+            'items.*.rate' => 'rate',
+            'items.*.total' => 'total',
+            'items.*.sales_tax' => 'sales tax',
+            'items.*.grand_total' => 'grand total',
         ];
     }
 }

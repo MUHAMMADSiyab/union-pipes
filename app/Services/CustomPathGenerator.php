@@ -17,10 +17,6 @@ class CustomPathGenerator implements PathGenerator
       return 'settings/' . $media->id . '/';
     }
 
-    if ($media->model_type === 'App\\Models\\Account') {
-      return 'accounts/' . $media->id . '/';
-    }
-
     if ($media->model_type === 'App\\Models\\Payment') {
       return 'payments/' . $media->id . '/';
     }
@@ -47,10 +43,6 @@ class CustomPathGenerator implements PathGenerator
       return 'settings/conversions/' . $media->id . '/';
     }
 
-    if ($media->model_type === 'App\\Models\\Account') {
-      return 'accounts/conversions/' . $media->id . '/';
-    }
-
     if ($media->model_type === 'App\\Models\\Payment') {
       return 'payments/conversions/' . $media->id . '/';
     }
@@ -75,10 +67,6 @@ class CustomPathGenerator implements PathGenerator
   {
     if ($media->model_type === 'App\\Models\\Setting') {
       return 'settings/responsive-images/' . $media->id . '/';
-    }
-
-    if ($media->model_type === 'App\\Models\\Account') {
-      return 'accounts/responsive-images/' . $media->id . '/';
     }
 
     if ($media->model_type === 'App\\Models\\Payment') {

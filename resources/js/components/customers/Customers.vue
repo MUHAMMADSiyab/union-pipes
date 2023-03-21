@@ -23,11 +23,6 @@
               v-if="customer.photo"
               height="220px"
             ></v-img>
-            <v-img
-              src="/storage/common/user-placeholder.jpg"
-              height="220px"
-              v-else
-            ></v-img>
 
             <v-card-title>
               {{ customer.name }}

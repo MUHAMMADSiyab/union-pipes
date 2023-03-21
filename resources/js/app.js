@@ -22,7 +22,6 @@ Vue.use(VueApexCharts);
 Vue.component("apexchart", VueApexCharts);
 
 Vue.config.productionTip = false;
-
 // CSS
 import "@mdi/font/css/materialdesignicons.css";
 

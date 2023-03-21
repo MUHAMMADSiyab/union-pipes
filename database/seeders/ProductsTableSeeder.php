@@ -14,7 +14,7 @@ class ProductsTableSeeder extends Seeder
      */
     public function run()
     {
-        Product::query()->create(['name' => 'Petrol']);
-        Product::query()->create(['name' => 'Diesel']);
+        Product::query()->create(['name' => 'Pipe PVC', 'per_kg_price' => 140]);
+        Product::query()->create(['name' => 'Pipe Plastic', 'per_kg_price' => 120]);
     }
 }

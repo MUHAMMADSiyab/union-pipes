@@ -51,11 +51,13 @@ class UserController extends Controller
         Gate::authorize('user_access');
         Gate::authorize('user_create');
 
+        $data = $request->only(['name', 'email', 'password']);
+
         DB::beginTransaction();
 
         try {
-            $request->password = bcrypt($request->password);
-            $user = User::create($request->only(['name', 'email', 'password']));
+            $data['password'] = bcrypt($data['password']);
+            $user = User::create($data);
             // Assign users to user
             $user->roles()->sync($request->roles);
 
@@ -79,17 +81,19 @@ class UserController extends Controller
         Gate::authorize('user_access');
         Gate::authorize('user_edit');
 
+        $data = $request->only(['name', 'email', 'password']);
+
         DB::beginTransaction();
 
         try {
 
             if (!empty($request->password)) {
-                $request['password'] = bcrypt($request->password);
+                $data['password'] = bcrypt($data['password']);
             } else {
-                unset($request['password']);
+                unset($data['password']);
             }
 
-            $user = tap($user)->update($request->only(['name', 'email', 'password']));
+            $user = tap($user)->update($data);
             // Assign users to user
             $user->roles()->sync($request->roles);
 

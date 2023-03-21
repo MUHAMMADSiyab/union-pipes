@@ -25,6 +25,9 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required|max:30',
+            'size' => 'required|numeric',
+            'type' => 'required|max:50',
+            'per_kg_price' => 'required|numeric'
         ];
     }
 }

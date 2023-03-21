@@ -1,856 +1,530 @@
 <template>
-  <div>
-    <Navbar v-if="!printMode" />
+    <div>
+        <Navbar v-if="!printMode" />
 
-    <v-container class="mt-4">
-      <v-row>
-        <v-col cols="12">
-          <v-card :loading="formLoading" :disabled="formLoading">
-            <v-card-title primary-title>New Purchase</v-card-title>
-            <v-card-subtitle>Add a New Purchase</v-card-subtitle>
+        <v-container class="mt-4">
+            <v-row>
+                <v-col cols="12">
+                    <v-card :loading="formLoading" :disabled="formLoading">
+                        <v-card-title primary-title>Edit Purchase</v-card-title>
+                        <v-card-subtitle>Edit this Purchase</v-card-subtitle>
 
-            <v-card-text class="mt-3">
-              <v-form @submit.prevent="update">
-                <v-row>
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('date')"
-                    ></small>
-                    <v-menu max-width="290px" min-width="auto">
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="data.date"
-                          v-on="on"
-                          label="Date"
-                          prepend-inner-icon="mdi-calendar"
-                          dense
-                          outlined
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="data.date"
-                        label="Date"
-                        no-title
-                        outlined
-                        dense
-                        show-current
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
+                        <v-card-text class="mt-3">
+                            <v-form @submit.prevent="update">
+                                <v-row>
+                                    <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage('date')
+                                            "
+                                        ></small>
+                                        <v-menu
+                                            max-width="290px"
+                                            min-width="auto"
+                                        >
+                                            <template v-slot:activator="{ on }">
+                                                <v-text-field
+                                                    v-model="data.date"
+                                                    v-on="on"
+                                                    label="Date"
+                                                    prepend-inner-icon="mdi-calendar"
+                                                    dense
+                                                    outlined
+                                                ></v-text-field>
+                                            </template>
+                                            <v-date-picker
+                                                v-model="data.date"
+                                                label="Date"
+                                                no-title
+                                                outlined
+                                                dense
+                                                show-current
+                                            ></v-date-picker>
+                                        </v-menu>
+                                    </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('company_id')"
-                    ></small>
-                    <v-select
-                      :items="companies"
-                      item-text="name"
-                      item-value="id"
-                      v-model="data.company_id"
-                      placeholder="Select Company"
-                      autocomplete
-                      dense
-                      outlined
-                    ></v-select>
-                  </v-col>
+                                    <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'company_id'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-select
+                                            :items="companies"
+                                            item-text="name"
+                                            item-value="id"
+                                            v-model="data.company_id"
+                                            placeholder="Select Supplier Company"
+                                            autocomplete
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('invoice_no')"
-                    ></small>
-                    <v-text-field
-                      v-model="data.invoice_no"
-                      label="Invoice No."
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
+                                    <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'invoice_no'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-text-field
+                                            v-model="data.invoice_no"
+                                            label="Invoice No."
+                                            dense
+                                            outlined
+                                        ></v-text-field>
+                                    </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('vehicle_id')"
-                    ></small>
-                    <v-select
-                      :items="vehicles"
-                      item-text="registration_no"
-                      item-value="id"
-                      v-model="data.vehicle_id"
-                      @change="handleVehicleChange"
-                      placeholder="Select Vehicle"
-                      autocomplete
-                      dense
-                      outlined
-                    ></v-select>
-                  </v-col>
+                                    <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'sales_tax_percentage'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-text-field
+                                            type="number"
+                                            steps=".01"
+                                            v-model="data.sales_tax_percentage"
+                                            label="Sales Tax %"
+                                            dense
+                                            outlined
+                                        ></v-text-field>
+                                    </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('petrol_quantity')"
-                    ></small>
-                    <v-text-field
-                      type="number"
-                      v-model="data.petrol_quantity"
-                      label="Petrol Quantity"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
+                                    <v-col
+                                        xl="8"
+                                        lg="8"
+                                        md="8"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'category'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-select
+                                            :items="categories"
+                                            v-model="data.category"
+                                            placeholder="Select Purchase Category"
+                                            autocomplete
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('diesel_quantity')"
-                    ></small>
-                    <v-text-field
-                      type="number"
-                      v-model="data.diesel_quantity"
-                      label="Diesel Quantity"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
+                                <!-- Purchase Items -->
+                                <v-row class="mt-3">
+                                    <v-col cols="12" class="py-0">
+                                        <h3 class="ml-3 mb-4">
+                                            Purchase Items
+                                        </h3>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('petrol_price')"
-                    ></small>
-                    <v-text-field
-                      v-model="data.petrol_price"
-                      label="Petrol Price"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
+                                        <v-btn
+                                            color="success"
+                                            x-small
+                                            @click="addItemRow"
+                                            class="mb-5 ml-3"
+                                            ><v-icon x-small
+                                                >mdi-plus</v-icon
+                                            ></v-btn
+                                        >
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('diesel_price')"
-                    ></small>
-                    <v-text-field
-                      v-model="data.diesel_price"
-                      label="Diesel Price"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
+                                        <v-list
+                                            v-for="(item, i) in data.items"
+                                            dense
+                                            :key="i"
+                                            no-action
+                                        >
+                                            <v-list-item>
+                                                <v-btn
+                                                    color="error"
+                                                    x-small
+                                                    @click="removeItemRow(i)"
+                                                    class="mb-5 mr-2"
+                                                    ><v-icon x-small
+                                                        >mdi-minus</v-icon
+                                                    ></v-btn
+                                                >
+                                                <v-row>
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.purchase_item_id`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-select
+                                                            :items="
+                                                                purchase_items
+                                                            "
+                                                            item-text="name"
+                                                            item-value="id"
+                                                            v-model="
+                                                                item.purchase_item_id
+                                                            "
+                                                            placeholder="Select Item"
+                                                            autocomplete
+                                                            filled
+                                                        ></v-select>
+                                                    </v-col>
 
-                  <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('total_amount')"
-                    ></small>
-                    <v-text-field
-                      type="number"
-                      v-model="data.total_amount"
-                      label="Total Amount"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.rate`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="item.rate"
+                                                            type="number"
+                                                            label="Rate"
+                                                            dense
+                                                            filled
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                <!-- Chamber Readings -->
-                <v-row class="mt-3" v-if="data.chamber_readings.length">
-                  <v-col cols="12" class="py-0">
-                    <h3 class="ml-3 mb-4">Chambers Readings</h3>
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.quantity`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="
+                                                                item.quantity
+                                                            "
+                                                            type="number"
+                                                            label="Quantity"
+                                                            dense
+                                                            filled
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                    <!-- Chambers -->
-                    <v-list
-                      v-for="(chamber, i) in data.chamber_readings"
-                      :key="i"
-                      no-action
-                    >
-                      <v-list-item>
-                        <v-row>
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              :label="`Chamber # ${i + 1}`"
-                              dense
-                              filled
-                              disabled
-                            ></v-text-field>
-                          </v-col>
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.total`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="item.total"
+                                                            type="number"
+                                                            label="Total"
+                                                            dense
+                                                            filled
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              v-model="chamber.capacity"
-                              type="number"
-                              label="Capacity"
-                              readonly
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.sales_tax`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="
+                                                                item.sales_tax
+                                                            "
+                                                            type="number"
+                                                            label="Sales Tax"
+                                                            dense
+                                                            filled
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              v-model="chamber.dip_value"
-                              type="number"
-                              label="Dip Value"
-                              readonly
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.grand_total`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="
+                                                                item.grand_total
+                                                            "
+                                                            type="number"
+                                                            label="Grand Total"
+                                                            dense
+                                                            filled
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-list-item>
+                                            <v-divider class="mb-3"></v-divider>
+                                        </v-list>
+                                    </v-col>
+                                </v-row>
 
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <small
-                              class="red--text"
-                              v-if="validation.hasErrors()"
-                              v-text="
-                                validation.getMessage(
-                                  `chamber_readings.${i}.rod_value`
-                                )
-                              "
-                            ></small>
-                            <v-text-field
-                              v-model="chamber.rod_value"
-                              type="number"
-                              label="Rod Value"
-                              height="20"
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
+                                <v-btn color="success" type="submit"
+                                    >Update Purchase</v-btn
+                                >
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
 
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <small
-                              class="red--text"
-                              v-if="validation.hasErrors()"
-                              v-text="
-                                validation.getMessage(
-                                  `chamber_readings.${i}.available_quantity`
-                                )
-                              "
-                            ></small>
-                            <v-text-field
-                              v-model="chamber.available_quantity"
-                              type="number"
-                              label="Available Quantity"
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <small
-                              class="red--text"
-                              v-if="validation.hasErrors()"
-                              v-text="
-                                validation.getMessage(
-                                  `chamber_readings.${i}.excess_quantity`
-                                )
-                              "
-                            ></small>
-                            <v-text-field
-                              v-model="chamber.excess_quantity"
-                              type="number"
-                              label="Excess Quantity"
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-list-item>
-                      <v-divider class="mb-3"></v-divider>
-                    </v-list>
-                  </v-col>
-                </v-row>
-
-                <!-- Fuel Distribution -->
-                <v-row
-                  class="mt-3"
-                  v-if="
-                    data.chamber_readings.length && data.distributions.length
-                  "
-                >
-                  <v-col cols="12" class="py-0">
-                    <h3 class="ml-3 mb-4">Fuel Distribution</h3>
-
-                    <!-- Tanks -->
-                    <v-list
-                      v-for="(tank, i) in data.distributions"
-                      :key="i"
-                      no-action
-                    >
-                      <v-list-item>
-                        <v-row>
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              :label="`${tank.name}`"
-                              dense
-                              filled
-                              disabled
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              v-model="tank.limit"
-                              type="number"
-                              label="Limit/Capacity"
-                              readonly
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              v-model="tank.current_fuel_quantity"
-                              type="number"
-                              label="Curent Fuel Qty."
-                              readonly
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              :value="tank.limit - tank.current_fuel_quantity"
-                              type="number"
-                              readonly
-                              label="Free Space"
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <small
-                              class="red--text"
-                              v-if="validation.hasErrors()"
-                              v-text="
-                                validation.getMessage(
-                                  `distributions.${i}.new_stock_quantity`
-                                )
-                              "
-                            ></small>
-                            <v-text-field
-                              v-model="tank.new_stock_quantity"
-                              type="number"
-                              label="New Stock Qty."
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                            xl="2"
-                            lg="2"
-                            md="2"
-                            sm="12"
-                            cols="12"
-                            class="py-0"
-                          >
-                            <v-text-field
-                              :value="tank.product.name"
-                              label="Tank Type"
-                              disabled
-                              dense
-                              filled
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-list-item>
-                      <v-divider class="mb-3"></v-divider>
-                    </v-list>
-                  </v-col>
-                </v-row>
-
-                <!-- Payment -->
-                <v-row v-if="paymentSetting">
-                  <v-col cols="12" class="py-0 mb-3">
-                    <h6 class="text-subtitle-2 primary--text">
-                      Payment Details
-                    </h6>
-                  </v-col>
-
-                  <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('amount')"
-                    ></small>
-                    <v-text-field
-                      name="amount"
-                      :label="`Amount (${paymentSetting.currency})`"
-                      id="amount"
-                      v-model="data.payment.amount"
-                      max="purchase.amount"
-                      type="number"
-                      dense
-                      outlined
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('payment_date')"
-                    ></small>
-                    <v-menu max-width="290px" min-width="auto">
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="data.payment.payment_date"
-                          v-on="on"
-                          label="Payment Date"
-                          prepend-inner-icon="mdi-calendar"
-                          dense
-                          outlined
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="data.payment.payment_date"
-                        label="Payment Date"
-                        no-title
-                        outlined
-                        dense
-                        show-current
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-
-                  <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('payment_method')"
-                    ></small>
-                    <v-select
-                      :items="paymentSetting.payment_methods"
-                      label="Payment Method"
-                      id="payment-method"
-                      name="payment-method"
-                      v-model="data.payment.payment_method"
-                      dense
-                      outlined
-                    ></v-select>
-                  </v-col>
-
-                  <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
-                    <small
-                      class="red--text"
-                      v-if="validation.hasErrors()"
-                      v-text="validation.getMessage('bank_id')"
-                    ></small>
-                    <v-select
-                      :items="banks"
-                      name="bank"
-                      label="Select Bank"
-                      item-text="name"
-                      item-value="id"
-                      id="bank"
-                      v-model="data.payment.bank_id"
-                      dense
-                      outlined
-                    ></v-select>
-                  </v-col>
-
-                  <template
-                    v-if="data.payment.payment_method === 'Cheque'"
-                    class="mt-1 mb-1"
-                  >
-                    <v-col xl="6" lg="6" md="6" sm="12" xs="12" class="py-0">
-                      <small
-                        class="red--text"
-                        v-if="validation.hasErrors()"
-                        v-text="validation.getMessage('cheque_type')"
-                      ></small>
-                      <v-select
-                        :items="paymentSetting.cheque_types"
-                        label="Cheque Type"
-                        id="cheque-type"
-                        name="cheque-type"
-                        v-model="data.payment.cheque_type"
-                        dense
-                        outlined
-                      ></v-select>
-                    </v-col>
-                    <v-col xl="6" lg="6" md="6" sm="12" xs="12" class="py-0">
-                      <small
-                        class="red--text"
-                        v-if="validation.hasErrors()"
-                        v-text="validation.getMessage('cheque_no')"
-                      ></small>
-                      <v-text-field
-                        name="cheque-no"
-                        label="Cheque No."
-                        id="cheque-no"
-                        v-model="data.payment.cheque_no"
-                        dense
-                        outlined
-                      ></v-text-field>
-                    </v-col>
-                    <v-col xl="6" lg="6" md="6" sm="12" xs="12" class="py-0">
-                      <small
-                        class="red--text"
-                        v-if="validation.hasErrors()"
-                        v-text="validation.getMessage('cheque_due_date')"
-                      ></small>
-                      <v-menu max-width="290px" min-width="auto">
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="data.payment.cheque_due_date"
-                            v-on="on"
-                            label="Cheque Due Date"
-                            prepend-inner-icon="mdi-calendar"
-                            dense
-                            outlined
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="data.payment.cheque_due_date"
-                          label="Date"
-                          no-title
-                          outlined
-                          dense
-                          show-current
-                        ></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                    <v-col xl="6" lg="6" md="6" sm="12" xs="12" class="py-0">
-                      <small
-                        class="red--text"
-                        v-if="validation.hasErrors()"
-                        v-text="
-                          validation.getMessage('cheque_images', true, true)
-                        "
-                      ></small>
-                      <v-file-input
-                        name="cheque-images"
-                        label="Cheque Image(s)"
-                        id="cheque-images"
-                        @change="handleFiles"
-                        prepend-inner-icon="mdi-camera"
-                        prepend-icon=""
-                        multiple
-                        dense
-                        :clearable="false"
-                        outlined
-                        hint="Only image files | Max. size 2MB"
-                      ></v-file-input>
-                    </v-col>
-                  </template>
-                </v-row>
-
-                <v-btn color="primary" type="submit">Update</v-btn>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <alert />
-    </v-container>
-  </div>
+            <alert />
+        </v-container>
+    </div>
 </template>
-  
-  <script>
+
+<script>
 import { mapActions, mapGetters } from "vuex";
 import ValidationMixin from "../../mixins/ValidationMixin";
 import Navbar from "../navs/Navbar";
 
 export default {
-  mixins: [ValidationMixin],
+    mixins: [ValidationMixin],
 
-  components: {
-    Navbar,
-  },
+    components: {
+        Navbar,
+    },
 
-  data() {
-    return {
-      formLoading: false,
-      data: {
-        id: "",
-        date: "",
-        company_id: "",
-        invoice_no: "",
-        vehicle_id: "",
-        petrol_quantity: 0,
-        diesel_quantity: 0,
-        petrol_price: "0",
-        diesel_price: "0",
-        total_amount: 0,
-        chamber_readings: [],
-        distributions: [],
-        payment: {
-          model: "App\\Models\\Purchase",
-          paymentable_id: null,
-          amount: "",
-          transaction_type: "Credit",
-          payment_date: "",
-          bank_id: "",
-          payment_method: "",
-          cheque_type: "",
-          cheque_no: "",
-          cheque_due_date: "",
-          cheque_images: [],
-          description: "",
+    data() {
+        return {
+            formLoading: false,
+            categories: ["Raw Material", "Other"],
+            data: {
+                date: "",
+                company_id: "",
+                invoice_no: "",
+                category: "",
+                sales_tax_percentage: 0,
+                total_amount: 0,
+                items: [
+                    {
+                        purchase_item_id: "",
+                        quantity: 0,
+                        rate: 0,
+                        total: 0,
+                        sales_tax: 0,
+                        grand_total: 0,
+                    },
+                ],
+            },
+        };
+    },
+
+    methods: {
+        ...mapActions({
+            getCompanies: "company/getCompanies",
+            getPurchaseItems: "purchase_item/getPurchaseItems",
+            getPurchase: "purchase/getPurchase",
+            updatePurchase: "purchase/updatePurchase",
+        }),
+
+        addItemRow() {
+            this.data.items = [
+                ...this.data.items,
+                {
+                    purchase_item_id: "",
+                    quantity: 0,
+                    rate: 0,
+                    total: 0,
+                    sales_tax: 0,
+                    grand_total: 0,
+                },
+            ];
         },
-      },
-    };
-  },
 
-  methods: {
-    ...mapActions({
-      getCompanies: "company/getCompanies",
-      getVehicles: "vehicle/getVehicles",
-      getTanks: "tank/getTanks",
-      getPaymentSetting: "getPaymentSetting",
-      getVehicleChambers: "vehicle/getVehicleChambers",
-      getBanks: "bank/getBanks",
-      editPayment: "payment/editPayment",
-      getPurchase: "purchase/getPurchase",
-      updatePurchase: "purchase/updatePurchase",
-    }),
+        removeItemRow(index) {
+            this.data.items = this.data.items.filter((item, i) => i !== index);
+        },
 
-    handleFiles(files) {
-      this.data.payment.cheque_images = files;
+        async update() {
+            this.formLoading = true;
+
+            await this.updatePurchase({
+                ...this.data,
+                old_items: this.purchase.purchased_items,
+            });
+
+            this.formLoading = false;
+
+            // Validation
+            if (this.validationErrors !== null) {
+                this.validation.setMessages(this.validationErrors.errors);
+            } else {
+                // Clear the validation messages object
+                this.validation.setMessages({});
+
+                // redirect
+                return this.$router.push({ name: "purchases" });
+            }
+        },
     },
 
-    async handleVehicleChange(vehicleId) {
-      await this.getVehicleChambers(vehicleId);
-
-      this.data.chamber_readings = this.vehicle_chambers.map((chamber) => ({
-        chamber_id: chamber.id,
-        capacity: chamber.capacity,
-        dip_value: chamber.dip_value,
-        rod_value: 0,
-        available_quantity: 0,
-        excess_quantity: 0,
-      }));
+    computed: {
+        ...mapGetters({
+            companies: "company/companies",
+            purchase_items: "purchase_item/purchase_items",
+            purchase: "purchase/purchase",
+            validationErrors: "validationErrors",
+        }),
     },
 
-    getCalculatedPrice(data, type) {
-      const splitted = data[`${type}_price`].split("+");
-      const price = splitted[0];
-      const vehicle_charges_rate = splitted[1];
-      return (parseFloat(price) || 0) + (parseFloat(vehicle_charges_rate) || 0);
+    watch: {
+        data: {
+            handler(data) {
+                this.data.items.forEach((item, index) => {
+                    const sales_tax_percentage =
+                        data.sales_tax_percentage / 100;
+                    item.total =
+                        data.items[index].rate * data.items[index].quantity;
+                    const sales_tax_amount = item.total * sales_tax_percentage;
+                    item.sales_tax = sales_tax_amount;
+                    item.grand_total = item.total + item.sales_tax;
+                });
+            },
+            deep: true,
+        },
     },
 
-    async update() {
-      this.formLoading = true;
+    async mounted() {
+        await Promise.all([
+            this.getCompanies(),
+            this.getPurchaseItems(),
+            this.getPurchase(this.$route.params.id),
+        ]);
 
-      await this.updatePurchase(this.data);
-
-      if (this.old_purchase) {
-        await this.editPayment(this.data.payment);
-      }
-
-      this.formLoading = false;
-
-      // Validation
-      if (this.validationErrors !== null) {
-        this.validation.setMessages(this.validationErrors.errors);
-      } else {
-        // Clear the validation messages object
-        this.validation.setMessages({});
-      }
-    },
-  },
-
-  computed: {
-    ...mapGetters({
-      companies: "company/companies",
-      vehicles: "vehicle/vehicles",
-      tanks: "tank/tanks",
-      vehicle_chambers: "vehicle/vehicle_chambers",
-      paymentSetting: "paymentSetting",
-      recent_purchase: "purchase/recent_purchase",
-      purchase: "purchase/purchase",
-      old_purchase: "purchase/old_purchase",
-      banks: "bank/banks",
-      validationErrors: "validationErrors",
-    }),
-  },
-
-  watch: {
-    data: {
-      handler(data) {
-        let petrol_result = 0;
-        let diesel_result = 0;
-
-        if (data.petrol_price.indexOf("+") !== -1) {
-          petrol_result = this.getCalculatedPrice(data, "petrol");
-        } else {
-          petrol_result = data.petrol_price;
+        if (!this.purchase) {
+            return this.$router.push({ name: "not_found" });
         }
 
-        if (data.diesel_price.indexOf("+") !== -1) {
-          diesel_result = this.getCalculatedPrice(data, "diesel");
-        } else {
-          diesel_result = data.diesel_price;
-        }
-
-        this.data.total_amount =
-          data.petrol_quantity * petrol_result +
-          data.diesel_quantity * diesel_result;
-
-        this.data.chamber_readings.forEach((reading) => {
-          reading.available_quantity =
-            (reading.rod_value * reading.dip_value) / reading.capacity;
-
-          reading.excess_quantity =
-            reading.capacity - reading.available_quantity;
-        });
-      },
-
-      deep: true,
+        this.data.id = this.purchase.id;
+        this.data.date = this.purchase.date;
+        this.data.sales_tax_percentage = this.purchase.sales_tax_percentage;
+        this.data.invoice_no = this.purchase.invoice_no;
+        this.data.category = this.purchase.category;
+        this.data.company_id = this.purchase.company_id;
+        this.data.items = this.purchase.purchased_items;
     },
-  },
-
-  async mounted() {
-    await Promise.all([
-      this.getCompanies(),
-      this.getVehicles(),
-      this.getTanks(),
-      this.getPaymentSetting(),
-      this.getBanks(),
-      this.getPurchase(this.$route.params.id),
-    ]);
-
-    if (!this.purchase) {
-      return this.$router.push({ name: "not_found" });
-    }
-
-    this.data.id = this.purchase.id;
-    this.data.date = this.purchase.date;
-    this.data.invoice_no = this.purchase.invoice_no;
-    this.data.company_id = this.purchase.company_id;
-    this.data.vehicle_id = this.purchase.vehicle_id;
-    this.data.petrol_quantity = this.purchase.petrol_quantity;
-    this.data.diesel_quantity = this.purchase.diesel_quantity;
-    this.data.petrol_price = `${this.purchase.petrol_price}+${this.purchase.vehicle_charges_petrol_rate}`;
-    this.data.diesel_price = `${this.purchase.diesel_price}+${this.purchase.vehicle_charges_diesel_rate}`;
-    this.data.total_amount = this.purchase.total_amount;
-
-    this.data.chamber_readings = this.purchase.chamber_readings.map(
-      (chamber_reading) => ({
-        chamber_id: chamber_reading.chamber_id,
-        capacity: chamber_reading.chamber.capacity,
-        dip_value: chamber_reading.chamber.dip_value,
-        rod_value: chamber_reading.rod_value,
-        available_quantity: chamber_reading.available_quantity,
-        excess_quantity: chamber_reading.excess_quantity,
-      })
-    );
-
-    this.data.distributions = this.purchase.distributions.map(
-      (distribution) => ({
-        tank_id: distribution.tank_id,
-        name: distribution.tank.name,
-        limit: distribution.tank.limit,
-        current_fuel_quantity: distribution.tank.current_fuel_quantity,
-        new_stock_quantity: distribution.new_stock_quantity,
-        product: distribution.tank.product,
-      })
-    );
-
-    this.data.payment.id = this.purchase.payment.id;
-    this.data.payment.paymentable_id = this.purchase.id;
-    this.data.payment.amount = this.purchase.payment.amount;
-    this.data.payment.payment_date = this.purchase.payment.payment_date;
-    this.data.payment.bank_id = this.purchase.payment.bank_id;
-    this.data.payment.payment_method = this.purchase.payment.payment_method;
-    this.data.payment.cheque_type = this.purchase.payment.cheque_type;
-    this.data.payment.cheque_no = this.purchase.payment.cheque_no;
-    this.data.payment.cheque_due_date = this.purchase.payment.cheque_due_date;
-  },
 };
 </script>

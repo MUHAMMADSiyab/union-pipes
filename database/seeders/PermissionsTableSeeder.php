@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PermissionsTableSeeder extends Seeder
 {
@@ -81,11 +80,11 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'transaction_show'],
             ['name' => 'transaction_delete'],
 
-            ['name' => 'utility_access'],
-            ['name' => 'utility_create'],
-            ['name' => 'utility_edit'],
-            ['name' => 'utility_show'],
-            ['name' => 'utility_delete'],
+            ['name' => 'expense_access'],
+            ['name' => 'expense_create'],
+            ['name' => 'expense_edit'],
+            ['name' => 'expense_show'],
+            ['name' => 'expense_delete'],
 
             ['name' => 'employee_access'],
             ['name' => 'employee_create'],
@@ -104,6 +103,18 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'company_edit'],
             ['name' => 'company_show'],
             ['name' => 'company_delete'],
+
+            ['name' => 'purchase_item_access'],
+            ['name' => 'purchase_item_create'],
+            ['name' => 'purchase_item_edit'],
+            ['name' => 'purchase_item_show'],
+            ['name' => 'purchase_item_delete'],
+
+            ['name' => 'purchase_access'],
+            ['name' => 'purchase_create'],
+            ['name' => 'purchase_edit'],
+            ['name' => 'purchase_show'],
+            ['name' => 'purchase_delete'],
 
             ['name' => 'purchase_access'],
             ['name' => 'purchase_create'],

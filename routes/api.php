@@ -5,30 +5,23 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\CustomerBillingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DispenserController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExportController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\MeterController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentSettingController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\RateController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaryController;
-use App\Http\Controllers\SellController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\TankController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UtilityController;
-use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\VehicleTransactionController;
+use App\Http\Controllers\ExpenseSourceController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseItemController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\AuthGates;
 use App\Http\Middleware\NullToEmptyString;
 use Illuminate\Support\Facades\Route;
@@ -69,30 +62,6 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'except' => ['create', 'edit']
     ]);
 
-    // Tank
-    Route::resource('tanks', TankController::class, [
-        'except' => ['create', 'edit']
-    ]);
-
-    // Dispenser
-    Route::delete('dispensers/delete_multiple', [DispenserController::class, 'destroy_multiple']);
-    Route::resource('dispensers', DispenserController::class, [
-        'except' => ['create', 'edit']
-    ]);
-
-    // Meter
-    Route::get('meters/detailed_meters', [MeterController::class, 'detailed_meters']);
-    Route::delete('meters/delete_multiple', [MeterController::class, 'destroy_multiple']);
-    Route::resource('meters', MeterController::class, [
-        'except' => ['create', 'edit']
-    ]);
-
-    // Vehicle
-    Route::get('vehicles/{vehicle}/chambers', [VehicleController::class, 'getVehicleChambers']);
-    Route::resource('vehicles', VehicleController::class, [
-        'except' => ['create', 'edit']
-    ]);
-
     // Company
     Route::delete('companies/delete_multiple', [CompanyController::class, 'destroy_multiple']);
     Route::resource('companies', CompanyController::class, [
@@ -105,15 +74,15 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'except' => ['create', 'edit']
     ]);
 
-    // Transaction
-    Route::delete('transactions/delete_multiple', [TransactionController::class, 'destroy_multiple']);
-    Route::resource('transactions', TransactionController::class, [
+    // Expense Source
+    Route::delete('expense_sources/delete_multiple', [ExpenseSourceController::class, 'destroy_multiple']);
+    Route::resource('expense_sources', ExpenseSourceController::class, [
         'except' => ['create', 'edit']
     ]);
 
-    // Utility
-    Route::delete('utilities/delete_multiple', [UtilityController::class, 'destroy_multiple']);
-    Route::resource('utilities', UtilityController::class, [
+    // Expense
+    Route::delete('expenses/delete_multiple', [ExpenseController::class, 'destroy_multiple']);
+    Route::resource('expenses', ExpenseController::class, [
         'except' => ['create', 'edit']
     ]);
 
@@ -132,68 +101,32 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'create', 'edit'
     ]);
 
-    // Purchase
-    Route::delete('purchases/delete_multiple', [PurchaseController::class, 'destroy_multiple']);
-    Route::resource('purchases', PurchaseController::class, [
-        'except' => ['create', 'edit']
-    ]);
-
-    // Sell
-    Route::get('sells/{sell}/get_sell_final_readings', [
-        SellController::class, 'get_sell_final_readings'
-    ]);
-    Route::post('sells/{sell}/update_final_readings', [
-        SellController::class, 'update_final_readings'
-    ]);
-    Route::post('sells/get_previous_sell_readings', [
-        SellController::class, 'get_previous_sell_readings'
-    ]);
-    Route::delete('sells/delete_multiple', [SellController::class, 'destroy_multiple']);
-    Route::resource('sells', SellController::class, [
-        'except' => ['create', 'edit']
-    ]);
-
     // Customer
     Route::delete('customers/delete_multiple', [CustomerController::class, 'destroy_multiple']);
     Route::resource('customers', CustomerController::class, [
         'except' => ['create', 'edit']
     ]);
 
-    // Account
-    Route::get('accounts/get_customer_accounts/{customer}', [AccountController::class, 'get_customer_accounts']);
-    Route::delete('accounts/delete_multiple', [AccountController::class, 'destroy_multiple']);
-    Route::resource('accounts', AccountController::class, [
-        'except' => ['index', 'create', 'edit']
-    ]);
-
-    // Invoice
-    Route::delete('invoices/delete_multiple', [InvoiceController::class, 'destroy_multiple']);
-    Route::resource('invoices', InvoiceController::class, [
+    // Purchase Item
+    Route::delete('purchase_items/delete_multiple', [PurchaseItemController::class, 'destroy_multiple']);
+    Route::resource('purchase_items', PurchaseItemController::class, [
         'except' => ['create', 'edit']
     ]);
 
-    // Vehicle Transaction
-    Route::get('vehicle_transactions/get_vehicle_transactions/{vehicle}', [VehicleTransactionController::class, 'get_vehicle_transactions']);
-    Route::delete('vehicle_transactions/delete_multiple', [VehicleTransactionController::class, 'destroy_multiple']);
-    Route::resource('vehicle_transactions', VehicleTransactionController::class, [
-        'except' => ['index', 'create', 'edit']
+    // Purchase 
+    Route::delete('purchases/delete_multiple', [PurchaseController::class, 'destroy_multiple']);
+    Route::resource('purchases', PurchaseController::class, [
+        'except' => ['create', 'edit']
     ]);
 
-    Route::post('billing', CustomerBillingController::class);
-
-    // Rate
-    Route::get('rates/current', [RateController::class, 'get_current_rates']);
-    Route::post('rates/update', [RateController::class, 'update']);
-    Route::get('rates', [RateController::class, 'index']);
+    // Setting (edit)
+    Route::put('settings/{setting}', [SettingController::class, 'editSetting']);
 
     // Payment
     Route::post('payments/get_payments', [PaymentController::class, 'get_payments']);
     Route::resource('payments', PaymentController::class)->except([
         'create', 'edit'
     ]);
-
-    // Setting (edit)
-    Route::put('settings/{setting}', [SettingController::class, 'editSetting']);
 
     // Payment Setting
     Route::get('payment_settings', [PaymentSettingController::class, 'get']);
@@ -205,6 +138,10 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     // Dashboard
     Route::post('dashboard', DashboardController::class);
+
+    Route::group(['prefix' => 'reports'], function () {
+        Route::post('purchase', [ReportController::class, 'get_purchase_report']);
+    });
 });
 
 // Public routes

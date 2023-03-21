@@ -5,43 +5,6 @@
 
     <v-card-text class="mt-1">
       <v-form @submit.prevent="update">
-        <!-- Investor -->
-        <template v-if="payment.model === 'App\\Models\\PurchasedVehicle'">
-          <v-row
-            v-for="(investment, i) in data.investments"
-            :key="i"
-            class="mb-2"
-          >
-            <v-col xl="8" lg="8" md="8" sm="12" cols="12" class="py-0">
-              <v-select
-                :items="[
-                  {
-                    investor_id: investment.investor_id,
-                    investor: investment.investor,
-                  },
-                ]"
-                v-model="investment.investor_id"
-                item-text="investor"
-                item-value="investor_id"
-                label="Investor"
-                dense
-                outlined
-                readonly
-              ></v-select>
-            </v-col>
-
-            <v-col xl="4" lg="4" md="4" smal="12" cols="12" class="py-0">
-              <v-text-field
-                name="investor-amount"
-                label="Amount"
-                v-model="investment.amount"
-                dense
-                outlined
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </template>
-
         <small
           class="red--text"
           v-if="validation.hasErrors()"
@@ -249,18 +212,6 @@ export default {
   mixins: [ValidationMixin],
 
   data() {
-    const investments = [];
-
-    if (this.payment.model === "App\\Models\\PurchasedVehicle") {
-      this.entry.investments.forEach((investment) => {
-        investments.push({
-          investor_id: investment.investor_id,
-          investor: investment.investor,
-          amount: 0,
-        });
-      });
-    }
-
     const {
       id,
       amount,
@@ -295,7 +246,6 @@ export default {
         paymentable_id,
         model,
         description,
-        investments,
       },
     };
   },
@@ -304,7 +254,6 @@ export default {
     ...mapActions({
       getBanks: "bank/getBanks",
       editPayment: "payment/editPayment",
-      getInvestmentPayments: "payment/getInvestmentPayments",
     }),
 
     handleFiles(files) {
@@ -313,10 +262,6 @@ export default {
 
     async update() {
       this.formLoading = true;
-
-      if (this.payment.model === "App\\Models\\PurchasedVehicle") {
-        this.data.old_investments = this.investment_payments;
-      }
 
       // in case of salary payment
       if (this.employeeId) {
@@ -346,7 +291,6 @@ export default {
   computed: {
     ...mapGetters({
       banks: "bank/banks",
-      investment_payments: "payment/investment_payments",
       validationErrors: "validationErrors",
     }),
   },
@@ -368,34 +312,10 @@ export default {
       },
       deep: true,
     },
-
-    "data.investments": {
-      handler(investments) {
-        let investmentAmounts = 0;
-
-        investments.map((inv) => (investmentAmounts += parseInt(inv.amount)));
-
-        this.data.amount = parseInt(investmentAmounts);
-      },
-
-      deep: true,
-    },
   },
 
   async mounted() {
-    await Promise.all([
-      this.getInvestmentPayments(this.payment.id),
-      this.getBanks(),
-    ]);
-
-    // Populate investor's amounts fields
-    this.investment_payments.forEach((investment_payment) => {
-      this.data.investments.forEach((investment) => {
-        if (investment_payment.investor_id === investment.investor_id) {
-          investment.amount = investment_payment.amount;
-        }
-      });
-    });
+    await Promise.all([this.getBanks()]);
   },
 };
 </script>

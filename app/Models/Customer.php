@@ -31,9 +31,11 @@ class Customer extends Model implements HasMedia
 
     public function getPhotoAttribute()
     {
+        $avatar = "https://ui-avatars.com/api/?name={$this->name}&background=0D8ABC&color=fff&font-size=0.25";
+
         return $this->getFirstMedia('customers') ?
             $this->getFirstMedia('customers')->getUrl('photo') :
-            NULL;
+            $avatar;
     }
 
     public function registerMediaConversions(?Media $media = null): void

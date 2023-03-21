@@ -13,21 +13,15 @@ import setting from "./modules/setting";
 import product from "./modules/product";
 import tank from "./modules/tank";
 import dispenser from "./modules/dispenser";
-import meter from "./modules/meter";
-import vehicle from "./modules/vehicle";
-import rate from "./modules/rate";
 import bank from "./modules/bank";
-import transaction from "./modules/transaction";
-import utility from "./modules/utility";
+import expense_source from "./modules/expense_source";
+import expense from "./modules/expense";
 import employee from "./modules/employee";
 import salary from "./modules/salary";
 import company from "./modules/company";
-import purchase from "./modules/purchase";
-import sell from "./modules/sell";
 import customer from "./modules/customer";
-import account from "./modules/account";
-import invoice from "./modules/invoice";
-import vehicle_transaction from "./modules/vehicle_transaction";
+import purchase_item from "./modules/purchase_item";
+import purchase from "./modules/purchase";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
 
@@ -70,43 +64,18 @@ const store = new Vuex.Store({
             namespaced: true,
         },
 
-        tank: {
-            ...tank,
-            namespaced: true,
-        },
-
-        dispenser: {
-            ...dispenser,
-            namespaced: true,
-        },
-
-        meter: {
-            ...meter,
-            namespaced: true,
-        },
-
-        vehicle: {
-            ...vehicle,
-            namespaced: true,
-        },
-
-        rate: {
-            ...rate,
-            namespaced: true,
-        },
-
         bank: {
             ...bank,
             namespaced: true,
         },
 
-        transaction: {
-            ...transaction,
+        expense_source: {
+            ...expense_source,
             namespaced: true,
         },
 
-        utility: {
-            ...utility,
+        expense: {
+            ...expense,
             namespaced: true,
         },
 
@@ -125,33 +94,18 @@ const store = new Vuex.Store({
             namespaced: true,
         },
 
-        purchase: {
-            ...purchase,
-            namespaced: true,
-        },
-
-        sell: {
-            ...sell,
-            namespaced: true,
-        },
-
         customer: {
             ...customer,
             namespaced: true,
         },
 
-        account: {
-            ...account,
+        purchase_item: {
+            ...purchase_item,
             namespaced: true,
         },
 
-        invoice: {
-            ...invoice,
-            namespaced: true,
-        },
-
-        vehicle_transaction: {
-            ...vehicle_transaction,
+        purchase: {
+            ...purchase,
             namespaced: true,
         },
 

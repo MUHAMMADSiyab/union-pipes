@@ -29,7 +29,7 @@ class SettingRequest extends FormRequest
             'phone' => 'min:9|max:20',
             'fax' => 'nullable|max:20',
             'address' => 'min:15|max:100',
-            'app_logo' => 'nullable|image|max:2000|dimensions:min_width=80,min_height=80',
+            'app_logo' => 'nullable|image|max:2000',
         ];
     }
 }

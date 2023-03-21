@@ -20,33 +20,13 @@ import UsersGroup from "./components/user-management/users/UsersGroup";
 import AddProduct from "./components/products/AddProduct";
 import Products from "./components/products/Products";
 
-import AddTank from "./components/tanks/AddTank";
-import EditTank from "./components/tanks/EditTank";
-import Tanks from "./components/tanks/Tanks";
-
-import AddDispenser from "./components/dispensers/AddDispenser";
-import EditDispenser from "./components/dispensers/EditDispenser";
-import Dispensers from "./components/dispensers/Dispensers";
-
-import AddMeter from "./components/meters/AddMeter";
-import EditMeter from "./components/meters/EditMeter";
-import Meters from "./components/meters/Meters";
-
-import Rates from "./components/rates/Rates";
-
 import BanksGroup from "./components/banks/BanksGroup";
 
-import AddVehicle from "./components/vehicles/AddVehicle";
-import EditVehicle from "./components/vehicles/EditVehicle";
-import Vehicles from "./components/vehicles/Vehicles";
+import ExpenseSourcesGroup from "./components/expense_sources/ExpenseSourcesGroup";
 
-import AddTransaction from "./components/transactions/AddTransaction";
-import EditTransaction from "./components/transactions/EditTransaction";
-import Transactions from "./components/transactions/Transactions";
-
-import AddUtility from "./components/utilities/AddUtility";
-import EditUtility from "./components/utilities/EditUtility";
-import Utilities from "./components/utilities/Utilities";
+import AddExpense from "./components/expenses/AddExpense";
+import EditExpense from "./components/expenses/EditExpense";
+import Expenses from "./components/expenses/Expenses";
 
 import AddEmployee from "./components/employees/AddEmployee";
 import Employees from "./components/employees/Employees";
@@ -57,33 +37,18 @@ import AddCompany from "./components/companies/AddCompany";
 import EditCompany from "./components/companies/EditCompany";
 import Companies from "./components/companies/Companies";
 
+import AddCustomer from "./components/customers/AddCustomer";
+import EditCustomer from "./components/customers/EditCustomer";
+import Customers from "./components/customers/Customers";
+
+import PurchaseItemsGroup from "./components/purchase_items/PurchaseItemsGroup";
+
 import AddPurchase from "./components/purchases/AddPurchase";
 import EditPurchase from "./components/purchases/EditPurchase";
 import Purchases from "./components/purchases/Purchases";
 import PurchaseDetails from "./components/purchases/PurchaseDetails";
 
-import AddSell from "./components/sells/AddSell";
-import EditSell from "./components/sells/EditSell";
-import Sells from "./components/sells/Sells";
-import SellDetails from "./components/sells/SellDetails";
-
-import AddCustomer from "./components/customers/AddCustomer";
-import EditCustomer from "./components/customers/EditCustomer";
-import Customers from "./components/customers/Customers";
-
-import AddAccount from "./components/accounts/AddAccount";
-import EditAccount from "./components/accounts/EditAccount";
-import Accounts from "./components/accounts/Accounts";
-
-import AddInvoice from "./components/invoices/AddInvoice";
-import EditInvoice from "./components/invoices/EditInvoice";
-import Invoices from "./components/invoices/Invoices";
-
-import AddVehicleTransaction from "./components/vehicle_transactions/AddVehicleTransaction";
-import EditVehicleTransaction from "./components/vehicle_transactions/EditVehicleTransaction";
-import VehicleTransactions from "./components/vehicle_transactions/VehicleTransactions";
-
-import Billing from "./components/billings/Billing";
+import PaymentReceipt from "./components/globals/payments/PaymentReceipt";
 
 import EditSetting from "./components/settings/Edit";
 
@@ -154,116 +119,6 @@ const router = new VueRouter({
         },
 
         {
-            path: "/tanks/add",
-            name: "add_tank",
-            component: AddTank,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Add Tank - ${process.env.MIX_APP_NAME}`,
-                gate: "tank_create",
-            },
-        },
-
-        {
-            path: "/tanks/edit/:id",
-            name: "tank_edit",
-            component: EditTank,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Tank - ${process.env.MIX_APP_NAME}`,
-                gate: "tank_edit",
-            },
-        },
-
-        {
-            path: "/tanks",
-            name: "tanks",
-            component: Tanks,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Tanks - ${process.env.MIX_APP_NAME}`,
-                gate: "tank_access",
-            },
-        },
-
-        {
-            path: "/dispensers/add",
-            name: "add_dispenser",
-            component: AddDispenser,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Add Dispenser - ${process.env.MIX_APP_NAME}`,
-                gate: "dispenser_create",
-            },
-        },
-
-        {
-            path: "/dispensers/edit/:id",
-            name: "dispenser_edit",
-            component: EditDispenser,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Dispenser - ${process.env.MIX_APP_NAME}`,
-                gate: "dispenser_edit",
-            },
-        },
-
-        {
-            path: "/dispensers",
-            name: "dispensers",
-            component: Dispensers,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Dispensers - ${process.env.MIX_APP_NAME}`,
-                gate: "dispenser_access",
-            },
-        },
-
-        {
-            path: "/meters/add",
-            name: "add_meter",
-            component: AddMeter,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Add Meter - ${process.env.MIX_APP_NAME}`,
-                gate: "meter_create",
-            },
-        },
-
-        {
-            path: "/meters/edit/:id",
-            name: "meter_edit",
-            component: EditMeter,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Meter - ${process.env.MIX_APP_NAME}`,
-                gate: "meter_edit",
-            },
-        },
-
-        {
-            path: "/meters",
-            name: "meters",
-            component: Meters,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Meters - ${process.env.MIX_APP_NAME}`,
-                gate: "meter_access",
-            },
-        },
-
-        {
-            path: "/rates",
-            name: "rates",
-            component: Rates,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Rates - ${process.env.MIX_APP_NAME}`,
-                gate: "rate_access",
-            },
-        },
-
-        {
             path: "/banks",
             name: "banks",
             component: BanksGroup,
@@ -275,101 +130,46 @@ const router = new VueRouter({
         },
 
         {
-            path: "/vehicles/add",
-            name: "add_vehicle",
-            component: AddVehicle,
+            path: "/expense_sources",
+            name: "expense_sources",
+            component: ExpenseSourcesGroup,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Add Vehicle - ${process.env.MIX_APP_NAME}`,
-                gate: "tank_create",
+                title: `Expense Sources - ${process.env.MIX_APP_NAME}`,
+                gate: "expense_access",
             },
         },
 
         {
-            path: "/vehicles/edit/:id",
-            name: "vehicle_edit",
-            component: EditVehicle,
+            path: "/expenses/add",
+            name: "expense_add",
+            component: AddExpense,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Vehicle - ${process.env.MIX_APP_NAME}`,
-                gate: "vehicle_edit",
+                title: `New Expense - ${process.env.MIX_APP_NAME}`,
+                gate: "expense_create",
             },
         },
 
         {
-            path: "/vehicles",
-            name: "vehicles",
-            component: Vehicles,
+            path: "/expenses/edit/:id",
+            name: "expense_edit",
+            component: EditExpense,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Vehicles - ${process.env.MIX_APP_NAME}`,
-                gate: "vehicle_access",
+                title: `Edit Expense - ${process.env.MIX_APP_NAME}`,
+                gate: "expense_edit",
             },
         },
 
         {
-            path: "/transactions/add",
-            name: "transaction_add",
-            component: AddTransaction,
+            path: "/expenses",
+            name: "expenses",
+            component: Expenses,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Transaction - ${process.env.MIX_APP_NAME}`,
-                gate: "transaction_create",
-            },
-        },
-
-        {
-            path: "/transactions/edit/:id",
-            name: "transaction_edit",
-            component: EditTransaction,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Transaction - ${process.env.MIX_APP_NAME}`,
-                gate: "transaction_edit",
-            },
-        },
-
-        {
-            path: "/transactions",
-            name: "transactions",
-            component: Transactions,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Transactions - ${process.env.MIX_APP_NAME}`,
-                gate: "transaction_access",
-            },
-        },
-
-        {
-            path: "/utilities/add",
-            name: "utility_add",
-            component: AddUtility,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `New Utility - ${process.env.MIX_APP_NAME}`,
-                gate: "utility_create",
-            },
-        },
-
-        {
-            path: "/utilities/edit/:id",
-            name: "utility_edit",
-            component: EditUtility,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Utility - ${process.env.MIX_APP_NAME}`,
-                gate: "utility_edit",
-            },
-        },
-
-        {
-            path: "/utilities",
-            name: "utilities",
-            component: Utilities,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Utilities - ${process.env.MIX_APP_NAME}`,
-                gate: "utility_access",
+                title: `Expenses - ${process.env.MIX_APP_NAME}`,
+                gate: "expense_access",
             },
         },
 
@@ -440,6 +240,50 @@ const router = new VueRouter({
         },
 
         {
+            path: "/customers/add",
+            name: "customer_add",
+            component: AddCustomer,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Customer - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_create",
+            },
+        },
+
+        {
+            path: "/customers",
+            name: "customers",
+            component: Customers,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Customers - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_access",
+            },
+        },
+
+        {
+            path: "/customers/edit/:id",
+            name: "customer_edit",
+            component: EditCustomer,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Customer - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_edit",
+            },
+        },
+
+        {
+            path: "/purchase_items",
+            name: "purchase_items",
+            component: PurchaseItemsGroup,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Purchase Items - ${process.env.MIX_APP_NAME}`,
+                gate: "purchase_item_access",
+            },
+        },
+
+        {
             path: "/purchases/add",
             name: "purchase_add",
             component: AddPurchase,
@@ -484,189 +328,13 @@ const router = new VueRouter({
         },
 
         {
-            path: "/sells/add",
-            name: "sell_add",
-            component: AddSell,
+            path: "/payments/:id/receipt",
+            name: "payment_receipt",
+            component: PaymentReceipt,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Sell - ${process.env.MIX_APP_NAME}`,
-                gate: "sell_create",
-            },
-        },
-
-        {
-            path: "/sells/edit/:id",
-            name: "sell_edit",
-            component: EditSell,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Sell - ${process.env.MIX_APP_NAME}`,
-                gate: "sell_edit",
-            },
-        },
-
-        {
-            path: "/sells",
-            name: "sells",
-            component: Sells,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Sells - ${process.env.MIX_APP_NAME}`,
-                gate: "sell_access",
-            },
-        },
-
-        {
-            path: "/sells/:id",
-            name: "sell_details",
-            component: SellDetails,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Sell Details - ${process.env.MIX_APP_NAME}`,
-                gate: "sell_show",
-            },
-        },
-
-        {
-            path: "/customers/add",
-            name: "customer_add",
-            component: AddCustomer,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `New Customer - ${process.env.MIX_APP_NAME}`,
-                gate: "customer_create",
-            },
-        },
-
-        {
-            path: "/customers",
-            name: "customers",
-            component: Customers,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Customers - ${process.env.MIX_APP_NAME}`,
-                gate: "customer_access",
-            },
-        },
-
-        {
-            path: "/customers/edit/:id",
-            name: "customer_edit",
-            component: EditCustomer,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Customer - ${process.env.MIX_APP_NAME}`,
-                gate: "customer_edit",
-            },
-        },
-
-        {
-            path: "/accounts/add",
-            name: "account_add",
-            component: AddAccount,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `New Account - ${process.env.MIX_APP_NAME}`,
-                gate: "account_create",
-            },
-        },
-
-        {
-            path: "/accounts/edit/:id",
-            name: "account_edit",
-            component: EditAccount,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Account - ${process.env.MIX_APP_NAME}`,
-                gate: "account_edit",
-            },
-        },
-
-        {
-            path: "/accounts/customer/:id",
-            name: "account_access",
-            component: Accounts,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Account Entries - ${process.env.MIX_APP_NAME}`,
-                gate: "account_access",
-            },
-        },
-
-        {
-            path: "/invoices/add",
-            name: "invoice_add",
-            component: AddInvoice,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `New Invoice - ${process.env.MIX_APP_NAME}`,
-                gate: "invoice_create",
-            },
-        },
-
-        {
-            path: "/invoices/edit/:id",
-            name: "invoice_edit",
-            component: EditInvoice,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Invoice - ${process.env.MIX_APP_NAME}`,
-                gate: "invoice_edit",
-            },
-        },
-
-        {
-            path: "/invoices",
-            name: "invoice_access",
-            component: Invoices,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Invoices - ${process.env.MIX_APP_NAME}`,
-                gate: "invoice_access",
-            },
-        },
-
-        {
-            path: "/vehicle_transactions/add",
-            name: "vehicle_transaction_add",
-            component: AddVehicleTransaction,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `New Vehicle Transaction - ${process.env.MIX_APP_NAME}`,
-                gate: "vehicle_transaction_create",
-            },
-        },
-
-        {
-            path: "/vehicle_transactions/edit/:id",
-            name: "vehicle_transaction_edit",
-            component: EditVehicleTransaction,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Edit Vehicle Transaction - ${process.env.MIX_APP_NAME}`,
-                gate: "vehicle_transaction_edit",
-            },
-        },
-
-        {
-            path: "/vehicle_transactions/vehicle/:id",
-            name: "vehicle_transaction_access",
-            component: VehicleTransactions,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Vehicle Transactions - ${process.env.MIX_APP_NAME}`,
-                gate: "vehicle_transaction_access",
-            },
-        },
-
-        {
-            path: "/billing",
-            name: "billing",
-            component: Billing,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Customer Billing - ${process.env.MIX_APP_NAME}`,
-                gate: "billing_access",
+                title: `Payment Receipt - ${process.env.MIX_APP_NAME}`,
+                // gate: "purchase_show",
             },
         },
 

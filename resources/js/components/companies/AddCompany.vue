@@ -6,7 +6,7 @@
       <v-row>
         <v-col cols="12">
           <v-card :loading="formLoading" :disabled="formLoading">
-            <v-card-title primary-title>New Company</v-card-title>
+            <v-card-title primary-title>New Supplier Company</v-card-title>
             <v-card-subtitle>Add a New Company</v-card-subtitle>
 
             <v-card-text class="mt-1">
