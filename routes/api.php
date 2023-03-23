@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     Route::group(['prefix' => 'reports'], function () {
         Route::post('purchase', [ReportController::class, 'get_purchase_report']);
+        Route::post('purchased_items', [ReportController::class, 'get_purchased_items_report']);
     });
 });
 

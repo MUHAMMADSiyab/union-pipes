@@ -158,6 +158,8 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'payment_show'],
             ['name' => 'payment_delete'],
 
+            ['name' => 'report_access'],
+
             ['name' => 'billing_access'],
 
             ['name' => 'payment_setting_edit'],

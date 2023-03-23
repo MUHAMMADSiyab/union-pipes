@@ -228,7 +228,9 @@ export default {
                 {
                     text: "Purchases",
                     icon: "mdi-archive-arrow-down-outline",
-                    active: this.activeMenu("purchases"),
+                    active:
+                        this.activeMenu("purchases") ||
+                        this.activeMenu("purchase_items"),
                     gate: "purchase_access",
                     submenu: [
                         {
@@ -309,6 +311,30 @@ export default {
                     to: "/banks",
                     gate: "bank_access",
                     active: this.activeMenu("banks"),
+                },
+
+                {
+                    text: "Reports",
+                    icon: "mdi-file-document-multiple-outline",
+                    active: this.activeMenu("reports"),
+                    gate: "report_access",
+                    submenu: [
+                        {
+                            text: "Purchase",
+                            to: "/reports/purchase",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Purchased Items",
+                            to: "/reports/purchased_items",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+                    ],
                 },
 
                 {

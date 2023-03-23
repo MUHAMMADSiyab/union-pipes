@@ -9,7 +9,7 @@
             :items-per-page="perPage"
             :loading="loading"
             :show-select="can('expense_delete') && !printMode"
-            loading-text="Loading expense_sources..."
+            loading-text="Loading expense sources..."
             :footer-props="footerProps"
             v-model="selectedItems"
         >
@@ -131,7 +131,7 @@ export default {
             paymentSetting: null,
             headers: [
                 { text: "S#", value: "sno" },
-                { text: "ExpenseSource Name", value: "name" },
+                { text: "Expense Source Name", value: "name" },
                 { text: "Actions", value: "actions", align: " d-print-none" },
             ],
             selectedItems: [],

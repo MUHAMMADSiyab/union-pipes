@@ -50,6 +50,9 @@ import PurchaseDetails from "./components/purchases/PurchaseDetails";
 
 import PaymentReceipt from "./components/globals/payments/PaymentReceipt";
 
+import PurchaseReportSearch from "./components/reports/purchase/PurchaseReportSearch";
+import PurchasedItemsReportSearch from "./components/reports/purchased_items/PurchasedItemsReportSearch";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -334,7 +337,29 @@ const router = new VueRouter({
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Payment Receipt - ${process.env.MIX_APP_NAME}`,
-                // gate: "purchase_show",
+                gate: "payment_access",
+            },
+        },
+
+        {
+            path: "/reports/purchase",
+            name: "purchase_report",
+            component: PurchaseReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Purchase Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/purchased_items",
+            name: "purchased_items_report",
+            component: PurchasedItemsReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Purchased Items Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
             },
         },
 
