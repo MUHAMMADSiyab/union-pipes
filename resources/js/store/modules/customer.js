@@ -9,18 +9,19 @@ import {
     UPDATE_CUSTOMER,
     DELETE_CUSTOMER,
     DELETE_CUSTOMERS,
-    GET_BILLING_DATA,
+    GET_LEDGER_ENTRIES,
 } from "../../mutation_constants";
 
 const state = {
     customers: [],
     customer: null,
-    billing_data: null,
+    ledger_entries: [],
 };
 
 const getters = {
     customers: (state) => state.customers,
     customer: (state) => state.customer,
+    ledger_entries: (state) => state.ledger_entries,
     billing_data: (state) => state.billing_data,
 };
 
@@ -28,7 +29,7 @@ const actions = {
     // Add customer
     async addCustomer(
         { dispatch, commit },
-        { name, cnic, phone, address, photo }
+        { name, cnic, phone, address, photo, local }
     ) {
         try {
             const fd = new FormData();
@@ -38,6 +39,7 @@ const actions = {
             fd.append("phone", phone);
             fd.append("address", address);
             fd.append("photo", photo);
+            fd.append("local", local);
 
             const res = await axios.post("/api/customers", fd);
 
@@ -64,9 +66,9 @@ const actions = {
     },
 
     // Get customers
-    async getCustomers({ commit }) {
+    async getCustomers({ commit }, local) {
         try {
-            const res = await axios.get("/api/customers");
+            const res = await axios.get(`/api/customers?local=${local}`);
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_CUSTOMERS, res.data);
@@ -76,13 +78,15 @@ const actions = {
         }
     },
 
-    // Get customer's billing data
-    async getBillingData({ commit }, data) {
+    // Get customer's ledger entries data
+    async getLedgerEntries({ commit }, customerId) {
         try {
-            const res = await axios.post("/api/billing", data);
+            const res = await axios.post(
+                `/api/customers/${customerId}/ledger_entries`
+            );
 
             commit(SET_LOADING, false, { root: true });
-            commit(GET_BILLING_DATA, res.data);
+            commit(GET_LEDGER_ENTRIES, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
@@ -105,7 +109,7 @@ const actions = {
     // Update customer
     async updateCustomer(
         { dispatch, commit },
-        { id, name, cnic, phone, address, photo }
+        { id, name, cnic, phone, address, photo, local }
     ) {
         try {
             const fd = new FormData();
@@ -115,6 +119,7 @@ const actions = {
             fd.append("phone", phone);
             fd.append("address", address);
             fd.append("photo", photo);
+            fd.append("local", local);
             fd.append("_method", "PUT");
 
             const res = await axios.post(`/api/customers/${id}`, fd);
@@ -216,7 +221,7 @@ const mutations = {
         });
     },
 
-    GET_BILLING_DATA: (state, payload) => (state.billing_data = payload),
+    GET_LEDGER_ENTRIES: (state, payload) => (state.ledger_entries = payload),
 };
 
 export default {

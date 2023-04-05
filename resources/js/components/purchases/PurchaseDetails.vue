@@ -15,7 +15,7 @@
                             <PurchaseDetails :purchase="purchase" />
                         </v-col>
 
-                        <!-- Vehicle Details -->
+                        <!-- Purchased Items Details -->
                         <v-col cols="12">
                             <PurchasedItems
                                 :purchased-items="purchase.purchased_items"

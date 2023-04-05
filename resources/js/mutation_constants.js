@@ -143,7 +143,6 @@ export const OLD_PURCHASE = "OLD_PURCHASE";
 export const GET_SELLS = "GET_SELLS";
 export const NEW_SELL = "NEW_SELL";
 export const GET_SELL = "GET_SELL";
-export const GET_SELL_FINAL_READINGS = "GET_SELL_FINAL_READINGS";
 export const UPDATE_SELL = "UPDATE_SELL";
 export const DELETE_SELL = "DELETE_SELL";
 export const DELETE_SELLS = "DELETE_SELLS";
@@ -156,7 +155,7 @@ export const GET_CUSTOMER = "GET_CUSTOMER";
 export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
 export const DELETE_CUSTOMER = "DELETE_CUSTOMER";
 export const DELETE_CUSTOMERS = "DELETE_CUSTOMERS";
-export const GET_BILLING_DATA = "GET_BILLING_DATA";
+export const GET_LEDGER_ENTRIES = "GET_LEDGER_ENTRIES";
 
 export const GET_ACCOUNTS = "GET_ACCOUNTS";
 export const NEW_ACCOUNT = "NEW_ACCOUNT";

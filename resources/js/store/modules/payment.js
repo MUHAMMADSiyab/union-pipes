@@ -97,6 +97,10 @@ const actions = {
                 commit("purchase/PAYMENT", res.data, { root: true });
             }
 
+            if (model === "App\\Models\\Sell") {
+                commit("sell/PAYMENT", res.data, { root: true });
+            }
+
             if (model === "App\\Models\\Salary") {
                 commit("salary/PAYMENT", res.data, { root: true });
 
@@ -206,6 +210,12 @@ const actions = {
                 });
             }
 
+            if (model === "App\\Models\\Sell") {
+                commit("sell/PAYMENT", res.data.paymentable, {
+                    root: true,
+                });
+            }
+
             if (model === "App\\Models\\Salary") {
                 commit("salary/PAYMENT", res.data.paymentable, {
                     root: true,
@@ -282,6 +292,12 @@ const actions = {
 
             if (model === "App\\Models\\Purchase") {
                 commit("purchase/PAYMENT", res.data, {
+                    root: true,
+                });
+            }
+
+            if (model === "App\\Models\\Sell") {
+                commit("sell/PAYMENT", res.data, {
                     root: true,
                 });
             }

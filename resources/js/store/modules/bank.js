@@ -9,16 +9,19 @@ import {
     DELETE_BANKS,
     GET_BANK,
     NEW_BANK,
+    GET_LEDGER_ENTRIES,
 } from "../../mutation_constants";
 
 const state = {
     banks: [],
     bank: null,
+    ledger_entries: [],
 };
 
 const getters = {
     banks: (state) => state.banks,
     bank: (state) => state.bank,
+    ledger_entries: (state) => state.ledger_entries,
 };
 
 const actions = {
@@ -69,6 +72,19 @@ const actions = {
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_BANK, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
+    // Get bank's ledger entries data
+    async getLedgerEntries({ commit }, bankId) {
+        try {
+            const res = await axios.post(`/api/banks/${bankId}/ledger_entries`);
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_LEDGER_ENTRIES, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
@@ -149,6 +165,8 @@ const mutations = {
     GET_BANKS: (state, payload) => (state.banks = payload),
 
     GET_BANK: (state, payload) => (state.bank = payload),
+
+    GET_LEDGER_ENTRIES: (state, payload) => (state.ledger_entries = payload),
 
     NEW_BANK: (state, payload) => {
         state.banks.unshift(payload);

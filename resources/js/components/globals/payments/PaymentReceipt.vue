@@ -7,16 +7,41 @@
             >
             <v-simple-table dense>
                 <tbody>
-                    <template v-if="paymentData.transaction_type === 'Credit'">
+                    <template>
                         <tr>
-                            <td>Payee:</td>
-                            <td
-                                v-if="
-                                    paymentData.model ===
-                                    'App\\Models\\Purchase'
-                                "
-                            >
-                                {{ paymentData.purchase.company.name }}
+                            <td>
+                                <span
+                                    v-if="
+                                        paymentData.model ===
+                                        'App\\Models\\Purchase'
+                                    "
+                                    >Payee</span
+                                >
+                                <span
+                                    v-if="
+                                        paymentData.model ===
+                                        'App\\Models\\Sell'
+                                    "
+                                    >Payer</span
+                                >
+                            </td>
+                            <td>
+                                <span
+                                    v-if="
+                                        paymentData.model ===
+                                        'App\\Models\\Purchase'
+                                    "
+                                    >{{
+                                        paymentData.purchase.company.name
+                                    }}</span
+                                >
+                                <span
+                                    v-if="
+                                        paymentData.model ===
+                                        'App\\Models\\Sell'
+                                    "
+                                    >{{ paymentData.sell.customer.name }}</span
+                                >
                             </td>
                         </tr>
                     </template>
@@ -29,8 +54,39 @@
                         <td>{{ money(paymentData.amount) }}</td>
                     </tr>
                     <tr>
-                        <td>Bank:</td>
-                        <td>{{ paymentData.bank.name }}</td>
+                        <td>Discount %:</td>
+                        <td>
+                            {{ paymentData.discount }} ({{
+                                money(
+                                    paymentData.amount *
+                                        (paymentData.discount / 100)
+                                )
+                            }})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span
+                                v-if="
+                                    paymentData.model ===
+                                    'App\\Models\\Purchase'
+                                "
+                                >Paid</span
+                            >
+                            <span
+                                v-if="paymentData.model === 'App\\Models\\Sell'"
+                                >Received</span
+                            >
+                        </td>
+                        <td>
+                            {{
+                                money(
+                                    paymentData.amount -
+                                        paymentData.amount *
+                                            (paymentData.discount / 100)
+                                )
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Payment Method:</td>
@@ -71,10 +127,6 @@ export default {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric",
-                hour12: true,
             };
             return date.toLocaleString("en-US", options);
         },

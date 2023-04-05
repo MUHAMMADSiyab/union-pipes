@@ -22,6 +22,9 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReturnedSoldItemController;
+use App\Http\Controllers\SellController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\AuthGates;
 use App\Http\Middleware\NullToEmptyString;
 use Illuminate\Support\Facades\Route;
@@ -63,12 +66,14 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Company
+    Route::post('/companies/{company_id}/ledger_entries', [CompanyController::class, 'get_ledger_entries']);
     Route::delete('companies/delete_multiple', [CompanyController::class, 'destroy_multiple']);
     Route::resource('companies', CompanyController::class, [
         'except' => ['create', 'edit']
     ]);
 
     // Bank
+    Route::post('/banks/{bank_id}/ledger_entries', [BankController::class, 'get_ledger_entries']);
     Route::delete('banks/delete_multiple', [BankController::class, 'destroy_multiple']);
     Route::resource('banks', BankController::class, [
         'except' => ['create', 'edit']
@@ -102,7 +107,8 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Customer
-    Route::delete('customers/delete_multiple', [CustomerController::class, 'destroy_multiple']);
+    Route::post('/customers/{customer_id}/ledger_entries', [CustomerController::class, 'get_ledger_entries']);
+
     Route::resource('customers', CustomerController::class, [
         'except' => ['create', 'edit']
     ]);
@@ -116,6 +122,21 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     // Purchase 
     Route::delete('purchases/delete_multiple', [PurchaseController::class, 'destroy_multiple']);
     Route::resource('purchases', PurchaseController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Sell 
+    Route::delete('sells/delete_multiple', [SellController::class, 'destroy_multiple']);
+    Route::resource('sells', SellController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Returned Sold Item
+    Route::post('returned_sold_items', [ReturnedSoldItemController::class, 'store']);
+
+    // Transaction
+    Route::delete('transactions/delete_multiple', [TransactionController::class, 'destroy_multiple']);
+    Route::resource('transactions', TransactionController::class, [
         'except' => ['create', 'edit']
     ]);
 
@@ -142,6 +163,14 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::group(['prefix' => 'reports'], function () {
         Route::post('purchase', [ReportController::class, 'get_purchase_report']);
         Route::post('purchased_items', [ReportController::class, 'get_purchased_items_report']);
+
+        Route::post('sell', [ReportController::class, 'get_sell_report']);
+        Route::post('sold_items', [ReportController::class, 'get_sold_items_report']);
+
+        Route::get('receivables', [ReportController::class, 'get_receivables_report']);
+        Route::get('payables', [ReportController::class, 'get_payables_report']);
+
+        Route::post('expense', [ReportController::class, 'get_expense_report']);
     });
 });
 

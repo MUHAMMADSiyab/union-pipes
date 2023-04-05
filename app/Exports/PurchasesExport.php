@@ -38,11 +38,11 @@ class PurchasesExport implements FromCollection, WithHeadings, WithMapping, With
             $purchase->id,
             $purchase->date,
             $purchase->invoice_no,
-            $purchase->company_id,
+            $purchase->company->name,
             $purchase->sales_tax_percentage,
             $purchase->category,
             $purchase->total_amount,
-            $purchase->paid,
+            $purchase->paid == 0 ? "0.00" : $purchase->paid,
             $purchase->balance == 0 ? "0.00" : $purchase->balance,
             $purchase->status,
         ];
@@ -73,7 +73,7 @@ class PurchasesExport implements FromCollection, WithHeadings, WithMapping, With
     {
         $exportService = new ExportService();
         return $exportService->registerExportEvents(
-            "Products",
+            "Purchases",
             $exportService->getHeadingCellsRange($this->headings()),
             PageSetup::ORIENTATION_PORTRAIT,
             $this->collection()->count(),

@@ -18,11 +18,21 @@ class Customer extends Model implements HasMedia
         'cnic',
         'phone',
         'address',
+        'local',
+    ];
+
+    protected $casts = [
+        'local' => 'boolean',
     ];
 
     protected $appends = [
-        'photo'
+        'photo',
     ];
+
+    public function sells(): HasMany
+    {
+        return $this->hasMany(Sell::class);
+    }
 
     public function accounts(): HasMany
     {
@@ -43,5 +53,15 @@ class Customer extends Model implements HasMedia
         $this->addMediaConversion('photo')
             ->width('200')
             ->height('200');
+    }
+
+    public function scopeLocal($query)
+    {
+        return $query->where('local', true);
+    }
+
+    public function scopeNotLocal($query)
+    {
+        return $query->where('local', false);
     }
 }

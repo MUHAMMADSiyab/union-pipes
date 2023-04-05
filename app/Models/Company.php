@@ -21,6 +21,11 @@ class Company extends Model implements HasMedia
         'logo'
     ];
 
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('logo')

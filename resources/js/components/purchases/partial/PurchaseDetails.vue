@@ -17,6 +17,10 @@
                             <td>{{ purchase.date }}</td>
                         </tr>
                         <tr>
+                            <td>Category</td>
+                            <td>{{ sell.category }}</td>
+                        </tr>
+                        <tr>
                             <td>Supplier Company</td>
                             <td>{{ purchase.company.name }}</td>
                         </tr>

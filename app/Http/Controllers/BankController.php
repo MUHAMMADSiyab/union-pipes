@@ -4,11 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BankRequest;
 use App\Models\Bank;
+use App\Models\Payment;
+use App\Services\LedgerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class BankController extends Controller
 {
+    public function get_ledger_entries(int $bank_id, LedgerService $ledgerService)
+    {
+        return response()->json($ledgerService->getBankLedgerEntries($bank_id));
+    }
+
+
     /**
      * Get all banks
      *

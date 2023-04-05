@@ -7,6 +7,7 @@ use App\Http\Requests\PaymentRequest;
 use App\Models\Payment;
 use App\Models\Purchase;
 use App\Models\Salary;
+use App\Models\Sell;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,10 @@ class PaymentController extends Controller
                 $this->paymentable = $this->getPurchase($request->paymentable_id);
             }
 
+            if ($request->model === Sell::class) {
+                $this->paymentable = $this->getSell($request->paymentable_id);
+            }
+
             if ($request->model === Salary::class) {
                 $this->paymentable = $this->getSalaryRecord($request->paymentable_id);
             }
@@ -62,10 +67,20 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $data = $payment;
-        $data['purchase'] = Purchase::query()
-            ->with('company')
-            ->select('id', 'company_id')
-            ->find($payment->paymentable_id);
+
+        if ($payment->model === Purchase::class) {
+            $data['purchase'] = Purchase::query()
+                ->with('company')
+                ->select('id', 'company_id')
+                ->find($payment->paymentable_id);
+        }
+
+        if ($payment->model === Sell::class) {
+            $data['sell'] = Sell::query()
+                ->with('customer')
+                ->select('id', 'customer_id')
+                ->find($payment->paymentable_id);
+        }
 
         return response()->json($data);
     }
@@ -85,6 +100,13 @@ class PaymentController extends Controller
         if ($payment->model === Purchase::class) {
             $this->data = [
                 'paymentable' => $this->getPurchase($payment->paymentable_id),
+                'payment' => $updatedPayment
+            ];
+        }
+
+        if ($payment->model === Sell::class) {
+            $this->data = [
+                'paymentable' => $this->getSell($payment->paymentable_id),
                 'payment' => $updatedPayment
             ];
         }
@@ -117,6 +139,10 @@ class PaymentController extends Controller
                 $this->paymentable = $this->getPurchase($payment->paymentable_id);
             }
 
+            if ($payment->model === Sell::class) {
+                $this->paymentable = $this->getSell($payment->paymentable_id);
+            }
+
             if ($payment->model === Salary::class) {
                 $this->paymentable = $this->getSalaryRecord($payment->paymentable_id);
             }
@@ -138,6 +164,23 @@ class PaymentController extends Controller
                 'company',
                 'purchased_items',
                 'purchased_items.purchase_item',
+            ])
+            ->find($paymentable_id);
+    }
+
+    /**
+     * Get sell record
+     *
+     * @param integer $paymentable_id
+     * @return App\Models\Sell $sell
+     */
+    public function getSell(int $paymentable_id)
+    {
+        return Sell::query()
+            ->with([
+                'customer',
+                'sold_items.product',
+                'returned_items.product',
             ])
             ->find($paymentable_id);
     }

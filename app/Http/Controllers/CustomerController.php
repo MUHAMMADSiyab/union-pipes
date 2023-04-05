@@ -4,11 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
+use App\Services\LedgerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class CustomerController extends Controller
 {
+
+    /**
+     * Get ledger entries of a customer
+     *
+     * @param integer $customer_id
+     * @param LedgerService $ledgerService
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_ledger_entries(int $customer_id, LedgerService $ledgerService)
+    {
+        return response()->json($ledgerService->getCustomerLedgerEntries($customer_id));
+    }
+
+
     /**
      * Get all customers
      *
@@ -18,7 +33,17 @@ class CustomerController extends Controller
     {
         Gate::authorize('customer_access');
 
-        $customers = Customer::all();
+        $local = request()->boolean('local');
+
+        $customers = Customer::query()
+            ->when($local, function ($q) {
+                $q->local();
+            })
+            ->when(!$local, function ($q) {
+                $q->notLocal();
+            })
+            ->get();
+
         return response()->json($customers);
     }
 
@@ -33,7 +58,10 @@ class CustomerController extends Controller
         Gate::authorize('customer_access');
         Gate::authorize('customer_create');
 
-        $customer = Customer::create($request->all());
+        $data =  $request->all();
+        $data['local'] = $request->boolean('local');
+
+        $customer = Customer::create($data);
 
         if ($request->hasFile('photo')) {
             $customer->addMediaFromRequest('photo')->toMediaCollection('customers');
@@ -68,7 +96,10 @@ class CustomerController extends Controller
         Gate::authorize('customer_access');
         Gate::authorize('customer_edit');
 
-        $customer->update($request->all());
+        $data = $request->all();
+        $data['local'] = $request->boolean('local');
+
+        $customer->update($data);
 
         if ($request->hasFile('photo')) {
             if ($media = $customer->getFirstMedia('customers')) {
@@ -76,6 +107,8 @@ class CustomerController extends Controller
             }
             $customer->addMediaFromRequest('photo')->toMediaCollection('customers');
         }
+
+
 
         return response()->json(Customer::find($customer->id));
     }
@@ -94,23 +127,5 @@ class CustomerController extends Controller
         if ($customer->delete()) {
             return response()->json(['success' => 'Customer deleted successfully']);
         }
-    }
-
-    /**
-     * Delete multitple customers 
-     *
-     * @param  Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy_multiple(Request $request)
-    {
-        Gate::authorize('customer_access');
-        Gate::authorize('customer_delete');
-
-        foreach ($request->ids as $id) {
-            Customer::find($id)->delete();
-        }
-
-        return response()->json(['success' => 'Customers deleted successfully']);
     }
 }

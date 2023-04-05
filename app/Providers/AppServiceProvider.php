@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Payment;
+use App\Models\ReturnedSoldItem;
 use App\Observers\PaymentObserver;
+use App\Observers\ReturnedSoldItemObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Payment::observe(PaymentObserver::class);
+        ReturnedSoldItem::observe(ReturnedSoldItemObserver::class);
     }
 }

@@ -22,6 +22,8 @@ import company from "./modules/company";
 import customer from "./modules/customer";
 import purchase_item from "./modules/purchase_item";
 import purchase from "./modules/purchase";
+import sell from "./modules/sell";
+import transaction from "./modules/transaction";
 import report from "./modules/report";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
@@ -112,6 +114,16 @@ const store = new Vuex.Store({
 
         purchase: {
             ...purchase,
+            namespaced: true,
+        },
+
+        sell: {
+            ...sell,
+            namespaced: true,
+        },
+
+        transaction: {
+            ...transaction,
             namespaced: true,
         },
 

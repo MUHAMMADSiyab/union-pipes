@@ -51,7 +51,7 @@
                         <span> {{ formatDate(props.item.payment_date) }} </span>
                     </template>
 
-                    <!-- Amount -->
+                    <!-- Amounts -->
                     <template slot="item.amount" slot-scope="props">
                         <span> {{ money(props.item.amount) }} </span>
                     </template>

@@ -51,7 +51,7 @@
                             </v-chip>
                         </template>
 
-                        <!-- Cheque Images (Button) -->
+                        <!-- Purchased Items (Button) -->
                         <template
                             slot="item.purchased_items"
                             slot-scope="props"
@@ -61,6 +61,7 @@
                                 class="d-print-none"
                                 x-small
                                 title="Purchased Items"
+                                v-if="props.item.purchased_items.length"
                                 @click="
                                     setCurrentPurchasedItems(
                                         props.item.purchased_items
@@ -307,7 +308,7 @@ export default {
                 { text: "Paid Amount", value: "paid" },
                 { text: "Balance", value: "balance" },
                 { text: "Status", value: "status" },
-                { text: "Actions", value: "actions", align: " d-print-none" },
+                { text: "🚀", value: "actions", align: " d-print-none" },
             ],
             selectedItems: [],
             purchaseId: null,
@@ -338,6 +339,9 @@ export default {
 
                 case "Paid":
                     return "success";
+
+                case "Advance":
+                    return "purple white--text";
             }
         },
 

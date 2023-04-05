@@ -7,10 +7,10 @@ import {
     UPDATE_SELL,
     DELETE_SELL,
     DELETE_SELLS,
+    PAYMENT,
     GET_SELL,
     NEW_SELL,
     OLD_SELL,
-    GET_SELL_FINAL_READINGS,
 } from "../../mutation_constants";
 
 const state = {
@@ -35,7 +35,6 @@ const actions = {
         try {
             const res = await axios.post("/api/sells", data);
 
-            commit(NEW_SELL, res.data);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
             return dispatch(
@@ -58,9 +57,9 @@ const actions = {
     },
 
     // Get sells
-    async getSells({ commit }) {
+    async getSells({ commit }, local) {
         try {
-            const res = await axios.get("/api/sells");
+            const res = await axios.get(`/api/sells?local=${local}`);
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_SELLS, res.data);
@@ -79,56 +78,6 @@ const actions = {
             commit(GET_SELL, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
-            console.log(error);
-        }
-    },
-
-    // Get sell final readings
-    async getSellFinalReadings({ commit }, data) {
-        try {
-            if (typeof data != "object") {
-                var res = await axios.get(
-                    `/api/sells/${data}/get_sell_final_readings`
-                );
-            } else {
-                var res = await axios.post(
-                    `/api/sells/get_previous_sell_readings`,
-                    data
-                );
-            }
-
-            commit(SET_LOADING, false, { root: true });
-            commit(GET_SELL_FINAL_READINGS, res.data);
-        } catch (error) {
-            commit(SET_LOADING, false, { root: true });
-            console.log(error);
-        }
-    },
-
-    // Update final readings
-    async updateFinalReadings({ dispatch, commit }, data) {
-        try {
-            const res = await axios.post(
-                `/api/sells/${data.sell_id}/update_final_readings`,
-                data
-            );
-
-            commit(UPDATE_SELL, res.data);
-            commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
-            return dispatch(
-                "alert/setAlert",
-                {
-                    type: "success",
-                    message: "Readings updated successfully",
-                },
-                { root: true }
-            );
-        } catch (error) {
-            if (error.response.status === 422) {
-                commit(SET_VALIDATION_ERRORS, error.response.data, {
-                    root: true,
-                });
-            }
             console.log(error);
         }
     },
@@ -201,6 +150,33 @@ const actions = {
             console.log(error);
         }
     },
+
+    // Return sold items
+    async returnSoldItems({ dispatch, commit }, data) {
+        try {
+            const res = await axios.post(`/api/returned_sold_items`, data);
+
+            commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+            commit(PAYMENT, res.data);
+
+            return dispatch(
+                "alert/setAlert",
+                {
+                    type: "success",
+                    message: "Items returned successfully",
+                },
+                { root: true }
+            );
+        } catch (error) {
+            console.log(error);
+            if (error.response.status === 422) {
+                commit(SET_VALIDATION_ERRORS, error.response.data, {
+                    root: true,
+                });
+            }
+            console.log(error);
+        }
+    },
 };
 
 const mutations = {
@@ -208,11 +184,13 @@ const mutations = {
 
     GET_SELL: (state, payload) => (state.sell = payload),
 
-    GET_SELL_FINAL_READINGS: (state, payload) =>
-        (state.final_readings = payload),
-
     NEW_SELL: (state, payload) => {
         state.recent_sell = payload;
+    },
+
+    PAYMENT: (state, payload) => {
+        const index = state.sells.findIndex((sell) => sell.id === payload.id);
+        state.sells.splice(index, 1, payload);
     },
 
     OLD_SELL: (state, payload) => {

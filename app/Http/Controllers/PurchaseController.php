@@ -6,6 +6,8 @@ use App\Http\Requests\PurchaseRequest;
 use App\Models\Payment;
 use App\Models\Purchase;
 use App\Models\PurchasedItem;
+use App\Services\LedgerService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,11 +54,41 @@ class PurchaseController extends Controller
                 'invoice_no',
                 'company_id',
                 'sales_tax_percentage',
+                'total_amount',
                 'category',
             ]));
 
-            foreach ($request->items as $item) {
-                $purchase->purchased_items()->create($item);
+            if ($request->category === 'Raw Material') {
+                foreach ($request->items as $item) {
+                    $purchase->purchased_items()->create($item);
+                }
+            }
+
+
+            if ($request->category === 'Raw Material') {
+                $last_balance = (new LedgerService)
+                    ->getCompanyLastBalance($request->company_id, $purchase->id);
+
+                if ($last_balance < 0) {
+                    $negative_balance = $last_balance;
+
+                    if (abs($negative_balance) > $purchase->total_amount || abs($negative_balance) === $purchase->total_amount) {
+                        $amount = $purchase->total_amount;
+                    } else if (abs($negative_balance) < $purchase->total_amount) {
+                        $amount = abs($negative_balance);
+                    }
+
+                    Payment::query()
+                        ->create([
+                            'amount' => $amount,
+                            'model' => Purchase::class,
+                            'paymentable_id' => $purchase->id,
+                            'payment_method' => 'Cash',
+                            'payment_date' => Carbon::parse($request->date)->format('Y-m-d h:i:s'),
+                            'transaction_type' => 'Credit',
+                            'bank_id' => null,
+                        ]);
+                }
             }
 
             DB::commit();
@@ -108,16 +140,19 @@ class PurchaseController extends Controller
                 'invoice_no',
                 'company_id',
                 'sales_tax_percentage',
+                'total_amount',
                 'category',
             ]));
 
-            // Delete old items 
-            foreach ($request->old_items as $item) {
-                PurchasedItem::find($item['id'])->delete();
-            }
+            if ($request->category === 'Raw Material') {
+                // Delete old items 
+                foreach ($request->old_items as $item) {
+                    PurchasedItem::find($item['id'])->delete();
+                }
 
-            foreach ($request->items as $item) {
-                $purchase->purchased_items()->create($item);
+                foreach ($request->items as $item) {
+                    $purchase->purchased_items()->create($item);
+                }
             }
 
             DB::commit();
@@ -141,7 +176,9 @@ class PurchaseController extends Controller
         Gate::authorize('purchase_delete');
 
         if ($purchase->delete()) {
-            $payment = Payment::where('paymentable_id', $purchase->id)->first();
+            $payment = Payment::where('model', Purchase::class)
+                ->where('paymentable_id', $purchase->id)
+                ->first();
 
             if ($payment) {
                 $payment->delete();
@@ -165,7 +202,9 @@ class PurchaseController extends Controller
         foreach ($request->ids as $id) {
             $purchase = Purchase::find($id);
             $purchase->delete();
-            $payment = Payment::where('paymentable_id', $purchase->id)->first();
+            $payment = Payment::where('model', Purchase::class)
+                ->where('paymentable_id', $purchase->id)
+                ->first();
 
             if ($payment) {
                 $payment->delete();

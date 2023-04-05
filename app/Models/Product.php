@@ -19,6 +19,15 @@ class Product extends Model
         'type',
     ];
 
+    protected $appends = [
+        'product_full_name'
+    ];
+
+    public function getProductFullNameAttribute()
+    {
+        return $this->name . "-" . $this->type . " (" . $this->size . ")";
+    }
+
     public function tanks(): HasMany
     {
         return $this->hasMany(Tank::class);

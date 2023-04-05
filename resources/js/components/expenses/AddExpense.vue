@@ -417,6 +417,7 @@ export default {
                     model: "App\\Models\\Expense",
                     paymentable_id: null,
                     amount: "",
+                    discount: 0,
                     transaction_type: "Credit",
                     payment_date: "",
                     bank_id: "",

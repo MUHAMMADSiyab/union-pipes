@@ -258,6 +258,29 @@ export default {
                 },
 
                 {
+                    text: "Sells",
+                    icon: "mdi-archive-arrow-up-outline",
+                    active: this.activeMenu("sells"),
+                    gate: "sell_access",
+                    submenu: [
+                        {
+                            text: "Add Sell",
+                            to: "/sells/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "sell_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Sells",
+                            to: "/sells",
+                            icon: "mdi-chevron-double-right",
+                            gate: "sell_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "Customers",
                     icon: "mdi-account-group-outline",
                     active: this.activeMenu("customers"),
@@ -308,9 +331,47 @@ export default {
                 {
                     text: "Banks",
                     icon: "mdi-bank",
-                    to: "/banks",
-                    gate: "bank_access",
                     active: this.activeMenu("banks"),
+                    gate: "bank_access",
+                    submenu: [
+                        {
+                            text: "Add Bank",
+                            to: "/banks/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "bank_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Banks",
+                            to: "/banks",
+                            icon: "mdi-chevron-double-right",
+                            gate: "bank_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
+                    text: "Transactions",
+                    icon: "mdi-currency-eur",
+                    active: this.activeMenu("transactions"),
+                    gate: "transaction_access",
+                    submenu: [
+                        {
+                            text: "Add Transaction",
+                            to: "/transactions/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "transaction_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Transactions",
+                            to: "/transactions",
+                            icon: "mdi-chevron-double-right",
+                            gate: "transaction_access",
+                            exact: true,
+                        },
+                    ],
                 },
 
                 {
@@ -319,6 +380,14 @@ export default {
                     active: this.activeMenu("reports"),
                     gate: "report_access",
                     submenu: [
+                        {
+                            text: "Expense",
+                            to: "/reports/expense",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
                         {
                             text: "Purchase",
                             to: "/reports/purchase",
@@ -330,6 +399,38 @@ export default {
                         {
                             text: "Purchased Items",
                             to: "/reports/purchased_items",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Sell",
+                            to: "/reports/sell",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Sold Items",
+                            to: "/reports/sold_items",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Receivables",
+                            to: "/reports/receivables",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Payables",
+                            to: "/reports/payables",
                             icon: "mdi-chevron-double-right",
                             gate: "report_access",
                             exact: true,
@@ -435,7 +536,7 @@ export default {
 }
 
 .v-navigation-drawer__content::-webkit-scrollbar-track {
-    background-color: #152737;
+    background-color: #1a68d2;
 }
 
 .v-navigation-drawer__content::-webkit-scrollbar {
@@ -450,8 +551,8 @@ export default {
 
 .v-navigation-drawer__content::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    box-shadow: inset 0 0 6px #436685;
-    -webkit-box-shadow: inset 0 0 6px #436685;
-    background-color: #436685;
+    box-shadow: inset 0 0 6px #6ba5f7;
+    -webkit-box-shadow: inset 0 0 6px #6ba5f7;
+    background-color: #6ba5f7;
 }
 </style>

@@ -49,6 +49,15 @@
                             >
                                 <v-icon small>mdi-delete</v-icon>
                             </v-btn>
+                            <v-btn
+                                x-small
+                                text
+                                color="info darken-2"
+                                :to="`/companies/${company.id}/ledger_entries`"
+                                title="Ledger Entries"
+                            >
+                                <v-icon small>mdi-account-cash-outline</v-icon>
+                            </v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>

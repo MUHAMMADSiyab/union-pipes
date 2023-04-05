@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
+use App\Models\Payment;
+use App\Models\Purchase;
+use App\Services\LedgerService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class CompanyController extends Controller
 {
+    public function get_ledger_entries(int $company_id, LedgerService $ledgerService)
+    {
+        return response()->json($ledgerService->getCompanyLedgerEntries($company_id));
+    }
+
     /**
      * Get all companies
      *

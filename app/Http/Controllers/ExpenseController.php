@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpenseRequest;
 use App\Models\Expense;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -90,7 +91,10 @@ class ExpenseController extends Controller
         Gate::authorize('expense_delete');
 
         if ($expense->delete()) {
-            $expense->payment()->delete(); // delete payment
+            Payment::where('model', Expense::class)
+                ->where('paymentable_id', $expense->id)
+                ->first()
+                ->delete(); // delete payment
             return response()->json(["success" =>  "Expense deleted successfully"]);
         }
     }
@@ -109,7 +113,10 @@ class ExpenseController extends Controller
         foreach ($request->ids as $id) {
             $expense = Expense::find($id);
             $expense->delete();
-            $expense->payment()->delete(); // delete payment
+            Payment::where('model', Expense::class)
+                ->where('paymentable_id', $expense->id)
+                ->first()
+                ->delete(); // delete payment
         }
 
         return response()->json(["success" =>  "Expenses deleted successfully"]);

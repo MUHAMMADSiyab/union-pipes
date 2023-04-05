@@ -34,9 +34,8 @@ class Payment extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'cheque_images'
+        'cheque_images',
     ];
-
 
     public function registerMediaConversions(?Media $media = null): void
     {

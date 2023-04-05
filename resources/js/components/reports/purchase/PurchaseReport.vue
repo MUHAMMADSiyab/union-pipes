@@ -11,7 +11,6 @@
             :show-select="!printMode"
             loading-text="Loading Report Data..."
             :footer-props="footerProps"
-            v-model="selectedItems"
             dense
         >
             <!-- S# -->
@@ -47,37 +46,12 @@
                     {{ money(props.item.balance) }}
                 </span>
             </template>
-
-            <template v-slot:top v-if="!printMode">
-                <Excel
-                    module="purchases_report"
-                    :ids="selectedItems.map((item) => item.id)"
-                />
-                <CSV
-                    module="purchases_report"
-                    :ids="selectedItems.map((item) => item.id)"
-                />
-                <PDF
-                    module="purchases_report"
-                    :ids="selectedItems.map((item) => item.id)"
-                />
-
-                <v-text-field
-                    v-model="search"
-                    placeholder="Search"
-                    class="mx-4"
-                    append-icon="mdi-magnify"
-                ></v-text-field>
-            </template>
         </v-data-table>
     </div>
 </template>
 
 <script>
 import DatatableMixin from "../../../mixins/DatatableMixin";
-import Excel from "../../globals/exports/Excel.vue";
-import CSV from "../../globals/exports/CSV.vue";
-import PDF from "../../globals/exports/PDF.vue";
 import CurrencyMixin from "../../../mixins/CurrencyMixin";
 import { mapGetters } from "vuex";
 
@@ -85,12 +59,6 @@ export default {
     mixins: [DatatableMixin, CurrencyMixin],
 
     props: ["purchases"],
-
-    components: {
-        Excel,
-        CSV,
-        PDF,
-    },
 
     data() {
         return {
@@ -102,7 +70,6 @@ export default {
                 { text: "Paid", value: "paid" },
                 { text: "Balance", value: "balance" },
             ],
-            selectedItems: [],
         };
     },
 

@@ -24,7 +24,7 @@ class CreatePaymentsTable extends Migration
             $table->string('cheque_type')->nullable();
             $table->date('cheque_due_date')->nullable();
             $table->dateTime('payment_date');
-            $table->foreignId('bank_id')->constrained()->onDelete('cascade');
+            $table->foreignId('bank_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
         });
     }

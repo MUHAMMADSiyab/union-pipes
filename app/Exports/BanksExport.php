@@ -36,6 +36,7 @@ class BanksExport implements FromCollection, WithHeadings, WithMapping, WithCust
             $bank->account_no,
             $bank->branch_name,
             $bank->branch_code,
+            $bank->balance > 0 ? $bank->balance : 0,
         ];
     }
 
@@ -47,6 +48,7 @@ class BanksExport implements FromCollection, WithHeadings, WithMapping, WithCust
             'Account no.',
             'Branch name',
             'Branch code',
+            'Balance',
         ];
     }
 

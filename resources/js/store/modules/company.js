@@ -9,16 +9,19 @@ import {
     UPDATE_COMPANY,
     DELETE_COMPANY,
     DELETE_COMPANIES,
+    GET_LEDGER_ENTRIES,
 } from "../../mutation_constants";
 
 const state = {
     companies: [],
     company: null,
+    ledger_entries: [],
 };
 
 const getters = {
     companies: (state) => state.companies,
     company: (state) => state.company,
+    ledger_entries: (state) => state.ledger_entries,
 };
 
 const actions = {
@@ -75,6 +78,21 @@ const actions = {
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_COMPANY, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
+    // Get compnay's ledger entries data
+    async getLedgerEntries({ commit }, companyId) {
+        try {
+            const res = await axios.post(
+                `/api/companies/${companyId}/ledger_entries`
+            );
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_LEDGER_ENTRIES, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
@@ -173,6 +191,8 @@ const mutations = {
         );
         state.companies.splice(index, 1, payload);
     },
+
+    GET_LEDGER_ENTRIES: (state, payload) => (state.ledger_entries = payload),
 
     DELETE_COMPANY: (state, payload) => {
         const index = state.companies.findIndex(

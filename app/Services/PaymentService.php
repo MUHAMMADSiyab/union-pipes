@@ -24,6 +24,7 @@ class PaymentService
             'paymentable_id' => $request->paymentable_id,
             'transaction_type' => $request->transaction_type,
             'amount' => $request->amount,
+            'discount' => $request->discount,
             'payment_method' => $request->payment_method,
             'cheque_no' => $request->cheque_no,
             'cheque_type' => $request->cheque_type,
@@ -61,6 +62,7 @@ class PaymentService
     {
         $data = [
             'amount' => $request->amount,
+            'discount' => $request->discount,
             'payment_method' => $request->payment_method,
             'cheque_no' => $request->cheque_no,
             'cheque_type' => $request->cheque_type,

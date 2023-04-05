@@ -3,8 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Bank;
+use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Salary;
+use App\Models\Sell;
 
 class PaymentObserver
 {
@@ -16,12 +18,14 @@ class PaymentObserver
      */
     public function created(Payment $payment)
     {
-        if ($payment->transaction_type === 'Credit') {
-            $payment->bank()->decrement('balance', $payment->amount);
-        }
+        if ($payment->bank_id) {
+            if ($payment->transaction_type === 'Credit') {
+                $payment->bank()->decrement('balance', $payment->amount);
+            }
 
-        if ($payment->transaction_type === 'Debit') {
-            $payment->bank()->increment('balance', $payment->amount);
+            if ($payment->transaction_type === 'Debit') {
+                $payment->bank()->increment('balance', $payment->amount);
+            }
         }
 
         // Salary Payments
@@ -38,15 +42,17 @@ class PaymentObserver
      */
     public function updated(Payment $payment)
     {
-        $original_bank = Bank::find($payment->getOriginal('bank_id'));
-        if ($payment->transaction_type === 'Credit') {
-            $original_bank->increment('balance', $payment->getOriginal('amount'));
-            $payment->bank()->decrement('balance', $payment->amount);
-        }
+        if ($payment->bank_id) {
+            $original_bank = Bank::find($payment->getOriginal('bank_id'));
+            if ($payment->transaction_type === 'Credit') {
+                $original_bank->increment('balance', $payment->getOriginal('amount'));
+                $payment->bank()->decrement('balance', $payment->amount);
+            }
 
-        if ($payment->transaction_type === 'Debit') {
-            $original_bank->decrement('balance', $payment->getOriginal('amount'));
-            $payment->bank()->increment('balance', $payment->amount);
+            if ($payment->transaction_type === 'Debit') {
+                $original_bank->decrement('balance', $payment->getOriginal('amount'));
+                $payment->bank()->increment('balance', $payment->amount);
+            }
         }
 
         // Salary Payments
@@ -65,12 +71,15 @@ class PaymentObserver
      */
     public function deleted(Payment $payment)
     {
-        if ($payment->transaction_type === 'Credit') {
-            $payment->bank()->increment('balance', $payment->amount);
-        }
+        if ($payment->bank_id) {
 
-        if ($payment->transaction_type === 'Debit') {
-            $payment->bank()->decrement('balance', $payment->amount);
+            if ($payment->transaction_type === 'Credit') {
+                $payment->bank()->increment('balance', $payment->amount);
+            }
+
+            if ($payment->transaction_type === 'Debit') {
+                $payment->bank()->decrement('balance', $payment->amount);
+            }
         }
 
         // Salary Payments 

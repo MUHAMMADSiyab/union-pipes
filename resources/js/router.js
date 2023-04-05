@@ -20,7 +20,9 @@ import UsersGroup from "./components/user-management/users/UsersGroup";
 import AddProduct from "./components/products/AddProduct";
 import Products from "./components/products/Products";
 
-import BanksGroup from "./components/banks/BanksGroup";
+import AddBank from "./components/banks/AddBank";
+import Banks from "./components/banks/Banks";
+import BankLedgerEntries from "./components/banks/LedgerEntries";
 
 import ExpenseSourcesGroup from "./components/expense_sources/ExpenseSourcesGroup";
 
@@ -36,10 +38,12 @@ import SalariesView from "./components/salaries/View.vue";
 import AddCompany from "./components/companies/AddCompany";
 import EditCompany from "./components/companies/EditCompany";
 import Companies from "./components/companies/Companies";
+import CompanyLedgerEntries from "./components/companies/LedgerEntries";
 
 import AddCustomer from "./components/customers/AddCustomer";
 import EditCustomer from "./components/customers/EditCustomer";
 import Customers from "./components/customers/Customers";
+import CustomerLedgerEntries from "./components/customers/LedgerEntries";
 
 import PurchaseItemsGroup from "./components/purchase_items/PurchaseItemsGroup";
 
@@ -48,10 +52,24 @@ import EditPurchase from "./components/purchases/EditPurchase";
 import Purchases from "./components/purchases/Purchases";
 import PurchaseDetails from "./components/purchases/PurchaseDetails";
 
+import AddSell from "./components/sells/AddSell";
+import EditSell from "./components/sells/EditSell";
+import Sells from "./components/sells/Sells";
+import SellDetails from "./components/sells/SellDetails";
+
+import AddTransaction from "./components/transactions/AddTransaction";
+import EditTransaction from "./components/transactions/EditTransaction";
+import Transactions from "./components/transactions/Transactions";
+
 import PaymentReceipt from "./components/globals/payments/PaymentReceipt";
 
 import PurchaseReportSearch from "./components/reports/purchase/PurchaseReportSearch";
 import PurchasedItemsReportSearch from "./components/reports/purchased_items/PurchasedItemsReportSearch";
+import SellReportSearch from "./components/reports/sell/SellReportSearch";
+import SoldItemsReportSearch from "./components/reports/sold_items/SoldItemsReportSearch";
+import ReceivablesReport from "./components/reports/sell/ReceivablesReport";
+import PayablesReport from "./components/reports/purchase/PayablesReport";
+import ExpenseReportSearch from "./components/reports/expense/ExpenseReportSearch";
 
 import EditSetting from "./components/settings/Edit";
 
@@ -124,11 +142,33 @@ const router = new VueRouter({
         {
             path: "/banks",
             name: "banks",
-            component: BanksGroup,
+            component: Banks,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Banks - ${process.env.MIX_APP_NAME}`,
                 gate: "bank_access",
+            },
+        },
+
+        {
+            path: "/banks/:id/ledger_entries",
+            name: "bank_ledger_entries",
+            component: BankLedgerEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
+                gate: "bank_access",
+            },
+        },
+
+        {
+            path: "/banks/add",
+            name: "bank_add",
+            component: AddBank,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Add Bank - ${process.env.MIX_APP_NAME}`,
+                gate: "bank_create",
             },
         },
 
@@ -210,6 +250,17 @@ const router = new VueRouter({
         },
 
         {
+            path: "/companies/:id/ledger_entries",
+            name: "company_ledger_entries",
+            component: CompanyLedgerEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
+                gate: "company_access",
+            },
+        },
+
+        {
             path: "/salaries/:employee_id",
             name: "salaries_view",
             component: SalariesView,
@@ -260,6 +311,17 @@ const router = new VueRouter({
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Customers - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_access",
+            },
+        },
+
+        {
+            path: "/customers/:id/ledger_entries",
+            name: "customer_ledger_entries",
+            component: CustomerLedgerEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
                 gate: "customer_access",
             },
         },
@@ -331,6 +393,83 @@ const router = new VueRouter({
         },
 
         {
+            path: "/sells/add",
+            name: "sell_add",
+            component: AddSell,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Sell - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_create",
+            },
+        },
+
+        {
+            path: "/sells/edit/:id",
+            name: "sell_edit",
+            component: EditSell,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Sell - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_edit",
+            },
+        },
+
+        {
+            path: "/sells",
+            name: "sells",
+            component: Sells,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Sells - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_access",
+            },
+        },
+
+        {
+            path: "/sells/:id",
+            name: "sell_details",
+            component: SellDetails,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Sell Details - ${process.env.MIX_APP_NAME}`,
+                gate: "sell_show",
+            },
+        },
+
+        {
+            path: "/transactions/add",
+            name: "transaction_add",
+            component: AddTransaction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Transaction - ${process.env.MIX_APP_NAME}`,
+                gate: "transaction_create",
+            },
+        },
+
+        {
+            path: "/transactions/edit/:id",
+            name: "transaction_edit",
+            component: EditTransaction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Transaction - ${process.env.MIX_APP_NAME}`,
+                gate: "transaction_edit",
+            },
+        },
+
+        {
+            path: "/transactions",
+            name: "transactions",
+            component: Transactions,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Transactions - ${process.env.MIX_APP_NAME}`,
+                gate: "transaction_access",
+            },
+        },
+
+        {
             path: "/payments/:id/receipt",
             name: "payment_receipt",
             component: PaymentReceipt,
@@ -359,6 +498,61 @@ const router = new VueRouter({
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Purchased Items Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/sell",
+            name: "sell_report",
+            component: SellReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Sell Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/sold_items",
+            name: "sold_items_report",
+            component: SoldItemsReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Sold Items Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/receivables",
+            name: "receivables_report",
+            component: ReceivablesReport,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Receivables Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/payables",
+            name: "payables_report",
+            component: PayablesReport,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Payables Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/expense",
+            name: "expense_report",
+            component: ExpenseReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Expense Report - ${process.env.MIX_APP_NAME}`,
                 gate: "report_access",
             },
         },

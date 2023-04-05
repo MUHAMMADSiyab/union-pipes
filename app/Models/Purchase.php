@@ -48,6 +48,8 @@ class Purchase extends Model
             $status = "Unpaid";
         } elseif ($this->balance == 0) {
             $status = "Paid";
+        } elseif ($this->balance < 0) {
+            $status = "Advance";
         }
 
         return $status;
@@ -62,18 +64,5 @@ class Purchase extends Model
     public function purchased_items()
     {
         return $this->hasMany(PurchasedItem::class);
-    }
-
-    public static function booted()
-    {
-        static::saving(function ($purchase) {
-            $total_amount = 0;
-
-            foreach (request('items') as $item) {
-                $total_amount += $item['grand_total'];
-            }
-
-            $purchase->total_amount = $total_amount;
-        });
     }
 }

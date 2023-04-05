@@ -27,29 +27,25 @@
                                                 validation.getMessage('date')
                                             "
                                         ></small>
-                                        <v-menu
-                                            max-width="290px"
-                                            min-width="auto"
+                                        <v-datetime-picker
+                                            label="Date"
+                                            v-model="data.date"
+                                            :textFieldProps="{
+                                                dense: true,
+                                                outlined: true,
+                                            }"
+                                            :timePickerProps="{
+                                                'use-seconds': true,
+                                            }"
+                                            timeFormat="HH:mm:ss"
                                         >
-                                            <template v-slot:activator="{ on }">
-                                                <v-text-field
-                                                    v-model="data.date"
-                                                    v-on="on"
-                                                    label="Date"
-                                                    prepend-inner-icon="mdi-calendar"
-                                                    dense
-                                                    outlined
-                                                ></v-text-field>
-                                            </template>
-                                            <v-date-picker
-                                                v-model="data.date"
-                                                label="Date"
-                                                no-title
-                                                outlined
-                                                dense
-                                                show-current
-                                            ></v-date-picker>
-                                        </v-menu>
+                                            <v-icon slot="timeIcon"
+                                                >mdi-clock-time-three</v-icon
+                                            >
+                                            <v-icon slot="dateIcon"
+                                                >mdi-calendar</v-icon
+                                            >
+                                        </v-datetime-picker>
                                     </v-col>
 
                                     <v-col
@@ -158,6 +154,29 @@
                                             dense
                                             outlined
                                         ></v-select>
+                                    </v-col>
+                                </v-row>
+
+                                <v-row>
+                                    <v-col cols="12" class="py-0">
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'total_amount'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-text-field
+                                            name="total_amount"
+                                            label="Total Amount"
+                                            id="total_amount"
+                                            v-model="data.total_amount"
+                                            type="number"
+                                            dense
+                                            outlined
+                                        ></v-text-field>
                                     </v-col>
                                 </v-row>
 
@@ -399,6 +418,7 @@
 import { mapActions, mapGetters } from "vuex";
 import ValidationMixin from "../../mixins/ValidationMixin";
 import Navbar from "../navs/Navbar";
+import moment from "moment";
 
 export default {
     mixins: [ValidationMixin],
@@ -410,9 +430,9 @@ export default {
     data() {
         return {
             formLoading: false,
-            categories: ["Raw Material", "Other"],
+            categories: ["Raw Material", "Opening Balance", "Advance Payment"],
             data: {
-                date: "",
+                date: moment().format("Y-MM-DD HH:mm:ss"),
                 company_id: "",
                 invoice_no: "",
                 category: "",
@@ -493,6 +513,8 @@ export default {
     watch: {
         data: {
             handler(data) {
+                let total_amount = 0;
+
                 this.data.items.forEach((item, index) => {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
@@ -501,7 +523,13 @@ export default {
                     const sales_tax_amount = item.total * sales_tax_percentage;
                     item.sales_tax = sales_tax_amount;
                     item.grand_total = item.total + item.sales_tax;
+
+                    total_amount += item.grand_total;
                 });
+
+                if (this.data.items.filter((item) => item.product_id).length) {
+                    this.data.total_amount = total_amount;
+                }
             },
             deep: true,
         },
