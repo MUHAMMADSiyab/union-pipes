@@ -375,6 +375,29 @@ export default {
                 },
 
                 {
+                    text: "Gate Passes",
+                    icon: "mdi-receipt",
+                    active: this.activeMenu("gate_passes"),
+                    gate: "gate_pass_access",
+                    submenu: [
+                        {
+                            text: "Add Gate Pass",
+                            to: "/gate_passes/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "gate_pass_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Gate Passes",
+                            to: "/gate_passes",
+                            icon: "mdi-chevron-double-right",
+                            gate: "gate_pass_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "Reports",
                     icon: "mdi-file-document-multiple-outline",
                     active: this.activeMenu("reports"),

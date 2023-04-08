@@ -25,6 +25,7 @@ import purchase from "./modules/purchase";
 import sell from "./modules/sell";
 import transaction from "./modules/transaction";
 import report from "./modules/report";
+import gate_pass from "./modules/gate_pass";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
 
@@ -124,6 +125,11 @@ const store = new Vuex.Store({
 
         transaction: {
             ...transaction,
+            namespaced: true,
+        },
+
+        gate_pass: {
+            ...gate_pass,
             namespaced: true,
         },
 

@@ -18,6 +18,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpenseSourceController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\GatePassController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
@@ -137,6 +138,12 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     // Transaction
     Route::delete('transactions/delete_multiple', [TransactionController::class, 'destroy_multiple']);
     Route::resource('transactions', TransactionController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Gate Pass
+    Route::delete('gate_passes/delete_multiple', [GatePassController::class, 'destroy_multiple']);
+    Route::resource('gate_passes', GatePassController::class, [
         'except' => ['create', 'edit']
     ]);
 

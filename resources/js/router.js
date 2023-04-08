@@ -71,6 +71,10 @@ import ReceivablesReport from "./components/reports/sell/ReceivablesReport";
 import PayablesReport from "./components/reports/purchase/PayablesReport";
 import ExpenseReportSearch from "./components/reports/expense/ExpenseReportSearch";
 
+import CreateGatePass from "./components/gate_passes/CreateGatePass";
+import GatePasses from "./components/gate_passes/GatePasses";
+import GatePass from "./components/gate_passes/GatePass";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -554,6 +558,39 @@ const router = new VueRouter({
             meta: {
                 title: `Expense Report - ${process.env.MIX_APP_NAME}`,
                 gate: "report_access",
+            },
+        },
+
+        {
+            path: "/gate_passes/add",
+            name: "gate_pass_add",
+            component: CreateGatePass,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Gate Pass - ${process.env.MIX_APP_NAME}`,
+                gate: "gate_pass_create",
+            },
+        },
+
+        {
+            path: "/gate_passes",
+            name: "gate_pass_access",
+            component: GatePasses,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Gate Passes - ${process.env.MIX_APP_NAME}`,
+                gate: "gate_pass_access",
+            },
+        },
+
+        {
+            path: "/gate_passes/:id",
+            name: "gate_pass_show",
+            component: GatePass,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Gate Pass - ${process.env.MIX_APP_NAME}`,
+                gate: "gate_pass_access",
             },
         },
 
