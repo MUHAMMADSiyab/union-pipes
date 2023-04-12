@@ -19,12 +19,15 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpenseSourceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GatePassController;
+use App\Http\Controllers\MachineController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnedSoldItemController;
 use App\Http\Controllers\SellController;
+use App\Http\Controllers\StockItemController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\AuthGates;
 use App\Http\Middleware\NullToEmptyString;
@@ -145,6 +148,25 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::delete('gate_passes/delete_multiple', [GatePassController::class, 'destroy_multiple']);
     Route::resource('gate_passes', GatePassController::class, [
         'except' => ['create', 'edit']
+    ]);
+
+    // Stock Item
+    Route::delete('stock_items/delete_multiple', [StockItemController::class, 'destroy_multiple']);
+    Route::resource('stock_items', StockItemController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Production
+    Route::delete('productions/delete_multiple', [ProductionController::class, 'destroy_multiple']);
+    Route::get('productions/{stock_item_id}/get_stock_productions', [ProductionController::class, 'get_stock_productions']);
+    Route::resource('productions', ProductionController::class, [
+        'except' => ['create', 'edit', 'index']
+    ]);
+
+    // Production
+    Route::delete('machines/delete_multiple', [MachineController::class, 'destroy_multiple']);
+    Route::resource('machines', MachineController::class, [
+        'except' => ['create', 'edit', 'index']
     ]);
 
     // Setting (edit)

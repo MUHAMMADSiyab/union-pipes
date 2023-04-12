@@ -233,6 +233,12 @@
                                             id="discount"
                                             v-model="data.discount"
                                             type="number"
+                                            :hint="
+                                                (
+                                                    data.total_amount *
+                                                    (data.discount / 100)
+                                                ).toString()
+                                            "
                                             dense
                                             outlined
                                         ></v-text-field>
@@ -623,7 +629,9 @@ export default {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
                     item.total =
-                        data.items[index].rate * data.items[index].quantity;
+                        data.items[index].rate *
+                        data.items[index].quantity *
+                        data.items[index].weight;
                     const sales_tax_amount = item.total * sales_tax_percentage;
                     item.sales_tax = sales_tax_amount;
                     item.grand_total = item.total + item.sales_tax;
@@ -655,6 +663,7 @@ export default {
         this.data.sales_tax_percentage = this.sell.sales_tax_percentage;
         this.data.invoice_no = this.sell.invoice_no;
         this.data.unit = this.sell.unit;
+        this.data.discount = this.sell.discount;
         this.data.description = this.sell.description;
         this.data.category = this.sell.category;
         this.data.customer_id = this.sell.customer_id;

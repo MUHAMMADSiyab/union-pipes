@@ -398,6 +398,29 @@ export default {
                 },
 
                 {
+                    text: "Stock Items",
+                    icon: "mdi-warehouse",
+                    active: this.activeMenu("stock_items"),
+                    gate: "stock_item_access",
+                    submenu: [
+                        {
+                            text: "Add Stock Item",
+                            to: "/stock_items/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "stock_item_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Stock Items",
+                            to: "/stock_items",
+                            icon: "mdi-chevron-double-right",
+                            gate: "stock_item_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "Reports",
                     icon: "mdi-file-document-multiple-outline",
                     active: this.activeMenu("reports"),

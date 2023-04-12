@@ -1,9 +1,12 @@
 <template>
     <v-row>
         <v-col cols="12">
-            <v-card>
-                <v-card-title primary-title>{{ employee.name }}</v-card-title>
-                <v-card-subtitle>Employee's Details</v-card-subtitle>
+            <v-card v-if="!printMode">
+                <v-card-subtitle
+                    ><strong>Employee Details</strong></v-card-subtitle
+                >
+
+                <v-divider></v-divider>
 
                 <v-card-text class="mt-1">
                     <v-row>
@@ -76,7 +79,7 @@
                                 <v-list-item>
                                     <v-list-item-content>
                                         <strong>Salary</strong>
-                                        {{ employee.salary }}
+                                        {{ money(employee.salary) }}
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-list>
@@ -105,7 +108,10 @@
 </template>
 
 <script>
+import CurrencyMixin from "../../../mixins/CurrencyMixin";
 export default {
     props: ["employee"],
+
+    mixins: [CurrencyMixin],
 };
 </script>

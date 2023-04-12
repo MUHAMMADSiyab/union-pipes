@@ -235,8 +235,10 @@
                                             v-model="data.discount"
                                             type="number"
                                             :hint="
-                                                data.total_amount *
-                                                (data.discount / 100)
+                                                (
+                                                    data.total_amount *
+                                                    (data.discount / 100)
+                                                ).toString()
                                             "
                                             dense
                                             outlined
@@ -577,7 +579,6 @@ export default {
         }),
 
         handleRateSelect(item) {
-            console.log(item);
             if (item.product_id) {
                 item.rate = this.products.find(
                     (product) => product.id == item.product_id
@@ -659,7 +660,9 @@ export default {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
                     item.total =
-                        data.items[index].rate * data.items[index].quantity;
+                        data.items[index].rate *
+                        data.items[index].quantity *
+                        data.items[index].weight;
                     const sales_tax_amount = item.total * sales_tax_percentage;
                     item.sales_tax = sales_tax_amount;
                     item.grand_total = item.total + item.sales_tax;

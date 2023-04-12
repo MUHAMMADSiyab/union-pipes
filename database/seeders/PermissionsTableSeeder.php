@@ -164,6 +164,24 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'gate_pass_show'],
             ['name' => 'gate_pass_delete'],
 
+            ['name' => 'stock_item_access'],
+            ['name' => 'stock_item_create'],
+            ['name' => 'stock_item_edit'],
+            ['name' => 'stock_item_show'],
+            ['name' => 'stock_item_delete'],
+
+            ['name' => 'production_access'],
+            ['name' => 'production_create'],
+            ['name' => 'production_edit'],
+            ['name' => 'production_show'],
+            ['name' => 'production_delete'],
+
+            ['name' => 'machine_access'],
+            ['name' => 'machine_create'],
+            ['name' => 'machine_edit'],
+            ['name' => 'machine_show'],
+            ['name' => 'machine_delete'],
+
             ['name' => 'report_access'],
 
             ['name' => 'billing_access'],

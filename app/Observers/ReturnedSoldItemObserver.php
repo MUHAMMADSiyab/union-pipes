@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\ReturnedSoldItem;
 use App\Models\Sell;
 use App\Models\SoldItem;
+use App\Models\StockItem;
 
 class ReturnedSoldItemObserver
 {
@@ -28,6 +29,13 @@ class ReturnedSoldItemObserver
 
         // Decrement sell total amount
         Sell::find($sold_item->sell_id)->decrement('total_amount', $returnedSolItem->total);
+
+        // Add back to stock the weight
+        $stock_item = StockItem::first();
+
+        if ($stock_item) {
+            $stock_item->increment('available_quantity', $returnedSolItem->weight);
+        }
     }
 
     /**

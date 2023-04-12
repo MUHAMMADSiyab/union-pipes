@@ -26,6 +26,9 @@ import sell from "./modules/sell";
 import transaction from "./modules/transaction";
 import report from "./modules/report";
 import gate_pass from "./modules/gate_pass";
+import stock_item from "./modules/stock_item";
+import production from "./modules/production";
+import machine from "./modules/machine";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
 
@@ -130,6 +133,21 @@ const store = new Vuex.Store({
 
         gate_pass: {
             ...gate_pass,
+            namespaced: true,
+        },
+
+        stock_item: {
+            ...stock_item,
+            namespaced: true,
+        },
+
+        production: {
+            ...production,
+            namespaced: true,
+        },
+
+        machine: {
+            ...machine,
             namespaced: true,
         },
 

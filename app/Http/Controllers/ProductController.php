@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Gate;
 class ProductController extends Controller
 {
     /**
-     * Get all companies
+     * Get all products
      *
      * @return \Illuminate\Http\Response
      */
@@ -18,8 +18,8 @@ class ProductController extends Controller
     {
         Gate::authorize('product_access');
 
-        $companies = Product::all();
-        return response()->json($companies);
+        $products = Product::all();
+        return response()->json($products);
     }
 
     /**
@@ -86,7 +86,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Delete multitple companies 
+     * Delete multitple products 
      *
      * @param  Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -100,6 +100,6 @@ class ProductController extends Controller
             Product::find($id)->delete();
         }
 
-        return response()->json(['success' => 'Companies deleted successfully']);
+        return response()->json(['success' => 'Products deleted successfully']);
     }
 }

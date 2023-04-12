@@ -95,6 +95,8 @@
                 </v-col>
             </v-row>
         </v-container>
+
+        <alert />
     </div>
 </template>
 

@@ -29,6 +29,7 @@ class DashboardService
         // Initialize an array to hold the chart data
         $chartData = [];
 
+        $months = [];
         // Loop through each expense source
         foreach ($groupedExpenses as $sourceId => $sourceExpenses) {
             // Find the expense source
@@ -56,6 +57,7 @@ class DashboardService
 
                 // Add the total to the monthly totals array
                 $monthlyTotals[$monthString] = $totalInMonth;
+                array_push($months, $monthString);
             }
 
             // Add the expense source and its monthly totals to the chart data array
@@ -65,7 +67,7 @@ class DashboardService
             ];
         }
 
-        return $chartData;
+        return compact('chartData', 'months');
     }
 
     public function getLast12MonthsSells()

@@ -18,7 +18,7 @@
                         </tr>
                         <tr>
                             <td>Category</td>
-                            <td>{{ sell.category }}</td>
+                            <td>{{ purchase.category }}</td>
                         </tr>
                         <tr>
                             <td>Supplier Company</td>

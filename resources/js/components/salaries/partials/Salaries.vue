@@ -2,7 +2,9 @@
     <v-row>
         <v-col cols="12">
             <v-card>
-                <v-card-title primary-title>Salary Details</v-card-title>
+                <v-card-title primary-title v-if="employee"
+                    >Salary Details of {{ employee.name }}</v-card-title
+                >
 
                 <v-card-text class="mt-1">
                     <v-row>
@@ -75,6 +77,9 @@
                                                         })
                                                     "
                                                     v-if="can('payment_create')"
+                                                    :disabled="
+                                                        salary.balance == 0
+                                                    "
                                                     ><v-icon x-small
                                                         >mdi-plus-thick</v-icon
                                                     ></v-btn
@@ -218,6 +223,7 @@ export default {
         ...mapActions({
             getPaymentSetting: "getPaymentSetting",
             getSalary: "salary/getSalary",
+            getEmployee: "employee/getEmployee",
             deleteSalary: "salary/deleteSalary",
         }),
 
@@ -241,6 +247,9 @@ export default {
 
                 case "Paid":
                     return "success";
+
+                case "Advance":
+                    return "purple";
             }
         },
 
@@ -279,11 +288,15 @@ export default {
         ...mapGetters({
             paymentSetting: "paymentSetting",
             salary: "salary/salary",
+            employee: "employee/employee",
         }),
     },
 
     mounted() {
-        this.getPaymentSetting();
+        Promise.all([
+            this.getPaymentSetting(),
+            this.getEmployee(this.$route.params.employee_id),
+        ]);
     },
 };
 </script>
@@ -291,6 +304,7 @@ export default {
 <style scoped>
 #salries_table {
     width: 100%;
+    font-size: small !important;
     border-collapse: collapse;
 }
 

@@ -75,6 +75,10 @@ import CreateGatePass from "./components/gate_passes/CreateGatePass";
 import GatePasses from "./components/gate_passes/GatePasses";
 import GatePass from "./components/gate_passes/GatePass";
 
+import AddStockItem from "./components/stock_items/AddStockItem";
+import EditStockItem from "./components/stock_items/EditStockItem";
+import StockItems from "./components/stock_items/StockItems";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -320,17 +324,6 @@ const router = new VueRouter({
         },
 
         {
-            path: "/customers/:id/ledger_entries",
-            name: "customer_ledger_entries",
-            component: CustomerLedgerEntries,
-            beforeEnter: RedirectBasedOnAuthStatus,
-            meta: {
-                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
-                gate: "customer_access",
-            },
-        },
-
-        {
             path: "/customers/edit/:id",
             name: "customer_edit",
             component: EditCustomer,
@@ -338,6 +331,17 @@ const router = new VueRouter({
             meta: {
                 title: `Edit Customer - ${process.env.MIX_APP_NAME}`,
                 gate: "customer_edit",
+            },
+        },
+
+        {
+            path: "/customers/:id/ledger_entries",
+            name: "customer_ledger_entries",
+            component: CustomerLedgerEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
+                gate: "customer_access",
             },
         },
 
@@ -591,6 +595,39 @@ const router = new VueRouter({
             meta: {
                 title: `Gate Pass - ${process.env.MIX_APP_NAME}`,
                 gate: "gate_pass_access",
+            },
+        },
+
+        {
+            path: "/stock_items/add",
+            name: "stock_item_add",
+            component: AddStockItem,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Stock Item - ${process.env.MIX_APP_NAME}`,
+                gate: "stock_item_create",
+            },
+        },
+
+        {
+            path: "/stock_items",
+            name: "stock_items",
+            component: StockItems,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Stock Items - ${process.env.MIX_APP_NAME}`,
+                gate: "stock_item_access",
+            },
+        },
+
+        {
+            path: "/stock_items/edit/:id",
+            name: "stock_item_edit",
+            component: EditStockItem,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Stock Item - ${process.env.MIX_APP_NAME}`,
+                gate: "stock_item_edit",
             },
         },
 

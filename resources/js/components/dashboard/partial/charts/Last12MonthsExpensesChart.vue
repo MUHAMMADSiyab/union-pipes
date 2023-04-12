@@ -19,12 +19,9 @@ export default {
     components: {
         apexchart: VueApexCharts,
     },
-    props: {
-        expenses: {
-            type: Array,
-            required: true,
-        },
-    },
+
+    props: ["expenses", "months"],
+
     computed: {
         chartOptions() {
             return {
@@ -46,7 +43,7 @@ export default {
                     enabled: false,
                 },
                 xaxis: {
-                    categories: Object.keys(this.expenses[0].totals),
+                    categories: this.months,
                     labels: {
                         style: {
                             fontSize: "14px",

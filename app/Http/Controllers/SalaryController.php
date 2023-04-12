@@ -21,6 +21,9 @@ class SalaryController extends Controller
 
         $data = $request->all();
 
+        $total_paid = ($request->total_paid  + $request->deducted_amount) - $request->additional_amount;
+        $data['balance'] = (Employee::find($request->employee_id)->salary - $total_paid);
+
         $recordExists = Salary::whereMonth('month', date('m', strtotime($request->month)))
             ->whereYear('month', date('Y', strtotime($request->month)))
             ->whereEmployeeId($request->employee_id)
@@ -99,7 +102,10 @@ class SalaryController extends Controller
         Gate::authorize('salary_access');
         Gate::authorize('salary_edit');
 
-        $salary->update($request->all());
+        $data = $request->all();
+        $data['balance'] = (Employee::find($salary->employee_id)->salary - $request->total_paid);
+
+        $salary->update($data);
 
         return response()->json(Salary::with('payments')->find($salary->id));
     }

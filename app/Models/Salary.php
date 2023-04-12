@@ -15,23 +15,17 @@ class Salary extends Model
         'month',
         'date',
         'total_paid',
+        'balance',
         'additional_amount',
         'deducted_amount',
-        'status',
         'employee_id',
     ];
 
 
     protected $appends = [
-        'balance',
+        'status',
         'month_formatted'
     ];
-
-    public function getBalanceAttribute()
-    {
-        $basicPay = Employee::find($this->employee_id)->salary;
-        return $basicPay - $this->total_paid;
-    }
 
     public function getMonthFormattedAttribute()
     {
@@ -42,14 +36,13 @@ class Salary extends Model
     {
         $status = "";
 
-        if ($this->balance === 0.0 || $this->balance < 0) {
-            $status = "Paid";
+        if ($this->balance == 0 || $this->balance < 0) {
+            $status = ($this->balance < 0) ? "Advance" : "Paid";
         } elseif ($this->total_paid > 0 && $this->balance > 0) {
             $status = "Partial";
-        } elseif ($this->total_paid === 0.0 || $this->balance === $this->salary) {
+        } elseif ($this->total_paid == 0.0 || $this->balance == $this->salary) {
             $status = "Unpaid";
         }
-
 
         return $status;
     }

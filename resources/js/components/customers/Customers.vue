@@ -21,35 +21,49 @@
             <!-- Permanent Customers -->
             <v-row v-if="!local">
                 <v-col
-                    xl="3"
-                    lg="3"
-                    md="3"
-                    sm="12"
+                    v-for="(customer, index) in customers"
+                    :key="index"
                     cols="12"
-                    v-for="(customer, i) in customers"
-                    :key="i"
+                    sm="6"
+                    md="4"
+                    lg="3"
+                    xl="2"
                 >
-                    <v-card class="mx-auto" max-width="344" ripple>
-                        <v-img
-                            :src="customer.photo"
-                            v-if="customer.photo"
-                            height="220px"
-                        ></v-img>
-
-                        <v-card-title>
-                            {{ customer.name }}
-                        </v-card-title>
-
-                        <v-card-subtitle v-if="customer.phone">
-                            <v-icon left>mdi-card-account-phone-outline</v-icon>
-                            {{ customer.phone }}
-                        </v-card-subtitle>
-
-                        <v-card-actions>
+                    <div
+                        class="d-flex flex-column align-center pa-2"
+                        style="background-color: #fff; border-radius: 8px"
+                    >
+                        <div class="mb-2">
+                            <v-avatar
+                                size="80"
+                                color="grey"
+                                class="white--text"
+                            >
+                                <v-img :src="customer.photo" contain></v-img>
+                            </v-avatar>
+                        </div>
+                        <div class="text-center mb-2">
+                            <div class="font-weight-bold">
+                                {{ customer.name }}
+                            </div>
+                            <div
+                                class="text--secondary mt-1"
+                                style="font-size: 12px"
+                            >
+                                CNIC: {{ customer.cnic }}
+                            </div>
+                            <div
+                                class="text--secondary"
+                                style="font-size: 12px"
+                            >
+                                Phone: {{ customer.phone }}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-center">
                             <v-btn
-                                x-small
-                                text
-                                color="secondary"
+                                small
+                                color="primary"
+                                icon
                                 :to="`/customers/edit/${customer.id}`"
                                 title="Edit"
                                 v-if="can('customer_edit')"
@@ -57,27 +71,26 @@
                                 <v-icon small>mdi-pencil</v-icon>
                             </v-btn>
                             <v-btn
-                                x-small
-                                text
-                                color="red darken-2"
+                                small
+                                color="error"
+                                icon
                                 @click="setCustomerId(customer.id)"
                                 title="Delete"
                                 v-if="can('customer_delete')"
                             >
                                 <v-icon small>mdi-delete</v-icon>
                             </v-btn>
-
                             <v-btn
-                                x-small
-                                text
+                                small
                                 color="info darken-2"
+                                icon
                                 :to="`/customers/${customer.id}/ledger_entries`"
                                 title="Ledger Entries"
                             >
                                 <v-icon small>mdi-account-cash-outline</v-icon>
                             </v-btn>
-                        </v-card-actions>
-                    </v-card>
+                        </div>
+                    </div>
                 </v-col>
             </v-row>
 
@@ -241,3 +254,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.v-avatar {
+    border-radius: 50%;
+}
+</style>

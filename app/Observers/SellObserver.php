@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Customer;
 use App\Models\Sell;
+use App\Models\StockItem;
 
 class SellObserver
 {
@@ -25,7 +26,6 @@ class SellObserver
      */
     public function updated(Sell $sell)
     {
-        //
     }
 
     /**
