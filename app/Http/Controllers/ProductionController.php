@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductionRequest;
 use App\Models\Production;
-use App\Models\StockItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -15,11 +14,11 @@ class ProductionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function get_stock_productions(int $stock_item_id)
+    public function index()
     {
         Gate::authorize('production_access');
 
-        $productions = Production::where('stock_item_id', $stock_item_id)->get();
+        $productions = Production::with(['machine', 'employee', 'product'])->get();
         return response()->json($productions);
     }
 
@@ -35,9 +34,8 @@ class ProductionController extends Controller
         Gate::authorize('production_create');
 
         $production = Production::create($request->all());
-        $stock_item = StockItem::find($production->stock_item_id);
 
-        return response()->json(compact('production', 'stock_item'), 201);
+        return response()->json($production, 201);
     }
 
     /**
@@ -67,10 +65,8 @@ class ProductionController extends Controller
         Gate::authorize('production_edit');
 
         $production->update($request->all());
-        $production = Production::find($production->id);
-        $stock_item = StockItem::with('productions')->find($production->stock_item_id);
 
-        return response()->json(compact('production', 'stock_item'));
+        return response()->json(Production::find($production->id));
     }
 
     /**
@@ -85,8 +81,7 @@ class ProductionController extends Controller
         Gate::authorize('production_delete');
 
         if ($production->delete()) {
-            $stock_item = StockItem::find($production->stock_item_id);
-            return response()->json($stock_item);
+            return response()->json(['success' => 'Production deleted successfully']);
         }
     }
 

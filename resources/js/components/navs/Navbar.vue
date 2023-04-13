@@ -421,6 +421,52 @@ export default {
                 },
 
                 {
+                    text: "Machines",
+                    icon: "mdi-wardrobe",
+                    active: this.activeMenu("machines"),
+                    gate: "machine_access",
+                    submenu: [
+                        {
+                            text: "Add Machine",
+                            to: "/machines/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "machine_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Machines",
+                            to: "/machines",
+                            icon: "mdi-chevron-double-right",
+                            gate: "machine_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
+                    text: "Productions",
+                    icon: "mdi-cogs",
+                    active: this.activeMenu("productions"),
+                    gate: "production_access",
+                    submenu: [
+                        {
+                            text: "Add Production",
+                            to: "/productions/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "production_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Productions",
+                            to: "/productions",
+                            icon: "mdi-chevron-double-right",
+                            gate: "production_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "Reports",
                     icon: "mdi-file-document-multiple-outline",
                     active: this.activeMenu("reports"),

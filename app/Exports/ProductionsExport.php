@@ -20,28 +20,28 @@ class ProductionsExport implements FromCollection, WithHeadings, WithMapping, Wi
         $this->ids = $ids;
     }
 
-    public function getProductions()
-    {
-        return Production::query()
-            ->with('stock_item')
-            ->whereIn('id', $this->ids)
-            ->get();
-    }
-
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        return $this->getProductions();;
+        return Production::query()
+            ->whereIn('id', $this->ids)
+            ->get();
     }
 
-    public function map($production): array
+    public function map($product): array
     {
         return [
-            $production->id,
-            $production->quantity,
-            $production->date,
+            $product->id,
+            $product->machine->name,
+            $product->employee->name,
+            $product->product->name,
+            $product->date,
+            $product->shift,
+            $product->weight,
+            $product->quantity,
+            $product->total_weight,
         ];
     }
 
@@ -49,8 +49,14 @@ class ProductionsExport implements FromCollection, WithHeadings, WithMapping, Wi
     {
         return [
             'S#',
-            'Quantity',
+            'Machine',
+            'Operator',
+            'Product',
             'Date',
+            'Shift',
+            'Weight',
+            'Quantity',
+            'Total Weight',
         ];
     }
 
@@ -63,7 +69,7 @@ class ProductionsExport implements FromCollection, WithHeadings, WithMapping, Wi
     {
         $exportService = new ExportService();
         return $exportService->registerExportEvents(
-            $this->getProductions()[0]->stock_item->name . " Productions",
+            "Productions",
             $exportService->getHeadingCellsRange($this->headings()),
             PageSetup::ORIENTATION_PORTRAIT,
             $this->collection()->count(),

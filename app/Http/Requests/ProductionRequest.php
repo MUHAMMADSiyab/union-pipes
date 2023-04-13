@@ -24,9 +24,14 @@ class ProductionRequest extends FormRequest
     public function rules()
     {
         return [
-            'stock_item_id' => 'required|exists:stock_items,id',
+            'machine_id' => 'required|exists:machines,id',
+            'employee_id' => 'required|exists:employees,id',
+            'product_id' => 'required|exists:products,id',
             'date' => 'required|date',
+            'shift' => 'required|max:50',
+            'weight' => 'required|numeric',
             'quantity' => 'required|numeric',
+            'total_weight' => 'required|numeric'
         ];
     }
 }

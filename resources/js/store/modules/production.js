@@ -27,10 +27,7 @@ const actions = {
         try {
             const res = await axios.post("/api/productions", data);
 
-            commit(NEW_PRODUCTION, res.data.production);
-            commit("stock_item/UPDATE_STOCK_ITEM", res.data.stock_item, {
-                root: true,
-            });
+            commit(NEW_PRODUCTION, res.data);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
             return dispatch(
@@ -53,11 +50,9 @@ const actions = {
     },
 
     // Get productions
-    async getProductions({ commit }, stockItemId) {
+    async getProductions({ commit }) {
         try {
-            const res = await axios.get(
-                `/api/productions/${stockItemId}/get_stock_productions`
-            );
+            const res = await axios.get("/api/productions");
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_PRODUCTIONS, res.data);
@@ -85,10 +80,7 @@ const actions = {
         try {
             const res = await axios.put(`/api/productions/${data.id}`, data);
 
-            commit(UPDATE_PRODUCTION, res.data.production);
-            commit("stock_item/UPDATE_STOCK_ITEM", res.data.stock_item, {
-                root: true,
-            });
+            commit(UPDATE_PRODUCTION, res.data);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
             return dispatch(
@@ -115,15 +107,12 @@ const actions = {
             const res = await axios.delete(`/api/productions/${productionId}`);
 
             commit(DELETE_PRODUCTION, productionId);
-            commit("stock_item/UPDATE_STOCK_ITEM", res.data, {
-                root: true,
-            });
 
             return dispatch(
                 "alert/setAlert",
                 {
                     type: "success",
-                    message: "Production deleted successfully",
+                    message: res.data.success,
                 },
                 { root: true }
             );

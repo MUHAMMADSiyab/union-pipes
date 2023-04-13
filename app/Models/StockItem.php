@@ -15,8 +15,8 @@ class StockItem extends Model
         'description',
     ];
 
-    public function productions()
+    public function stocks()
     {
-        return $this->hasMany(Production::class);
+        return $this->hasMany(Stock::class);
     }
 }

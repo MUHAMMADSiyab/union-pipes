@@ -10,13 +10,28 @@ class Production extends Model
     use HasFactory;
 
     protected $fillable = [
-        'stock_item_id',
+        'machine_id',
+        'employee_id',
+        'shift',
         'date',
+        'product_id',
+        'weight',
         'quantity',
+        'total_weight',
     ];
 
-    public function stock_item()
+    public function machine()
     {
-        return $this->belongsTo(StockItem::class);
+        return $this->belongsTo(Machine::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

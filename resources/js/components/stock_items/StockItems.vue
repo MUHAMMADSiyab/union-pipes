@@ -67,8 +67,8 @@
                             <v-btn
                                 small
                                 color="info"
-                                @click="showAddProductionDialog(stock_item.id)"
-                                title="Add Production"
+                                @click="showAddStockDialog(stock_item.id)"
+                                title="Add Stock"
                             >
                                 Add Stock
                             </v-btn>
@@ -76,8 +76,8 @@
                             <v-btn
                                 small
                                 color="info"
-                                @click="showProductionsDialog(stock_item.id)"
-                                title="View Productions"
+                                @click="showStocksDialog(stock_item.id)"
+                                title="View Stocks"
                             >
                                 View Stock History
                             </v-btn>
@@ -86,19 +86,19 @@
                 </v-col>
             </v-row>
 
-            <!-- Add Production -->
-            <v-dialog v-model="addProductionDialog" max-width="600" persistent>
-                <AddProduction
+            <!-- Add Stock -->
+            <v-dialog v-model="addStockDialog" max-width="600" persistent>
+                <AddStock
                     :stock-item-id="currentStockItemId"
-                    @closeDialog="closeAddProductionDialog"
+                    @closeDialog="closeAddStockDialog"
                 />
             </v-dialog>
 
-            <!-- Productions -->
-            <v-dialog v-model="productionsDialog" max-width="800" persistent>
-                <Productions
+            <!-- Stocks -->
+            <v-dialog v-model="stocksDialog" max-width="800" persistent>
+                <Stocks
                     :stock-item-id="currentStockItemId"
-                    @closeDialog="closeProductionsDialog"
+                    @closeDialog="closeStocksDialog"
                 />
             </v-dialog>
 
@@ -121,8 +121,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import EditStockItem from "./EditStockItem.vue";
-import AddProduction from "./partial/AddProduction.vue";
-import Productions from "./partial/Productions.vue";
+import AddStock from "./partial/AddStock.vue";
+import Stocks from "./partial/Stocks.vue";
 import Confirmation from "../globals/Confirmation";
 import Navbar from "../navs/Navbar";
 import CurrencyMixin from "../../mixins/CurrencyMixin";
@@ -134,14 +134,14 @@ export default {
         EditStockItem,
         Navbar,
         Confirmation,
-        AddProduction,
-        Productions,
+        AddStock,
+        Stocks,
     },
 
     data() {
         return {
-            addProductionDialog: false,
-            productionsDialog: false,
+            addStockDialog: false,
+            stocksDialog: false,
             stockItemId: null,
             currentStockItemId: null,
         };
@@ -151,7 +151,7 @@ export default {
         ...mapActions({
             getStockItems: "stock_item/getStockItems",
             getStockItem: "stock_item/getStockItem",
-            getProductions: "production/getProductions",
+            getStocks: "stock/getStocks",
             deleteStockItem: "stock_item/deleteStockItem",
             deleteMultipleStockItems: "stock_item/deleteMultipleStockItems",
         }),
@@ -161,23 +161,23 @@ export default {
             this.$refs.confirmationComponent.setDialog(true);
         },
 
-        showAddProductionDialog(currentStockItemId) {
+        showAddStockDialog(currentStockItemId) {
             this.currentStockItemId = currentStockItemId;
-            this.addProductionDialog = true;
+            this.addStockDialog = true;
         },
 
-        closeAddProductionDialog() {
+        closeAddStockDialog() {
             this.currentStockItemId = null;
-            this.addProductionDialog = false;
+            this.addStockDialog = false;
         },
 
-        showProductionsDialog(stockItemId) {
+        showStocksDialog(stockItemId) {
             this.currentStockItemId = stockItemId;
-            this.productionsDialog = true;
+            this.stocksDialog = true;
         },
 
-        closeProductionsDialog() {
-            this.productionsDialog = false;
+        closeStocksDialog() {
+            this.stocksDialog = false;
             this.currentStockItemId = null;
         },
 

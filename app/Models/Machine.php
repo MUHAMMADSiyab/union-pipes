@@ -12,4 +12,9 @@ class Machine extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function productions()
+    {
+        return $this->hasMany(Production::class);
+    }
 }

@@ -79,6 +79,13 @@ import AddStockItem from "./components/stock_items/AddStockItem";
 import EditStockItem from "./components/stock_items/EditStockItem";
 import StockItems from "./components/stock_items/StockItems";
 
+import AddMachine from "./components/machines/AddMachine";
+import Machines from "./components/machines/Machines";
+
+import AddProduction from "./components/productions/AddProduction";
+import EditProduction from "./components/productions/EditProduction";
+import Productions from "./components/productions/Productions";
+
 import EditSetting from "./components/settings/Edit";
 
 import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting";
@@ -628,6 +635,61 @@ const router = new VueRouter({
             meta: {
                 title: `Edit Stock Item - ${process.env.MIX_APP_NAME}`,
                 gate: "stock_item_edit",
+            },
+        },
+
+        {
+            path: "/machines/add",
+            name: "machine_add",
+            component: AddMachine,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Machine - ${process.env.MIX_APP_NAME}`,
+                gate: "machine_create",
+            },
+        },
+
+        {
+            path: "/machines",
+            name: "machines",
+            component: Machines,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Machines - ${process.env.MIX_APP_NAME}`,
+                gate: "machine_access",
+            },
+        },
+
+        {
+            path: "/productions/add",
+            name: "production_add",
+            component: AddProduction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Production - ${process.env.MIX_APP_NAME}`,
+                gate: "production_create",
+            },
+        },
+
+        {
+            path: "/productions/edit/:id",
+            name: "production_edit",
+            component: EditProduction,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Production - ${process.env.MIX_APP_NAME}`,
+                gate: "production_edit",
+            },
+        },
+
+        {
+            path: "/productions",
+            name: "productions",
+            component: Productions,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Machines Productions - ${process.env.MIX_APP_NAME}`,
+                gate: "production_access",
             },
         },
 
