@@ -13,7 +13,9 @@
                                 <span
                                     v-if="
                                         paymentData.model ===
-                                        'App\\Models\\Purchase'
+                                            'App\\Models\\Purchase' ||
+                                        paymentData.model ===
+                                            'App\\Models\\Salary'
                                     "
                                     >Payee</span
                                 >
@@ -42,6 +44,16 @@
                                     "
                                     >{{ paymentData.sell.customer.name }}</span
                                 >
+
+                                <span
+                                    v-if="
+                                        paymentData.model ===
+                                        'App\\Models\\Salary'
+                                    "
+                                    >{{
+                                        paymentData.salary.employee.name
+                                    }}</span
+                                >
                             </td>
                         </tr>
                     </template>
@@ -50,10 +62,22 @@
                         <td>{{ formatDate(paymentData.payment_date) }}</td>
                     </tr>
                     <tr>
-                        <td>Amount:</td>
+                        <td>
+                            Amount
+                            <span
+                                v-if="
+                                    paymentData.model === 'App\\Models\\Salary'
+                                "
+                                >Paid</span
+                            >:
+                        </td>
                         <td>{{ money(paymentData.amount) }}</td>
                     </tr>
-                    <tr>
+                    <tr v-if="paymentData.model === 'App\\Models\\Salary'">
+                        <td>Basi Pay:</td>
+                        <td>{{ money(paymentData.salary.employee.salary) }}</td>
+                    </tr>
+                    <tr v-if="paymentData.model === 'App\\Models\\Sell'">
                         <td>Discount %:</td>
                         <td>
                             {{ paymentData.discount }} ({{
@@ -64,7 +88,12 @@
                             }})
                         </td>
                     </tr>
-                    <tr>
+                    <tr
+                        v-if="
+                            paymentData.model === 'App\\Models\\Purchase' ||
+                            paymentData.model === 'App\\Models\\Sell'
+                        "
+                    >
                         <td>
                             <span
                                 v-if="

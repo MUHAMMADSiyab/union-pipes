@@ -109,6 +109,10 @@
                                         sm="12"
                                         cols="12"
                                         class="py-0"
+                                        v-if="
+                                            data.category === 'Raw Material' ||
+                                            data.category === 'Other'
+                                        "
                                     >
                                         <small
                                             class="red--text"
@@ -130,9 +134,24 @@
                                     </v-col>
 
                                     <v-col
-                                        xl="8"
-                                        lg="8"
-                                        md="8"
+                                        :xl="
+                                            data.category === 'Raw Material' ||
+                                            data.category === 'Other'
+                                                ? 8
+                                                : 12
+                                        "
+                                        :lg="
+                                            data.category === 'Raw Material' ||
+                                            data.category === 'Other'
+                                                ? 8
+                                                : 12
+                                        "
+                                        :md="
+                                            data.category === 'Raw Material' ||
+                                            data.category === 'Other'
+                                                ? 8
+                                                : 12
+                                        "
                                         sm="12"
                                         cols="12"
                                         class="py-0"
@@ -181,7 +200,13 @@
                                 </v-row>
 
                                 <!-- Purchase Items -->
-                                <v-row class="mt-3">
+                                <v-row
+                                    class="mt-3"
+                                    v-if="
+                                        data.category === 'Raw Material' ||
+                                        data.category === 'Other'
+                                    "
+                                >
                                     <v-col cols="12" class="py-0">
                                         <h3 class="ml-3 mb-4">
                                             Purchase Items
@@ -430,7 +455,12 @@ export default {
     data() {
         return {
             formLoading: false,
-            categories: ["Raw Material", "Opening Balance", "Advance Payment"],
+            categories: [
+                "Raw Material",
+                "Opening Balance",
+                "Advance Payment",
+                "Other",
+            ],
             data: {
                 date: moment().format("Y-MM-DD HH:mm:ss"),
                 company_id: "",

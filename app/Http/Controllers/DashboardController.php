@@ -12,11 +12,15 @@ class DashboardController extends Controller
         $lastTwelveMonthsExpenses = $dashboardService->getLastTwelveMonthsExpenses();
         $lastTwelveMonthsSells = $dashboardService->getLast12MonthsSells();
         $receivables = (new ReportService)->getReceivablesReport();
+        $totals = $dashboardService->getTotals();
+        $last30DaysProduction = $dashboardService->getLast30DaysProductionByMachine();
 
         return response()->json(compact(
             'lastTwelveMonthsExpenses',
             'lastTwelveMonthsSells',
-            'receivables'
+            'receivables',
+            'totals',
+            'last30DaysProduction'
         ));
     }
 }

@@ -44,6 +44,16 @@ class Payment extends Model implements HasMedia
             ->height('200');
     }
 
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class, 'paymentable_id');
+    }
+
+    public function sell()
+    {
+        return $this->belongsTo(Sell::class, 'paymentable_id');
+    }
+
 
     public function getChequeImagesAttribute()
     {

@@ -1,6 +1,5 @@
 <template>
     <v-card>
-        <v-card-subtitle>Last 12 Months Expenses</v-card-subtitle>
         <v-card-text>
             <apexchart
                 type="bar"
@@ -26,11 +25,13 @@ export default {
         chartOptions() {
             return {
                 chart: {
-                    type: "bar",
-                    height: 350,
                     toolbar: {
                         show: false,
                     },
+                },
+                title: {
+                    text: "Last 12 Months Expenses",
+                    align: "left",
                 },
                 plotOptions: {
                     bar: {
@@ -46,7 +47,7 @@ export default {
                     categories: this.months,
                     labels: {
                         style: {
-                            fontSize: "14px",
+                            fontSize: "12px",
                         },
                     },
                 },
@@ -56,7 +57,7 @@ export default {
                     },
                     labels: {
                         style: {
-                            fontSize: "14px",
+                            fontSize: "12px",
                         },
                     },
                 },

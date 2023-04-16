@@ -2,67 +2,22 @@
     <div>
         <Navbar v-if="!printMode" />
 
-        <v-container class="mt-4">
-            <v-row v-if="dashboardData">
-                <v-col cols="3">
-                    <v-card>
-                        <v-card-text>
-                            <Card
-                                color="light-green"
-                                title="Materials Purchased"
-                                :number="469000"
-                                icon="mdi-archive-arrow-down-outline"
-                            />
-                        </v-card-text>
-                    </v-card>
+        <v-container class="mt-4" v-if="dashboardData">
+            <TotalsCards :totals="dashboardData.totals" />
+            <v-row>
+                <v-col xl="12" lg="12" md="12" sm="12" cols="12">
+                    <Last30DaysProduction
+                        :chart-data="dashboardData.last30DaysProduction"
+                    />
                 </v-col>
 
-                <v-col cols="3">
-                    <v-card>
-                        <v-card-text>
-                            <Card
-                                color="indigo"
-                                title="Total Pipe Sold"
-                                :number="230000"
-                                icon="mdi-archive-arrow-up-outline"
-                            />
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-
-                <v-col cols="3">
-                    <v-card>
-                        <v-card-text>
-                            <Card
-                                color="pink"
-                                title="Total Stock Weight"
-                                :number="17000"
-                                icon="mdi-warehouse"
-                            />
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-
-                <v-col cols="3">
-                    <v-card>
-                        <v-card-text>
-                            <Card
-                                color="orange"
-                                title="Total Expenses"
-                                :number="45000"
-                                icon="mdi-currency-eur"
-                            />
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-
-                <v-col cols="12">
+                <v-col xl="12" lg="12" md="12" sm="12" cols="12">
                     <SellsLast12MonthsChart
                         :sell-data="dashboardData.lastTwelveMonthsSells"
                     />
                 </v-col>
 
-                <v-col cols="6">
+                <v-col xl="7" lg="7" md="7" sm="12" cols="12">
                     <Last12MonthsExpensesChart
                         :expenses="
                             dashboardData.lastTwelveMonthsExpenses.chartData
@@ -70,7 +25,8 @@
                         :months="dashboardData.lastTwelveMonthsExpenses.months"
                     />
                 </v-col>
-                <v-col cols="6">
+
+                <v-col xl="5" lg="5" md="5" sm="12" cols="12">
                     <ReceivablesChart
                         :receivables="dashboardData.receivables"
                     />
@@ -87,7 +43,8 @@ import Navbar from "../navs/Navbar.vue";
 import Last12MonthsExpensesChart from "./partial/charts/Last12MonthsExpensesChart.vue";
 import SellsLast12MonthsChart from "./partial/charts/SellsLast12MonthsChart.vue";
 import ReceivablesChart from "./partial/charts/ReceivablesChart.vue";
-import Card from "./partial/Card.vue";
+import Last30DaysProduction from "./partial/charts/Last30DaysProduction.vue";
+import TotalsCards from "./partial/TotalsCards.vue";
 
 export default {
     components: {
@@ -95,7 +52,8 @@ export default {
         Last12MonthsExpensesChart,
         SellsLast12MonthsChart,
         ReceivablesChart,
-        Card,
+        Last30DaysProduction,
+        TotalsCards,
     },
 
     mixins: [CurrencyMixin],

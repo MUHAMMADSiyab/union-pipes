@@ -135,6 +135,62 @@ const actions = {
             }
         }
     },
+    // Get machine report data
+    async getMachineReportData({ dispatch, commit }, data) {
+        try {
+            const res = await axios.post("/api/reports/machine", data);
+
+            commit(GET_REPORT_DATA, res.data);
+            commit(SET_LOADING, false, { root: true });
+            commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+
+            if (error.response.status === 422) {
+                commit(SET_VALIDATION_ERRORS, error.response.data, {
+                    root: true,
+                });
+            }
+        }
+    },
+
+    // Get salary report data
+    async getSalaryReportData({ dispatch, commit }, data) {
+        try {
+            const res = await axios.post("/api/reports/salary", data);
+
+            commit(GET_REPORT_DATA, res.data);
+            commit(SET_LOADING, false, { root: true });
+            commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+
+            if (error.response.status === 422) {
+                commit(SET_VALIDATION_ERRORS, error.response.data, {
+                    root: true,
+                });
+            }
+        }
+    },
+
+    // Get closing report data
+    async getClosingReportData({ dispatch, commit }, data) {
+        try {
+            const res = await axios.post("/api/reports/closing", data);
+
+            commit(GET_REPORT_DATA, res.data);
+            commit(SET_LOADING, false, { root: true });
+            commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+
+            if (error.response.status === 422) {
+                commit(SET_VALIDATION_ERRORS, error.response.data, {
+                    root: true,
+                });
+            }
+        }
+    },
 };
 
 const mutations = {

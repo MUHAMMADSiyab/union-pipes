@@ -82,6 +82,13 @@ class PaymentController extends Controller
                 ->find($payment->paymentable_id);
         }
 
+        if ($payment->model === Salary::class) {
+            $data['salary'] = Salary::query()
+                ->with('employee')
+                ->select('id', 'employee_id')
+                ->find($payment->paymentable_id);
+        }
+
         return response()->json($data);
     }
 

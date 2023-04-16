@@ -1,6 +1,5 @@
 <template>
     <v-card>
-        <v-card-subtitle>Last 12 Months Sells</v-card-subtitle>
         <v-card-text>
             <apexchart
                 type="area"
@@ -34,6 +33,10 @@ export default {
                     toolbar: {
                         show: false,
                     },
+                },
+                title: {
+                    text: "Last 12 Months Sells",
+                    align: "left",
                 },
                 dataLabels: {
                     enabled: false,

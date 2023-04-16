@@ -58,14 +58,14 @@ class PurchaseController extends Controller
                 'category',
             ]));
 
-            if ($request->category === 'Raw Material') {
+            if ($request->category === 'Raw Material' || $request->category === 'Other') {
                 foreach ($request->items as $item) {
                     $purchase->purchased_items()->create($item);
                 }
             }
 
 
-            if ($request->category === 'Raw Material') {
+            if ($request->category === 'Raw Material' || $request->category === 'Other') {
                 $last_balance = (new LedgerService)
                     ->getCompanyLastBalance($request->company_id, $purchase->id);
 
@@ -144,7 +144,7 @@ class PurchaseController extends Controller
                 'category',
             ]));
 
-            if ($request->category === 'Raw Material') {
+            if ($request->category === 'Raw Material' || $request->category === 'Other') {
                 // Delete old items 
                 foreach ($request->old_items as $item) {
                     PurchasedItem::find($item['id'])->delete();

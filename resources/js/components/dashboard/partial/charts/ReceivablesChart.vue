@@ -1,9 +1,9 @@
 <template>
     <v-card>
-        <v-card-subtitle>Receivables Chart</v-card-subtitle>
         <v-card-text>
             <apexchart
-                type="pie"
+                type="donut"
+                :height="350"
                 :options="chartOptions"
                 :series="chartSeries"
             ></apexchart>
@@ -45,6 +45,10 @@ export default {
                             speed: 350,
                         },
                     },
+                },
+                title: {
+                    text: "Receivables Chart",
+                    align: "left",
                 },
                 labels: this.receivables.map((receivable) => receivable.name),
                 colors: [

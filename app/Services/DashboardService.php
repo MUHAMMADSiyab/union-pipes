@@ -4,11 +4,88 @@ namespace App\Services;
 
 use App\Models\Expense;
 use App\Models\ExpenseSource;
+use App\Models\Machine;
+use App\Models\Payment;
+use App\Models\Production;
+use App\Models\PurchasedItem;
 use App\Models\Sell;
+use App\Models\SoldItem;
+use App\Models\Stock;
+use App\Models\StockItem;
 use Carbon\Carbon;
 
 class DashboardService
 {
+
+    public function getTotals()
+    {
+        $materials_purchased = PurchasedItem::query()->sum('grand_total');
+        $pipe_sold = SoldItem::query()->sum('grand_total');
+        $stock_weight_available = StockItem::first()->available_quantity;
+        $total_expenses = Payment::where('model', Expense::class)->sum('amount');
+
+        return compact('materials_purchased', 'pipe_sold', 'stock_weight_available', 'total_expenses');
+    }
+
+    public function getLast30DaysProductionByMachine()
+    {
+        $start_date = now()->subDays(29)->startOfDay();
+        $end_date = now()->endOfDay();
+
+        $productions = Production::with('machine')
+            ->whereBetween('date', [$start_date, $end_date])
+            ->selectRaw('date, SUM(total_weight) as total_weight, machine_id')
+            ->groupBy('date', 'machine_id')
+            ->orderBy('date', 'ASC')
+            ->get();
+
+        $days = [];
+        $productionByMachine = [];
+
+        // Initialize all days with 0 production for each machine
+        for ($i = 0; $i < 30; $i++) {
+            $date = now()->subDays($i)->format('d-M');
+            $days[$date] = $date;
+            foreach (Machine::all() as $machine) {
+                $machineId = $machine->id;
+                $machineName = $machine->name;
+                if (!isset($productionByMachine[$machineId])) {
+                    $productionByMachine[$machineId] = [
+                        'name' => $machineName,
+                        'data' => [],
+                    ];
+                }
+                $productionByMachine[$machineId]['data'][$date] = 0;
+            }
+        }
+
+        // Update production data for days with actual production data
+        foreach ($productions as $p) {
+            $machineId = $p->machine_id;
+            $machineName = $p->machine->name;
+            $date = Carbon::parse($p->date)->format('d-M');
+            $totalWeight = $p->total_weight;
+
+            if (!isset($productionByMachine[$machineId])) {
+                $productionByMachine[$machineId] = [
+                    'name' => $machineName,
+                    'data' => [],
+                ];
+            }
+
+            $productionByMachine[$machineId]['data'][$date] = $totalWeight;
+            $days[$date] = $date;
+        }
+
+        $chartData = [
+            'days' => array_values($days),
+            'productionByMachine' => array_values($productionByMachine),
+        ];
+
+        return $chartData;
+    }
+
+
 
     public function getLastTwelveMonthsExpenses()
     {

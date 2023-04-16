@@ -70,6 +70,9 @@ import SoldItemsReportSearch from "./components/reports/sold_items/SoldItemsRepo
 import ReceivablesReport from "./components/reports/sell/ReceivablesReport";
 import PayablesReport from "./components/reports/purchase/PayablesReport";
 import ExpenseReportSearch from "./components/reports/expense/ExpenseReportSearch";
+import MachineReportSearch from "./components/reports/machine/MachineReportSearch";
+import SalaryReport from "./components/reports/salary/SalaryReport";
+import ClosingReportSearch from "./components/reports/closing/ClosingReportSearch";
 
 import CreateGatePass from "./components/gate_passes/CreateGatePass";
 import GatePasses from "./components/gate_passes/GatePasses";
@@ -568,6 +571,39 @@ const router = new VueRouter({
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Expense Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/machine",
+            name: "machine_report",
+            component: MachineReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Machine Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/salary",
+            name: "salary_report",
+            component: SalaryReport,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Salary Report - ${process.env.MIX_APP_NAME}`,
+                gate: "report_access",
+            },
+        },
+
+        {
+            path: "/reports/closing",
+            name: "closing_report",
+            component: ClosingReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Closing Report - ${process.env.MIX_APP_NAME}`,
                 gate: "report_access",
             },
         },

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpenseReportRequest;
+use App\Http\Requests\MachineReportRequest;
 use App\Http\Requests\PurchaseReportRequest;
 use App\Http\Requests\SellReportRequest;
 use App\Models\Customer;
@@ -60,5 +61,19 @@ class ReportController extends Controller
         $expense_data = $reportService->getExpenseReport($request);
 
         return response()->json($expense_data);
+    }
+
+    function get_machines_report(MachineReportRequest $request, ReportService $reportService)
+    {
+        $machines_productions = $reportService->getMachinesReport($request);
+
+        return response()->json($machines_productions);
+    }
+
+    function get_salaries_report(ReportService $reportService)
+    {
+        $unpaid_salaries = $reportService->getSalariesReport();
+
+        return response()->json($unpaid_salaries);
     }
 }

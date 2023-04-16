@@ -4,6 +4,7 @@ use App\Http\Controllers\AbilityController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ClosingReportController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -207,6 +208,12 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         Route::get('payables', [ReportController::class, 'get_payables_report']);
 
         Route::post('expense', [ReportController::class, 'get_expense_report']);
+
+        Route::post('machine', [ReportController::class, 'get_machines_report']);
+
+        Route::post('salary', [ReportController::class, 'get_salaries_report']);
+
+        Route::post('closing', [ClosingReportController::class, 'index']);
     });
 });
 

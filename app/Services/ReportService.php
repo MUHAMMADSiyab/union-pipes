@@ -4,10 +4,13 @@ namespace App\Services;
 
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseSource;
+use App\Models\Machine;
 use App\Models\Purchase;
 use App\Models\PurchasedItem;
+use App\Models\Salary;
 use App\Models\Sell;
 use App\Models\SoldItem;
 
@@ -282,5 +285,26 @@ class ReportService
         $data = $groupedExpenses->values()->all();
 
         return compact('data', 'totals');
+    }
+
+    public function getMachinesReport($request)
+    {
+        $machines_productions = Machine::query()
+            ->whereHas('productions', function ($q) use ($request) {
+                $q->whereBetween('date', [$request->from_date, $request->to_date]);
+            })
+            ->withSum('productions', 'total_weight')
+            ->withAvg('productions', 'total_weight')
+            ->get();
+
+        return $machines_productions;
+    }
+
+    public function getSalariesReport()
+    {
+        return Employee::whereHas('salaries', function ($query) {
+            $query->where('balance', '>', 0);
+        })
+            ->withSum('salaries', 'balance')->get();
     }
 }

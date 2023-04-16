@@ -35,6 +35,10 @@ class Employee extends Model implements HasMedia
     /**
      * Relations
      */
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class);
+    }
 
 
     public function registerMediaConversions(?Media $media = null): void

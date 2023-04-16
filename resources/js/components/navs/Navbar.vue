@@ -527,6 +527,30 @@ export default {
                             gate: "report_access",
                             exact: true,
                         },
+
+                        {
+                            text: "Machine",
+                            to: "/reports/machine",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Salary",
+                            to: "/reports/salary",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Closing",
+                            to: "/reports/closing",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
                     ],
                 },
 
