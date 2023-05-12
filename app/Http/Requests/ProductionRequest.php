@@ -31,7 +31,8 @@ class ProductionRequest extends FormRequest
             'shift' => 'required|max:50',
             'weight' => 'required|numeric',
             'quantity' => 'required|numeric',
-            'total_weight' => 'required|numeric'
+            'total_weight' => 'required|numeric',
+            'description' => 'nullable|max:500'
         ];
     }
 }

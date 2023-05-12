@@ -46,6 +46,21 @@
                     ></v-date-picker>
                 </v-menu>
 
+                <small
+                    class="red--text"
+                    v-if="validation.hasErrors()"
+                    v-text="validation.getMessage('description')"
+                ></small>
+                <v-textarea
+                    name="description"
+                    label="Description"
+                    id="description"
+                    v-model="data.description"
+                    rows="3"
+                    dense
+                    outlined
+                ></v-textarea>
+
                 <v-btn color="success" type="submit">Update</v-btn>
                 <v-btn color="secondary" @click="$emit('closeEditMode')"
                     >Cancel</v-btn
@@ -65,7 +80,7 @@ export default {
     mixins: [ValidationMixin],
 
     data() {
-        const { id, quantity, date, stock_item_id } = this.stock;
+        const { id, quantity, date, stock_item_id, description } = this.stock;
 
         return {
             formLoading: false,
@@ -74,6 +89,7 @@ export default {
                 id,
                 quantity,
                 date,
+                description,
             },
         };
     },
@@ -119,6 +135,7 @@ export default {
                 this.data.id = newStock.id;
                 this.data.quantity = newStock.quantity;
                 this.data.date = newStock.date;
+                this.data.description = newStock.description;
             },
             deep: true,
         },

@@ -11,16 +11,17 @@
                 <v-col cols="12">
                     <v-data-table
                         :headers="headers"
-                        :items="productions"
-                        class="elevation-1"
-                        item-key="id"
-                        :search="search"
-                        :items-per-page="perPage"
+                        :items="productions.data"
+                        :total-items="totalItems"
                         :loading="loading"
-                        :show-select="can('production_delete') && !printMode"
-                        loading-text="Loading productions..."
+                        :search="search"
                         :footer-props="footerProps"
-                        v-model="selectedItems"
+                        :server-items-length="true"
+                        :disable-pagination="true"
+                        :sort-by.sync="sortBy"
+                        :sort-desc.sync="sortDesc"
+                        item-key="id"
+                        class="elevation-1"
                     >
                         <!-- S# -->
                         <template slot="item.sno" slot-scope="props">{{
@@ -56,6 +57,39 @@
 
                         <!-- Top -->
                         <template v-slot:top v-if="!printMode">
+                            <v-toolbar flat>
+                                <v-toolbar-title>Productions</v-toolbar-title>
+                                <v-divider class="mx-4" inset vertical />
+                                <v-spacer />
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Search"
+                                    single-line
+                                    hide-details
+                                ></v-text-field>
+                                <v-btn
+                                    color="primary"
+                                    href="/productions/create"
+                                    v-if="can('production_create')"
+                                    >Add New</v-btn
+                                >
+                            </v-toolbar>
+                            <v-data-pagination
+                                v-model="currentPage"
+                                :length="Math.ceil(totalItems / perPage)"
+                                :total-visible="9"
+                                :per-page="perPage"
+                                @input="
+                                    getProductions({
+                                        page: currentPage,
+                                        perPage,
+                                        sortBy,
+                                        sortDesc,
+                                    })
+                                "
+                            ></v-data-pagination>
+
                             <v-btn
                                 color="error"
                                 small
@@ -176,6 +210,7 @@ export default {
                 { text: "Weight", value: "weight" },
                 { text: "Quantity", value: "quantity" },
                 { text: "Total Weight", value: "total_weight" },
+                { text: "Description", value: "description" },
                 { text: "Actions", value: "actions", align: " d-print-none" },
             ],
             selectedItems: [],
@@ -223,6 +258,22 @@ export default {
             production: "production/production",
             loading: "loading",
         }),
+
+        currentPage() {
+            return this.$route.query.page || 1;
+        },
+        perPage() {
+            return parseInt(this.$route.query.perPage) || 10;
+        },
+        sortBy() {
+            return this.$route.query.sortBy || "id";
+        },
+        sortDesc() {
+            return this.$route.query.sortDesc === "true" || false;
+        },
+        totalItems() {
+            return this.productions.total;
+        },
     },
 
     mounted() {

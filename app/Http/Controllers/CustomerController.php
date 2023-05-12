@@ -23,6 +23,11 @@ class CustomerController extends Controller
         return response()->json($ledgerService->getCustomerLedgerEntries($customer_id));
     }
 
+    public function all()
+    {
+        return response()->json(Customer::all());
+    }
+
 
     /**
      * Get all customers
@@ -43,6 +48,7 @@ class CustomerController extends Controller
                 $q->notLocal();
             })
             ->get();
+
 
         return response()->json($customers);
     }

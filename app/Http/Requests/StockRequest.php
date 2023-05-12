@@ -27,6 +27,7 @@ class StockRequest extends FormRequest
             'stock_item_id' => 'required|exists:stock_items,id',
             'date' => 'required|date',
             'quantity' => 'required|numeric',
+            'description' => 'nullable|max:500',
         ];
     }
 }

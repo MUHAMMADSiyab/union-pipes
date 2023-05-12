@@ -10,7 +10,6 @@ use App\Models\Production;
 use App\Models\PurchasedItem;
 use App\Models\Sell;
 use App\Models\SoldItem;
-use App\Models\Stock;
 use App\Models\StockItem;
 use Carbon\Carbon;
 
@@ -21,7 +20,7 @@ class DashboardService
     {
         $materials_purchased = PurchasedItem::query()->sum('grand_total');
         $pipe_sold = SoldItem::query()->sum('grand_total');
-        $stock_weight_available = StockItem::first()->available_quantity;
+        $stock_weight_available = StockItem::first()->available_quantity ?? 0;
         $total_expenses = Payment::where('model', Expense::class)->sum('amount');
 
         return compact('materials_purchased', 'pipe_sold', 'stock_weight_available', 'total_expenses');

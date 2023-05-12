@@ -249,6 +249,27 @@
                                             outlined
                                         ></v-text-field>
                                     </v-col>
+
+                                    <v-col cols="12" class="py-0">
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'description'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-textarea
+                                            name="description"
+                                            label="Description"
+                                            id="description"
+                                            v-model="data.description"
+                                            rows="3"
+                                            dense
+                                            outlined
+                                        ></v-textarea>
+                                    </v-col>
                                 </v-row>
 
                                 <v-btn
@@ -290,6 +311,7 @@ export default {
                 weight: 0,
                 quantity: 0,
                 total_weight: 0,
+                description: "",
             },
         };
     },
@@ -363,6 +385,7 @@ export default {
             weight,
             quantity,
             total_weight,
+            description,
         } = this.production;
 
         this.data.id = id;
@@ -374,6 +397,7 @@ export default {
         this.data.weight = weight;
         this.data.quantity = quantity;
         this.data.total_weight = total_weight;
+        this.data.description = description;
     },
 };
 </script>

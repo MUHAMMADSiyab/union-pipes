@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\ProductionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,7 @@ class Production extends Model
         'weight',
         'quantity',
         'total_weight',
+        'description'
     ];
 
     public function machine()
@@ -33,5 +35,11 @@ class Production extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+
+    protected static function newFactory()
+    {
+        return ProductionFactory::new();
     }
 }

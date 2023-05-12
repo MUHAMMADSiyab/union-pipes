@@ -114,7 +114,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     // Customer
     Route::post('/customers/{customer_id}/ledger_entries', [CustomerController::class, 'get_ledger_entries']);
-
+    Route::get('all_customers', [CustomerController::class, 'all']);
     Route::resource('customers', CustomerController::class, [
         'except' => ['create', 'edit']
     ]);

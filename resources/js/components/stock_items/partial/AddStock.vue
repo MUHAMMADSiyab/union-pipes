@@ -46,6 +46,21 @@
                     ></v-date-picker>
                 </v-menu>
 
+                <small
+                    class="red--text"
+                    v-if="validation.hasErrors()"
+                    v-text="validation.getMessage('description')"
+                ></small>
+                <v-textarea
+                    name="description"
+                    label="Description"
+                    id="description"
+                    v-model="data.description"
+                    rows="3"
+                    dense
+                    outlined
+                ></v-textarea>
+
                 <v-btn color="success" type="submit">Add Stock</v-btn>
                 <v-btn color="secondary" @click="closeDialog">Cancel</v-btn>
             </v-form>
@@ -69,6 +84,7 @@ export default {
                 stock_item_id: this.stockItemId,
                 quantity: "",
                 date: "",
+                description: "",
             },
         };
     },
@@ -91,6 +107,7 @@ export default {
             } else {
                 this.data.quantity = "";
                 this.data.date = "";
+                this.data.description = "";
                 // Clear the validation messages object
                 this.validation.setMessages({});
 

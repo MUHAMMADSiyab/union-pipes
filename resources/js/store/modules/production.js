@@ -50,10 +50,19 @@ const actions = {
     },
 
     // Get productions
-    async getProductions({ commit }) {
+    async getProductions(
+        { commit },
+        { page = 1, perPage = 10, sortBy = "id", sortDesc = false }
+    ) {
         try {
-            const res = await axios.get("/api/productions");
-
+            const res = await axios.get("/api/productions", {
+                params: {
+                    page,
+                    per_page: perPage,
+                    sortBy,
+                    sortDesc: sortDesc ? "desc" : "asc",
+                },
+            });
             commit(SET_LOADING, false, { root: true });
             commit(GET_PRODUCTIONS, res.data);
         } catch (error) {

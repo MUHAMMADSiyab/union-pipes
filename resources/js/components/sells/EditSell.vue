@@ -566,7 +566,7 @@ export default {
 
     methods: {
         ...mapActions({
-            getCustomers: "customer/getCustomers",
+            getAllCustomers: "customer/getAllCustomers",
             getProducts: "product/getProducts",
             getSell: "sell/getSell",
             updateSell: "sell/updateSell",
@@ -629,9 +629,7 @@ export default {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
                     item.total =
-                        data.items[index].rate *
-                        data.items[index].quantity *
-                        data.items[index].weight;
+                        data.items[index].rate * data.items[index].quantity;
                     const sales_tax_amount = item.total * sales_tax_percentage;
                     item.sales_tax = sales_tax_amount;
                     item.grand_total = item.total + item.sales_tax;
@@ -649,7 +647,7 @@ export default {
 
     async mounted() {
         await Promise.all([
-            this.getCustomers(),
+            this.getAllCustomers(),
             this.getProducts(),
             this.getSell(this.$route.params.id),
         ]);
