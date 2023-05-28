@@ -17,10 +17,14 @@ const state = {
     purchase: null,
     recent_purchase: null,
     old_purchase: null,
+    total: 0,
+    loading: false,
 };
 
 const getters = {
     purchases: (state) => state.purchases,
+    total: (state) => state.total,
+    loading: (state) => state.loading,
     purchase: (state) => state.purchase,
     recent_purchase: (state) => state.recent_purchase,
     old_purchase: (state) => state.old_purchase,
@@ -55,14 +59,44 @@ const actions = {
     },
 
     // Get purchases
-    async getPurchases({ commit }) {
+    async getPurchases({ commit }, { page, itemsPerPage, sortBy, sortDesc }) {
         try {
-            const res = await axios.get("/api/purchases");
+            commit(SET_LOADING, true);
 
-            commit(SET_LOADING, false, { root: true });
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "date";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/purchases?page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
             commit(GET_PURCHASES, res.data);
         } catch (error) {
-            commit(SET_LOADING, false, { root: true });
+            commit(SET_LOADING, false);
+            console.log(error);
+        }
+    },
+
+    // Search purchases
+    async searchPurchases(
+        { commit },
+        { page, itemsPerPage, sortBy, sortDesc, search }
+    ) {
+        try {
+            commit(SET_LOADING, true);
+
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "date";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/search_purchases?search=${search}&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
+            commit(GET_PURCHASES, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false);
             console.log(error);
         }
     },
@@ -151,7 +185,12 @@ const actions = {
 };
 
 const mutations = {
-    GET_PURCHASES: (state, payload) => (state.purchases = payload),
+    SET_LOADING: (state, payload) => (state.loading = payload),
+
+    GET_PURCHASES: (state, payload) => {
+        state.purchases = payload.data;
+        state.total = payload.total;
+    },
 
     GET_PURCHASE: (state, payload) => (state.purchase = payload),
 

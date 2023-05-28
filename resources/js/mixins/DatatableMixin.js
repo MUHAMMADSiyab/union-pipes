@@ -2,12 +2,12 @@ const DatatableMixin = {
     data() {
         return {
             search: "",
-            perPage: 20,
+            perPage: 3,
             footerProps: {
-                itemsPerPageOptions: [20, 50, 100, -1]
-            }
+                itemsPerPageOptions: [3, 50, 100],
+            },
         };
-    }
+    },
 };
 
 export default DatatableMixin;

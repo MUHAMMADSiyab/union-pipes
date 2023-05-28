@@ -7,11 +7,13 @@ use App\Models\Payment;
 use App\Models\Purchase;
 use App\Models\PurchasedItem;
 use App\Services\LedgerService;
+use App\Services\OrderByService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use \Illuminate\Support\Str;
 
 class PurchaseController extends Controller
 {
@@ -24,13 +26,51 @@ class PurchaseController extends Controller
     {
         Gate::authorize('purchase_access');
 
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
         $purchases = Purchase::query()
             ->with([
                 'company',
                 'purchased_items',
                 'purchased_items.purchase_item',
             ])
-            ->get();
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'purchases');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
+
+        return response()->json($purchases);
+    }
+
+    public function search_purchases()
+    {
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
+        $purchases = Purchase::query()
+            ->with([
+                'company',
+                'purchased_items',
+                'purchased_items.purchase_item',
+            ])
+            ->where(function ($query) {
+                $searchTerm = request('search');
+                $query->where('date', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('invoice_no', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('category', 'like', '%' . $searchTerm . '%')
+                    ->orWhereHas('company', function ($q) use ($searchTerm) {
+                        $q->where('name', 'like', '%' . $searchTerm . '%');
+                    });
+            })
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'purchases');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
 
         return response()->json($purchases);
     }

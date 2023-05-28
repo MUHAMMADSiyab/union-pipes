@@ -14,9 +14,10 @@
                         :items="expenses"
                         class="elevation-1"
                         item-key="id"
-                        :search="search"
-                        :items-per-page="perPage"
                         :loading="loading"
+                        :options.sync="options"
+                        :server-items-length="total"
+                        :search="search"
                         :show-select="can('expense_delete') && !printMode"
                         loading-text="Loading expenses..."
                         :footer-props="footerProps"
@@ -235,6 +236,7 @@ export default {
 
     data() {
         return {
+            options: {},
             showChequeColumns: false,
             currentChequeImages: null,
             chequeImagesDialog: false,
@@ -278,6 +280,7 @@ export default {
     methods: {
         ...mapActions({
             getExpenses: "expense/getExpenses",
+            searchExpenses: "expense/searchExpenses",
             getExpense: "expense/getExpense",
             deleteExpense: "expense/deleteExpense",
             deleteMultipleExpenses: "expense/deleteMultipleExpenses",
@@ -340,7 +343,8 @@ export default {
         ...mapGetters({
             expenses: "expense/expenses",
             expense: "expense/expense",
-            loading: "loading",
+            loading: "expense/loading",
+            total: "expense/total",
         }),
 
         displayedHeaders() {
@@ -357,6 +361,22 @@ export default {
         },
     },
 
+    watch: {
+        options: {
+            handler() {
+                this.getExpenses(this.options);
+            },
+            deep: true,
+        },
+
+        search: {
+            handler(newVal) {
+                this.options.search = newVal;
+                this.searchExpenses(this.options);
+            },
+        },
+    },
+
     mounted() {
         // remove actions if no access is given
         if (!this.can("expense_edit") && !this.can("expense_delete")) {
@@ -364,7 +384,6 @@ export default {
                 (header) => header.value !== "actions"
             );
         }
-        this.getExpenses();
     },
 };
 </script>

@@ -17,6 +17,8 @@ const state = {
     expense: null,
     recent_expense: null,
     old_expense: null,
+    loading: false,
+    total: 0,
 };
 
 const getters = {
@@ -24,6 +26,8 @@ const getters = {
     expense: (state) => state.expense,
     recent_expense: (state) => state.recent_expense,
     old_expense: (state) => state.old_expense,
+    loading: (state) => state.loading,
+    total: (state) => state.total,
 };
 
 const actions = {
@@ -46,27 +50,44 @@ const actions = {
     },
 
     // Get expenses
-    async getExpenses({ commit }) {
+    async getExpenses({ commit }, { page, itemsPerPage, sortBy, sortDesc }) {
         try {
-            const res = await axios.get("/api/expenses");
+            commit(SET_LOADING, true);
 
-            commit(SET_LOADING, false, { root: true });
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "id";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/expenses?page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
             commit(GET_EXPENSES, res.data);
         } catch (error) {
-            commit(SET_LOADING, false, { root: true });
+            commit(SET_LOADING, false);
             console.log(error);
         }
     },
 
-    // Get a single expense
-    async getExpense({ commit }, vehicleAdjustmentId) {
+    // Search expenses
+    async searchExpenses(
+        { commit },
+        { page, itemsPerPage, sortBy, sortDesc, search }
+    ) {
         try {
-            const res = await axios.get(`/api/expenses/${vehicleAdjustmentId}`);
+            commit(SET_LOADING, true);
 
-            commit(SET_LOADING, false, { root: true });
-            commit(GET_EXPENSE, res.data);
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "id";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/search_expenses?search=${search}&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
+            commit(GET_EXPENSES, res.data);
         } catch (error) {
-            commit(SET_LOADING, false, { root: true });
+            commit(SET_LOADING, false);
             console.log(error);
         }
     },
@@ -134,7 +155,12 @@ const actions = {
 };
 
 const mutations = {
-    GET_EXPENSES: (state, payload) => (state.expenses = payload),
+    SET_LOADING: (state, payload) => (state.loading = payload),
+
+    GET_EXPENSES: (state, payload) => {
+        state.expenses = payload.data;
+        state.total = payload.total;
+    },
 
     GET_EXPENSE: (state, payload) => (state.expense = payload),
 

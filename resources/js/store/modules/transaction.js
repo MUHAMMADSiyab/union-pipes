@@ -17,6 +17,8 @@ const state = {
     transaction: null,
     recent_transaction: null,
     old_transaction: null,
+    loading: false,
+    total: 0,
 };
 
 const getters = {
@@ -24,6 +26,8 @@ const getters = {
     transaction: (state) => state.transaction,
     recent_transaction: (state) => state.recent_transaction,
     old_transaction: (state) => state.old_transaction,
+    loading: (state) => state.loading,
+    total: (state) => state.total,
 };
 
 const actions = {
@@ -46,14 +50,47 @@ const actions = {
     },
 
     // Get transactions
-    async getTransactions({ commit }) {
+    async getTransactions(
+        { commit },
+        { page, itemsPerPage, sortBy, sortDesc }
+    ) {
         try {
-            const res = await axios.get("/api/transactions");
+            commit(SET_LOADING, true);
 
-            commit(SET_LOADING, false, { root: true });
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "id";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/transactions?page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
             commit(GET_TRANSACTIONS, res.data);
         } catch (error) {
-            commit(SET_LOADING, false, { root: true });
+            commit(SET_LOADING, false);
+            console.log(error);
+        }
+    },
+
+    // Search transactions
+    async searchTransactions(
+        { commit },
+        { page, itemsPerPage, sortBy, sortDesc, search }
+    ) {
+        try {
+            commit(SET_LOADING, true);
+
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "id";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/search_transactions?search=${search}&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
+            commit(GET_TRANSACTIONS, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false);
             console.log(error);
         }
     },
@@ -141,7 +178,12 @@ const actions = {
 };
 
 const mutations = {
-    GET_TRANSACTIONS: (state, payload) => (state.transactions = payload),
+    SET_LOADING: (state, payload) => (state.loading = payload),
+
+    GET_TRANSACTIONS: (state, payload) => {
+        state.transactions = payload.data;
+        state.total = payload.total;
+    },
 
     GET_TRANSACTION: (state, payload) => (state.transaction = payload),
 

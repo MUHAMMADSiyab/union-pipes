@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Payment;
 use App\Models\Transaction;
+use App\Services\OrderByService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 
 class TransactionController extends Controller
@@ -20,9 +22,40 @@ class TransactionController extends Controller
     {
         Gate::authorize('transaction_access');
 
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
         $transactions = Transaction::with('payment')
-            ->orderBy('id', 'desc')
-            ->get();
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'transactions');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
+
+        return response()->json($transactions);
+    }
+
+    public function search_transactions()
+    {
+        Gate::authorize('transaction_access');
+
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
+        $transactions = Transaction::query()
+            ->with('payment')
+            ->where(function ($query) {
+                $searchTerm = request('search');
+                $query->where('title', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('type', 'like', '%' . $searchTerm . '%');
+            })
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'transactions');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
 
         return response()->json($transactions);
     }

@@ -14,9 +14,10 @@
                         :items="transactions"
                         class="elevation-1"
                         item-key="id"
-                        :search="search"
-                        :items-per-page="perPage"
                         :loading="loading"
+                        :options.sync="options"
+                        :server-items-length="total"
+                        :search="search"
                         :show-select="can('transaction_delete') && !printMode"
                         loading-text="Loading transactions..."
                         :footer-props="footerProps"
@@ -235,6 +236,7 @@ export default {
 
     data() {
         return {
+            options: {},
             showChequeColumns: false,
             currentChequeImages: null,
             chequeImagesDialog: false,
@@ -278,6 +280,7 @@ export default {
     methods: {
         ...mapActions({
             getTransactions: "transaction/getTransactions",
+            searchTransactions: "transaction/searchTransactions",
             getTransaction: "transaction/getTransaction",
             deleteTransaction: "transaction/deleteTransaction",
             deleteMultipleTransactions:
@@ -341,7 +344,8 @@ export default {
         ...mapGetters({
             transactions: "transaction/transactions",
             transaction: "transaction/transaction",
-            loading: "loading",
+            loading: "transaction/loading",
+            total: "transaction/total",
         }),
 
         displayedHeaders() {
@@ -358,6 +362,22 @@ export default {
         },
     },
 
+    watch: {
+        options: {
+            handler() {
+                this.getTransactions(this.options);
+            },
+            deep: true,
+        },
+
+        search: {
+            handler(newVal) {
+                this.options.search = newVal;
+                this.searchTransactions(this.options);
+            },
+        },
+    },
+
     mounted() {
         // remove actions if no access is given
         if (!this.can("transaction_edit") && !this.can("transaction_delete")) {
@@ -365,7 +385,6 @@ export default {
                 (header) => header.value !== "actions"
             );
         }
-        this.getTransactions();
     },
 };
 </script>

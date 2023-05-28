@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Expense
+    Route::get('search_expenses', [ExpenseController::class, 'search_expenses']);
     Route::delete('expenses/delete_multiple', [ExpenseController::class, 'destroy_multiple']);
     Route::resource('expenses', ExpenseController::class, [
         'except' => ['create', 'edit']
@@ -126,12 +127,14 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Purchase 
+    Route::get('search_purchases', [PurchaseController::class, 'search_purchases']);
     Route::delete('purchases/delete_multiple', [PurchaseController::class, 'destroy_multiple']);
     Route::resource('purchases', PurchaseController::class, [
         'except' => ['create', 'edit']
     ]);
 
     // Sell 
+    Route::get('search_sells', [SellController::class, 'search_sells']);
     Route::delete('sells/delete_multiple', [SellController::class, 'destroy_multiple']);
     Route::resource('sells', SellController::class, [
         'except' => ['create', 'edit']
@@ -141,6 +144,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::post('returned_sold_items', [ReturnedSoldItemController::class, 'store']);
 
     // Transaction
+    Route::get('search_transactions', [TransactionController::class, 'search_transactions']);
     Route::delete('transactions/delete_multiple', [TransactionController::class, 'destroy_multiple']);
     Route::resource('transactions', TransactionController::class, [
         'except' => ['create', 'edit']
@@ -172,6 +176,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Machine
+    Route::get('search_productions', [ProductionController::class, 'search_productions']);
     Route::delete('productions/delete_multiple', [ProductionController::class, 'destroy_multiple']);
     Route::resource('productions', ProductionController::class, [
         'except' => ['create', 'edit']

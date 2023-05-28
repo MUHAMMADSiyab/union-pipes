@@ -15,8 +15,9 @@
                         class="elevation-1"
                         item-key="id"
                         :search="search"
-                        :items-per-page="perPage"
                         :loading="loading"
+                        :options.sync="options"
+                        :server-items-length="total"
                         :show-select="can('purchase_delete') && !printMode"
                         loading-text="Loading purchases..."
                         :footer-props="footerProps"
@@ -25,7 +26,9 @@
                     >
                         <!-- S# -->
                         <template slot="item.sno" slot-scope="props">{{
-                            props.index + 1
+                            (options.page - 1) * options.itemsPerPage +
+                            props.index +
+                            1
                         }}</template>
 
                         <!-- Amounts -->
@@ -288,6 +291,7 @@ export default {
         return {
             currentPurchasedItems: null,
             purchasedItemsDialog: false,
+            options: {},
             headers: [
                 { text: "#", value: "sno" },
                 { text: "Date", value: "date" },
@@ -322,6 +326,7 @@ export default {
     methods: {
         ...mapActions({
             getPurchases: "purchase/getPurchases",
+            searchPurchases: "purchase/searchPurchases",
             getPurchase: "purchase/getPurchase",
             deletePurchase: "purchase/deletePurchase",
             deleteMultiplePurchases: "purchase/deleteMultiplePurchases",
@@ -412,12 +417,29 @@ export default {
             purchase: "purchase/purchase",
             paymentSetting: "paymentSetting",
             payments: "payment/payments",
-            loading: "loading",
+            loading: "purchase/loading",
+            total: "purchase/total",
         }),
     },
 
-    async mounted() {
-        await Promise.all([this.getPurchases(), this.getPaymentSetting()]);
+    watch: {
+        options: {
+            handler() {
+                this.getPurchases(this.options);
+            },
+            deep: true,
+        },
+
+        search: {
+            handler(newVal) {
+                this.options.search = newVal;
+                this.searchPurchases(this.options);
+            },
+        },
+    },
+
+    mounted() {
+        this.getPaymentSetting();
     },
 };
 </script>

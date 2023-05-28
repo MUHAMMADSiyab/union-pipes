@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ExpenseRequest;
 use App\Models\Expense;
 use App\Models\Payment;
+use App\Services\OrderByService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-
+use Illuminate\Support\Str;
 
 class ExpenseController extends Controller
 {
@@ -20,9 +21,42 @@ class ExpenseController extends Controller
     {
         Gate::authorize('expense_access');
 
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
         $expenses = Expense::with(['payment', 'expense_source'])
-            ->orderBy('id', 'desc')
-            ->get();
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'expenses');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
+
+        return response()->json($expenses);
+    }
+
+    public function search_expenses()
+    {
+        Gate::authorize('expense_access');
+
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
+        $expenses = Expense::query()
+            ->with(['machine', 'employee', 'product'])
+            ->where(function ($query) {
+                $searchTerm = request('search');
+                $query->where('name', 'like', '%' . $searchTerm . '%')
+                    ->orWhereHas('expense_source', function ($q) use ($searchTerm) {
+                        $q->where('name', 'like', '%' . $searchTerm . '%');
+                    });
+            })
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'expenses');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
 
         return response()->json($expenses);
     }

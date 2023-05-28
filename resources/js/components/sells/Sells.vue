@@ -25,9 +25,11 @@
                         :items="sells"
                         class="elevation-1"
                         item-key="id"
-                        :search="search"
                         :items-per-page="perPage"
+                        :search="search"
                         :loading="loading"
+                        :options.sync="options"
+                        :server-items-length="total"
                         :show-select="can('sell_delete') && !printMode"
                         loading-text="Loading sells..."
                         :footer-props="footerProps"
@@ -50,8 +52,8 @@
                             <small
                                 class="d-block purple--text"
                                 v-if="props.item.discount > 0"
-                                >({{ props.item.discount }}% discount
-                                applied on {{ money(props.item.total_amount) }})</small
+                                >({{ props.item.discount }}% discount applied on
+                                {{ money(props.item.total_amount) }})</small
                             >
                         </template>
 
@@ -359,6 +361,7 @@ export default {
         return {
             local: false,
             currentSoldItems: null,
+            options: {},
             currentSoldItemsForReturn: null,
             soldItemsDialog: false,
             soldItemsForReturnDialog: false,
@@ -396,6 +399,7 @@ export default {
     methods: {
         ...mapActions({
             getSells: "sell/getSells",
+            searchSells: "sell/searchSells",
             getSell: "sell/getSell",
             deleteSell: "sell/deleteSell",
             deleteMultipleSells: "sell/deleteMultipleSells",
@@ -500,15 +504,31 @@ export default {
             sell: "sell/sell",
             paymentSetting: "paymentSetting",
             payments: "payment/payments",
-            loading: "loading",
+            loading: "sell/loading",
+            total: "sell/total",
         }),
     },
 
-    async mounted() {
-        await Promise.all([
-            this.getSells(this.local),
-            this.getPaymentSetting(),
-        ]);
+    watch: {
+        options: {
+            handler() {
+                this.options.local = this.local;
+                this.getSells(this.options);
+            },
+            deep: true,
+        },
+
+        search: {
+            handler(newVal) {
+                this.options.search = newVal;
+                this.options.local = this.local;
+                this.searchSells(this.options);
+            },
+        },
+    },
+
+    mounted() {
+        this.getPaymentSetting();
     },
 };
 </script>

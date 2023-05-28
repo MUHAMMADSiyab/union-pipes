@@ -7,11 +7,13 @@ use App\Models\Payment;
 use App\Models\Sell;
 use App\Models\SoldItem;
 use App\Services\LedgerService;
+use App\Services\OrderByService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class SellController extends Controller
 {
@@ -23,6 +25,9 @@ class SellController extends Controller
     public function index()
     {
         Gate::authorize('sell_access');
+
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
 
         $local = request()->boolean('local');
         $sells = Sell::query()
@@ -37,7 +42,42 @@ class SellController extends Controller
             ->when(!$local, function ($q) {
                 $q->notLocal();
             })
-            ->get();
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'sells');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
+
+        return response()->json($sells);
+    }
+
+    public function search_sells()
+    {
+        $orderBy = request('orderBy');
+        $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+
+        $sells = Sell::query()
+            ->with([
+                'customer',
+                'sold_items.product',
+                'returned_items.product',
+            ])
+            ->where(function ($query) {
+                $searchTerm = request('search');
+                $query->where('date', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('invoice_no', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('category', 'like', '%' . $searchTerm . '%')
+                    ->orWhereHas('customer', function ($q) use ($searchTerm) {
+                        $q->where('name', 'like', '%' . $searchTerm . '%');
+                    });
+            })
+            ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
+                (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'sells');
+            }, function ($query) use ($orderBy, $orderDirection) {
+                $query->orderBy($orderBy, $orderDirection);
+            })
+            ->paginate(request('itemsPerPage'));
 
         return response()->json($sells);
     }

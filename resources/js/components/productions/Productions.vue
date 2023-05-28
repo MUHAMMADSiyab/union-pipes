@@ -11,21 +11,20 @@
                 <v-col cols="12">
                     <v-data-table
                         :headers="headers"
-                        :items="productions.data"
-                        :total-items="totalItems"
+                        :items="productions"
                         :loading="loading"
+                        :options.sync="options"
+                        :server-items-length="total"
                         :search="search"
                         :footer-props="footerProps"
-                        :server-items-length="true"
-                        :disable-pagination="true"
-                        :sort-by.sync="sortBy"
-                        :sort-desc.sync="sortDesc"
                         item-key="id"
                         class="elevation-1"
                     >
                         <!-- S# -->
                         <template slot="item.sno" slot-scope="props">{{
-                            props.index + 1
+                            (options.page - 1) * options.itemsPerPage +
+                            props.index +
+                            1
                         }}</template>
 
                         <!-- Weight -->
@@ -34,7 +33,7 @@
                             slot-scope="props"
                             v-if="props.item.weight"
                         >
-                            <strong>{{ money(props.item.weight) }}</strong>
+                            {{ money(props.item.weight) }}
                         </template>
 
                         <template
@@ -42,7 +41,7 @@
                             slot-scope="props"
                             v-if="props.item.quantity"
                         >
-                            <strong>{{ money(props.item.quantity) }}</strong>
+                            {{ money(props.item.quantity) }}
                         </template>
 
                         <template
@@ -50,46 +49,11 @@
                             slot-scope="props"
                             v-if="props.item.total_weight"
                         >
-                            <strong>{{
-                                money(props.item.total_weight)
-                            }}</strong>
+                            {{ money(props.item.total_weight) }}
                         </template>
 
                         <!-- Top -->
                         <template v-slot:top v-if="!printMode">
-                            <v-toolbar flat>
-                                <v-toolbar-title>Productions</v-toolbar-title>
-                                <v-divider class="mx-4" inset vertical />
-                                <v-spacer />
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details
-                                ></v-text-field>
-                                <v-btn
-                                    color="primary"
-                                    href="/productions/create"
-                                    v-if="can('production_create')"
-                                    >Add New</v-btn
-                                >
-                            </v-toolbar>
-                            <v-data-pagination
-                                v-model="currentPage"
-                                :length="Math.ceil(totalItems / perPage)"
-                                :total-visible="9"
-                                :per-page="perPage"
-                                @input="
-                                    getProductions({
-                                        page: currentPage,
-                                        perPage,
-                                        sortBy,
-                                        sortDesc,
-                                    })
-                                "
-                            ></v-data-pagination>
-
                             <v-btn
                                 color="error"
                                 small
@@ -200,6 +164,7 @@ export default {
 
     data() {
         return {
+            options: {},
             headers: [
                 { text: "S#", value: "sno" },
                 { text: "Machine", value: "machine.name" },
@@ -221,10 +186,15 @@ export default {
     methods: {
         ...mapActions({
             getProductions: "production/getProductions",
+            searchProductions: "production/searchProductions",
             getProduction: "production/getProduction",
             deleteProduction: "production/deleteProduction",
             deleteMultipleProductions: "production/deleteMultipleProductions",
         }),
+
+        customFilter(val) {
+            console.log(val);
+        },
 
         setProductionId(id) {
             this.productionId = id;
@@ -255,24 +225,25 @@ export default {
     computed: {
         ...mapGetters({
             productions: "production/productions",
+            loading: "production/loading",
+            total: "production/total",
             production: "production/production",
-            loading: "loading",
         }),
+    },
 
-        currentPage() {
-            return this.$route.query.page || 1;
+    watch: {
+        options: {
+            handler() {
+                this.getProductions(this.options);
+            },
+            deep: true,
         },
-        perPage() {
-            return parseInt(this.$route.query.perPage) || 10;
-        },
-        sortBy() {
-            return this.$route.query.sortBy || "id";
-        },
-        sortDesc() {
-            return this.$route.query.sortDesc === "true" || false;
-        },
-        totalItems() {
-            return this.productions.total;
+
+        search: {
+            handler(newVal) {
+                this.options.search = newVal;
+                this.searchProductions(this.options);
+            },
         },
     },
 
@@ -283,7 +254,6 @@ export default {
                 (header) => header.value !== "actions"
             );
         }
-        this.getProductions();
     },
 };
 </script>

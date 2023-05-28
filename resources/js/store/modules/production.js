@@ -10,15 +10,20 @@ import {
     DELETE_PRODUCTION,
     DELETE_PRODUCTIONS,
 } from "../../mutation_constants";
+import { sortBy } from "lodash";
 
 const state = {
     productions: [],
     production: null,
+    total: 0,
+    loading: false,
 };
 
 const getters = {
     productions: (state) => state.productions,
     production: (state) => state.production,
+    total: (state) => state.total,
+    loading: (state) => state.loading,
 };
 
 const actions = {
@@ -50,23 +55,44 @@ const actions = {
     },
 
     // Get productions
-    async getProductions(
-        { commit },
-        { page = 1, perPage = 10, sortBy = "id", sortDesc = false }
-    ) {
+    async getProductions({ commit }, { page, itemsPerPage, sortBy, sortDesc }) {
         try {
-            const res = await axios.get("/api/productions", {
-                params: {
-                    page,
-                    per_page: perPage,
-                    sortBy,
-                    sortDesc: sortDesc ? "desc" : "asc",
-                },
-            });
-            commit(SET_LOADING, false, { root: true });
+            commit(SET_LOADING, true);
+
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "date";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/productions?page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
             commit(GET_PRODUCTIONS, res.data);
         } catch (error) {
-            commit(SET_LOADING, false, { root: true });
+            commit(SET_LOADING, false);
+            console.log(error);
+        }
+    },
+
+    // Search productions
+    async searchProductions(
+        { commit },
+        { page, itemsPerPage, sortBy, sortDesc, search }
+    ) {
+        try {
+            commit(SET_LOADING, true);
+
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "date";
+            const orderByDesc =
+                sortDesc && sortDesc.length ? sortDesc[0] : true;
+
+            const res = await axios.get(
+                `/api/search_productions?search=${search}&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+            );
+            commit(SET_LOADING, false);
+            commit(GET_PRODUCTIONS, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false);
             console.log(error);
         }
     },
@@ -155,7 +181,12 @@ const actions = {
 };
 
 const mutations = {
-    GET_PRODUCTIONS: (state, payload) => (state.productions = payload),
+    SET_LOADING: (state, payload) => (state.loading = payload),
+
+    GET_PRODUCTIONS: (state, payload) => {
+        state.productions = payload.data;
+        state.total = payload.total;
+    },
 
     GET_PRODUCTION: (state, payload) => (state.production = payload),
 
