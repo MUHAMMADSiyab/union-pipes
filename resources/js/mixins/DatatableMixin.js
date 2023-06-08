@@ -2,9 +2,9 @@ const DatatableMixin = {
     data() {
         return {
             search: "",
-            perPage: 3,
+            perPage: 50,
             footerProps: {
-                itemsPerPageOptions: [3, 50, 100],
+                itemsPerPageOptions: [20, 50, 100],
             },
         };
     },

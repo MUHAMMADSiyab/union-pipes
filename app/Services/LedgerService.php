@@ -45,8 +45,10 @@ class LedgerService
 
             if ($purchase) {
                 $particular = $purchase->category;
+                $description = $purchase->description;
             } else {
                 $particular = "Purchase Payment to Party";
+                $description = $payment->description;
             }
 
             $debit = $purchase ? (int)$purchase->total_amount : 0;
@@ -56,6 +58,7 @@ class LedgerService
             if ($debit !== 0 || $credit !== 0) {
                 $entries[] = [
                     'particular' => $particular,
+                    'description' => $description,
                     'date' => $date,
                     'debit' => $debit,
                     'credit' => $credit,
@@ -116,8 +119,10 @@ class LedgerService
             if ($sell) {
                 $discount_description = $sell->category . " (" . $sell->discount . "% discount applied on orignal amount " . $sell->total_amount . ")";
                 $particular = $sell->category === 'Pipe' ? $discount_description : $sell->category;
+                $description = $sell->description;
             } else {
                 $particular = "Sell Payment from Customer";
+                $description = $payment->description;
             }
 
 
@@ -128,6 +133,7 @@ class LedgerService
             if ($debit !== 0 || $credit !== 0) {
                 $entries[] = [
                     'particular' => $particular,
+                    'description' => $description,
                     'date' => $date,
                     'debit' => $debit,
                     'credit' => $credit,
@@ -164,6 +170,7 @@ class LedgerService
         foreach ($payments as $payment) {
             $entry = [
                 'particular' => explode("\\", $payment->model)[2],
+                'description' => $payment->description,
                 'date' => $payment->payment_date,
                 'debit' => 0,
                 'credit' => 0,
