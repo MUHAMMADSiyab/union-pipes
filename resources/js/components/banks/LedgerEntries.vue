@@ -27,7 +27,7 @@
                                         <tr>
                                             <th>S#</th>
                                             <th>Date</th>
-                                            <th>Particular</th>
+                                            <!-- <th>Particular</th> -->
                                             <th>Description</th>
                                             <th>Debit</th>
                                             <th>Credit</th>
@@ -41,7 +41,7 @@
                                         >
                                             <td>{{ i + 1 }}</td>
                                             <td>{{ entry.date }}</td>
-                                            <td>{{ entry.particular }}</td>
+                                            <!-- <td>{{ entry.particular }}</td> -->
                                             <td>{{ entry.description }}</td>
                                             <td>{{ money(entry.debit) }}</td>
                                             <td>{{ money(entry.credit) }}</td>

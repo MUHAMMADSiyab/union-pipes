@@ -44,10 +44,12 @@ class LedgerService
             $payment = $payments->firstWhere('payment_date', $date);
 
             if ($purchase) {
-                $particular = $purchase->category;
+                // $particular = $purchase->category;
+                $invoice_no = $purchase->invoice_no;
                 $description = $purchase->description;
             } else {
-                $particular = "Purchase Payment to Party";
+                // $particular = "Purchase Payment to Party";
+                $invoice_no = "";
                 $description = $payment->description;
             }
 
@@ -57,7 +59,8 @@ class LedgerService
 
             if ($debit !== 0 || $credit !== 0) {
                 $entries[] = [
-                    'particular' => $particular,
+                    // 'particular' => $particular,
+                    'invoice_no' => $invoice_no,
                     'description' => $description,
                     'date' => $date,
                     'debit' => $debit,
@@ -118,10 +121,12 @@ class LedgerService
 
             if ($sell) {
                 $discount_description = $sell->category . " (" . $sell->discount . "% discount applied on orignal amount " . $sell->total_amount . ")";
-                $particular = $sell->category === 'Pipe' ? $discount_description : $sell->category;
+                // $particular = $sell->category === 'Pipe' ? $discount_description : $sell->category;
                 $description = $sell->description;
+                $invoice_no = $sell->invoice_no;
             } else {
-                $particular = "Sell Payment from Customer";
+                // $particular = "Sell Payment from Customer";
+                $invoice_no = "";
                 $description = $payment->description;
             }
 
@@ -132,7 +137,8 @@ class LedgerService
 
             if ($debit !== 0 || $credit !== 0) {
                 $entries[] = [
-                    'particular' => $particular,
+                    // 'particular' => $particular,
+                    'invoice_no' => $invoice_no,
                     'description' => $description,
                     'date' => $date,
                     'debit' => $debit,
@@ -169,7 +175,7 @@ class LedgerService
 
         foreach ($payments as $payment) {
             $entry = [
-                'particular' => explode("\\", $payment->model)[2],
+                // 'particular' => explode("\\", $payment->model)[2],
                 'description' => $payment->description,
                 'date' => $payment->payment_date,
                 'debit' => 0,
