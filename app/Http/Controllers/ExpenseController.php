@@ -87,7 +87,7 @@ class ExpenseController extends Controller
         Gate::authorize('expense_access');
         Gate::authorize('expense_show');
 
-        return response()->json($expense, 201);
+        return response()->json($expense);
     }
 
 

@@ -96,11 +96,9 @@ const actions = {
     },
 
     // Get a single transaction
-    async getTransaction({ commit }, vehicleAdjustmentId) {
+    async getTransaction({ commit }, id) {
         try {
-            const res = await axios.get(
-                `/api/transactions/${vehicleAdjustmentId}`
-            );
+            const res = await axios.get(`/api/transactions/${id}`);
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_TRANSACTION, res.data);

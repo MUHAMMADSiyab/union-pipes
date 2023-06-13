@@ -69,6 +69,19 @@ const actions = {
         }
     },
 
+    // Get a single expense
+    async getExpense({ commit }, id) {
+        try {
+            const res = await axios.get(`/api/expenses/${id}`);
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_EXPENSE, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
     // Search expenses
     async searchExpenses(
         { commit },
