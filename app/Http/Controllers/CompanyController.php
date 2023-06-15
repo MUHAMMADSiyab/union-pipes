@@ -31,6 +31,16 @@ class CompanyController extends Controller
         return response()->json($companies);
     }
 
+    public function search(Request $request)
+    {
+        Gate::authorize('company_access');
+
+        $companies = Company::query()
+            ->where('name', 'like', '%' . $request->searchKeyword . '%')
+            ->get();
+        return response()->json($companies);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

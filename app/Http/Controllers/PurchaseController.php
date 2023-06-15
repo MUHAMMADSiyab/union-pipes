@@ -216,13 +216,9 @@ class PurchaseController extends Controller
         Gate::authorize('purchase_delete');
 
         if ($purchase->delete()) {
-            $payment = Payment::where('model', Purchase::class)
+            Payment::where('model', Purchase::class)
                 ->where('paymentable_id', $purchase->id)
-                ->first();
-
-            if ($payment) {
-                $payment->delete();
-            }
+                ->delete();
 
             return response()->json(["success" =>  "Purchase deleted successfully"]);
         }
@@ -242,13 +238,9 @@ class PurchaseController extends Controller
         foreach ($request->ids as $id) {
             $purchase = Purchase::find($id);
             $purchase->delete();
-            $payment = Payment::where('model', Purchase::class)
+            Payment::where('model', Purchase::class)
                 ->where('paymentable_id', $purchase->id)
-                ->first();
-
-            if ($payment) {
-                $payment->delete();
-            }
+                ->delete();
         }
 
         return response()->json(["success" =>  "Purchases deleted successfully"]);

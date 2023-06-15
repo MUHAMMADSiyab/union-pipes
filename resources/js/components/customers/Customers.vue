@@ -9,6 +9,21 @@
 
             <v-row>
                 <v-col cols="12">
+                    <v-card>
+                        <v-card-text>
+                            <v-text-field
+                                v-model="searchKeyword"
+                                label="Search by Customer Name"
+                                outlined
+                                dense
+                            ></v-text-field>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+
+            <v-row>
+                <v-col cols="12">
                     <v-switch
                         color="red"
                         v-model="local"
@@ -118,6 +133,7 @@
                                         <img
                                             :src="customer.photo"
                                             alt="Customer Photo"
+                                            class="mt-2"
                                             width="50"
                                             height="50"
                                         />
@@ -198,6 +214,7 @@ export default {
 
     data() {
         return {
+            searchKeyword: "",
             customerId: null,
             local: false,
         };
@@ -206,6 +223,7 @@ export default {
     methods: {
         ...mapActions({
             getCustomers: "customer/getCustomers",
+            searchCustomers: "customer/searchCustomers",
             getCustomer: "customer/getCustomer",
             deleteCustomer: "customer/deleteCustomer",
             deleteMultipleCustomers: "customer/deleteMultipleCustomers",
@@ -247,6 +265,17 @@ export default {
             customer: "customer/customer",
             loading: "loading",
         }),
+    },
+
+    watch: {
+        searchKeyword: {
+            handler(searchValue) {
+                this.searchCustomers({
+                    searchKeyword: searchValue,
+                    local: this.local,
+                });
+            },
+        },
     },
 
     mounted() {

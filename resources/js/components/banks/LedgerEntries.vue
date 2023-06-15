@@ -13,7 +13,7 @@
                             >{{ bank.name }}
                             <v-btn
                                 color="indigo"
-                                class="white--text ml-auto"
+                                class="white--text ml-auto d-print-none"
                                 to="/banks"
                                 small
                                 >Back to Banks</v-btn

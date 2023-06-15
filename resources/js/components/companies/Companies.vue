@@ -8,6 +8,21 @@
             <h5 class="text-subtitle-1 mb-2">Supplier Companies</h5>
 
             <v-row>
+                <v-col cols="12">
+                    <v-card>
+                        <v-card-text>
+                            <v-text-field
+                                v-model="searchKeyword"
+                                label="Search by Company Name"
+                                outlined
+                                dense
+                            ></v-text-field>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+
+            <v-row>
                 <v-col
                     xl="4"
                     lg="4"
@@ -94,14 +109,15 @@ export default {
 
     data() {
         return {
-            allCompanies: [],
             companyId: null,
+            searchKeyword: "",
         };
     },
 
     methods: {
         ...mapActions({
             getCompanies: "company/getCompanies",
+            searchCompanies: "company/searchCompanies",
             getCompany: "company/getCompany",
             deleteCompany: "company/deleteCompany",
             deleteMultipleCompanies: "company/deleteMultipleCompanies",
@@ -110,6 +126,10 @@ export default {
         setCompanyId(id) {
             this.companyId = id;
             this.$refs.confirmationComponent.setDialog(true);
+        },
+
+        handleSearch() {
+            this.searchCompanies(this.searchKeyword);
         },
 
         async handleCompanyDelete() {
@@ -141,10 +161,16 @@ export default {
         }),
     },
 
+    watch: {
+        searchKeyword: {
+            handler(searchValue) {
+                this.searchCompanies(searchValue);
+            },
+        },
+    },
+
     async mounted() {
         await this.getCompanies();
-
-        this.allCompanies = this.companies;
     },
 };
 </script>

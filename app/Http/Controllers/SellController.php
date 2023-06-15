@@ -229,13 +229,10 @@ class SellController extends Controller
         Gate::authorize('sell_delete');
 
         if ($sell->delete()) {
-            $payment = Payment::where('model', Sell::class)
+            // Delete associated payments, too
+            Payment::where('model', Sell::class)
                 ->where('paymentable_id', $sell->id)
-                ->first();
-
-            if ($payment) {
-                $payment->delete();
-            }
+                ->delete();
 
             return response()->json(["success" =>  "Sell deleted successfully"]);
         }
@@ -255,13 +252,10 @@ class SellController extends Controller
         foreach ($request->ids as $id) {
             $sell = Sell::find($id);
             $sell->delete();
-            $payment = Payment::where('model', Sell::class)
+            // Delete associated payments, too
+            Payment::where('model', Sell::class)
                 ->where('paymentable_id', $sell->id)
-                ->first();
-
-            if ($payment) {
-                $payment->delete();
-            }
+                ->delete();
         }
 
         return response()->json(["success" =>  "Sells deleted successfully"]);

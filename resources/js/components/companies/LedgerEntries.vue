@@ -13,7 +13,7 @@
                             >{{ company.name }}
                             <v-btn
                                 color="indigo"
-                                class="white--text ml-auto"
+                                class="white--text ml-auto d-print-none"
                                 to="/companies"
                                 small
                                 >Back to Supplier Companies</v-btn

@@ -53,6 +53,27 @@ class CustomerController extends Controller
         return response()->json($customers);
     }
 
+    public function search(Request $request)
+    {
+        Gate::authorize('customer_access');
+
+        $local = request()->boolean('local');
+
+        $customers = Customer::query()
+            ->when($local, function ($q) {
+                $q->local();
+            })
+            ->when(!$local, function ($q) {
+                $q->notLocal();
+            })
+            ->where('name', 'like', '%' . $request->searchKeyword . '%')
+            ->get();
+
+        return response()->json($customers);
+    }
+
+
+
     /**
      * Store a newly created resource in storage.
      *

@@ -71,6 +71,21 @@ const actions = {
         }
     },
 
+    // Search companies
+    async searchCompanies({ commit }, searchKeyword) {
+        try {
+            const res = await axios.post("/api/companies/search", {
+                searchKeyword,
+            });
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_COMPANIES, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
     // Get a single company
     async getCompany({ commit }, companyId) {
         try {

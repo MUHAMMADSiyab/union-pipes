@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Company
+    Route::post('/companies/search', [CompanyController::class, 'search']);
     Route::post('/companies/{company_id}/ledger_entries', [CompanyController::class, 'get_ledger_entries']);
     Route::delete('companies/delete_multiple', [CompanyController::class, 'destroy_multiple']);
     Route::resource('companies', CompanyController::class, [
@@ -114,6 +115,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Customer
+    Route::post('/customers/search', [CustomerController::class, 'search']);
     Route::post('/customers/{customer_id}/ledger_entries', [CustomerController::class, 'get_ledger_entries']);
     Route::get('all_customers', [CustomerController::class, 'all']);
     Route::resource('customers', CustomerController::class, [

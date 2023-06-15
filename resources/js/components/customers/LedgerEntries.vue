@@ -13,7 +13,7 @@
                             >{{ customer.name }}
                             <v-btn
                                 color="indigo"
-                                class="white--text ml-auto"
+                                class="white--text ml-auto d-print-none"
                                 to="/customers"
                                 small
                                 >Back to Customers</v-btn
