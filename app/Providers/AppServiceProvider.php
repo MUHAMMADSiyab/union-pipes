@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Models\Payment;
 use App\Models\Stock;
 use App\Models\ReturnedSoldItem;
+use App\Models\Sell;
 use App\Models\SoldItem;
 use App\Observers\PaymentObserver;
 use App\Observers\StockObserver;
 use App\Observers\ReturnedSoldItemObserver;
+use App\Observers\SellObserver;
 use App\Observers\SoldItemObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Payment::observe(PaymentObserver::class);
         ReturnedSoldItem::observe(ReturnedSoldItemObserver::class);
         Stock::observe(StockObserver::class);
+        Sell::observe(SellObserver::class);
         SoldItem::observe(SoldItemObserver::class);
     }
 }

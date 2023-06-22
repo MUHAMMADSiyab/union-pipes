@@ -424,7 +424,8 @@ export default {
         },
 
         handleLocalSwitch(local) {
-            this.getSells(local);
+            this.options.local = local;
+            this.getSells(this.options);
         },
 
         setCurrentSoldItems(items) {

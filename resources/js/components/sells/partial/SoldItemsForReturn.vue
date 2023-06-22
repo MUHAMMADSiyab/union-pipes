@@ -230,6 +230,8 @@ export default {
                 this.validation.setMessages({});
 
                 this.closeDialog();
+
+                this.$router.go(this.$router.currentRoute)
             }
         },
 

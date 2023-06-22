@@ -34,9 +34,17 @@ class SellObserver
      * @param  \App\Models\Sell  $sell
      * @return void
      */
-    public function deleted(Sell $sell)
+    public function deleting(Sell $sell)
     {
-        //
+        $stock_item = StockItem::first();
+
+        info($sell->sold_items);
+
+        if ($stock_item) {
+            foreach ($sell->sold_items as $soldItem) {
+                $stock_item->increment('available_quantity', $soldItem->weight);
+            }
+        }
     }
 
     /**

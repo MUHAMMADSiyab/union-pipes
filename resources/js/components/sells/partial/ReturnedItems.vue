@@ -21,7 +21,11 @@
                         <tr v-for="(returnedItem, i) in returnedItems" :key="i">
                             <td>{{ i + 1 }}</td>
                             <td>{{ returnedItem.date }}</td>
-                            <td>{{ returnedItem.product.name }}</td>
+                            <td>
+                                {{ returnedItem.product.name }} ({{
+                                    returnedItem.product.size
+                                }})({{ returnedItem.product.type }})
+                            </td>
                             <td>{{ money(returnedItem.weight) }}</td>
                             <td>{{ money(returnedItem.rate) }}</td>
                             <td>{{ money(returnedItem.quantity) }}</td>

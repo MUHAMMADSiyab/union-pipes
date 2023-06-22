@@ -377,6 +377,36 @@
                                                             "
                                                             v-text="
                                                                 validation.getMessage(
+                                                                    `items.${i}.quantity`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="
+                                                                item.quantity
+                                                            "
+                                                            type="number"
+                                                            label="Quantity"
+                                                            dense
+                                                            filled
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                        xl="2"
+                                                        lg="2"
+                                                        md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
                                                                     `items.${i}.rate`
                                                                 )
                                                             "
@@ -415,36 +445,6 @@
                                                             "
                                                             type="number"
                                                             label="Weight"
-                                                            dense
-                                                            filled
-                                                        ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
-                                                        sm="12"
-                                                        cols="12"
-                                                        class="py-0"
-                                                    >
-                                                        <small
-                                                            class="red--text"
-                                                            v-if="
-                                                                validation.hasErrors()
-                                                            "
-                                                            v-text="
-                                                                validation.getMessage(
-                                                                    `items.${i}.quantity`
-                                                                )
-                                                            "
-                                                        ></small>
-                                                        <v-text-field
-                                                            v-model="
-                                                                item.quantity
-                                                            "
-                                                            type="number"
-                                                            label="Quantity"
                                                             dense
                                                             filled
                                                         ></v-text-field>
