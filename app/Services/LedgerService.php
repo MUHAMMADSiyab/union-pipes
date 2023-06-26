@@ -24,7 +24,7 @@ class LedgerService
             ->where('model', Purchase::class)
             ->whereIn('paymentable_id', $purchases->pluck('id')->all())
             ->orderBy('payment_date')
-            ->get(['id', 'payment_date', 'amount']);
+            ->get(['id', 'payment_date', 'amount', 'description']);
 
         $dates = collect(
             array_merge(
@@ -100,7 +100,7 @@ class LedgerService
             ->where('model', Sell::class)
             ->whereIn('paymentable_id', $sells->pluck('id')->all())
             ->orderBy('payment_date')
-            ->get(['id', 'payment_date', 'amount']);
+            ->get(['id', 'payment_date', 'amount', 'description']);
 
         $dates = collect(
             array_merge(

@@ -197,6 +197,27 @@
                                             outlined
                                         ></v-text-field>
                                     </v-col>
+
+                                    <v-col cols="12" class="py-0">
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'description'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-textarea
+                                            name="description"
+                                            label="Description"
+                                            id="description"
+                                            v-model="data.description"
+                                            rows="3"
+                                            dense
+                                            outlined
+                                        ></v-textarea>
+                                    </v-col>
                                 </v-row>
 
                                 <!-- Purchase Items -->
@@ -288,14 +309,16 @@
                                                             "
                                                             v-text="
                                                                 validation.getMessage(
-                                                                    `items.${i}.rate`
+                                                                    `items.${i}.quantity`
                                                                 )
                                                             "
                                                         ></small>
                                                         <v-text-field
-                                                            v-model="item.rate"
+                                                            v-model="
+                                                                item.quantity
+                                                            "
                                                             type="number"
-                                                            label="Rate"
+                                                            label="Quantity"
                                                             dense
                                                             filled
                                                         ></v-text-field>
@@ -316,16 +339,14 @@
                                                             "
                                                             v-text="
                                                                 validation.getMessage(
-                                                                    `items.${i}.quantity`
+                                                                    `items.${i}.rate`
                                                                 )
                                                             "
                                                         ></small>
                                                         <v-text-field
-                                                            v-model="
-                                                                item.quantity
-                                                            "
+                                                            v-model="item.rate"
                                                             type="number"
-                                                            label="Quantity"
+                                                            label="Rate"
                                                             dense
                                                             filled
                                                         ></v-text-field>
@@ -468,6 +489,7 @@ export default {
                 category: "",
                 sales_tax_percentage: 0,
                 total_amount: 0,
+                description: "",
                 items: [
                     {
                         purchase_item_id: "",
@@ -524,6 +546,7 @@ export default {
                 this.data.category = "";
                 this.data.sales_tax_percentage = 0;
                 this.data.total_amount = "";
+                this.data.description = "";
                 this.data.items = [
                     {
                         purchase_item_id: "",

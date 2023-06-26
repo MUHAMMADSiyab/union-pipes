@@ -96,6 +96,7 @@ class PurchaseController extends Controller
                 'sales_tax_percentage',
                 'total_amount',
                 'category',
+                'description',
             ]));
 
             if ($request->category === 'Raw Material' || $request->category === 'Other') {
@@ -182,6 +183,7 @@ class PurchaseController extends Controller
                 'sales_tax_percentage',
                 'total_amount',
                 'category',
+                'description'
             ]));
 
             if ($request->category === 'Raw Material' || $request->category === 'Other') {

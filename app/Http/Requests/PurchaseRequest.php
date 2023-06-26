@@ -29,6 +29,7 @@ class PurchaseRequest extends FormRequest
             'company_id' => 'required|exists:companies,id',
             'sales_tax_percentage' => 'numeric',
             'category' => 'required|max:100',
+            'description' => 'nullable|max:500',
             'items' => 'required_if:category,Raw Material|array',
             'items.*.purchase_item_id' => 'required_if:category,Raw Material',
             'items.*.quantity' => 'required_if:category,Raw Material|numeric',

@@ -71,7 +71,10 @@ class EmployeeController extends Controller
         $employee->update($request->all());
 
         if ($request->hasFile('photo')) {
-            $employee->getFirstMedia('employees')->delete();
+            $existingMedia = $employee->getFirstMedia('employees');
+            if ($existingMedia) {
+                $existingMedia->delete();
+            }
             $employee->addMediaFromRequest('photo')->toMediaCollection('employees');
         }
 

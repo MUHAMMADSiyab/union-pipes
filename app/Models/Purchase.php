@@ -15,7 +15,8 @@ class Purchase extends Model
         'company_id',
         'sales_tax_percentage',
         'category',
-        'total_amount'
+        'total_amount',
+        'description'
     ];
 
     protected $appends = [

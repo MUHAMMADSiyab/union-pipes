@@ -31,6 +31,15 @@
                             1
                         }}</template>
 
+                        <template slot="item.company.name" slot-scope="props">
+                            <router-link
+                                class="text-decoration-none"
+                                :to="`/companies/${props.item.company.id}/ledger_entries`"
+                            >
+                                {{ props.item.company.name }}
+                            </router-link>
+                        </template>
+
                         <!-- Amounts -->
                         <template slot="item.total_amount" slot-scope="props">
                             <span> {{ money(props.item.total_amount) }} </span>

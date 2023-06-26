@@ -41,6 +41,15 @@
                             props.index + 1
                         }}</template>
 
+                        <template slot="item.customer.name" slot-scope="props">
+                            <router-link
+                                class="text-decoration-none"
+                                :to="`/customers/${props.item.customer.id}/ledger_entries`"
+                            >
+                                {{ props.item.customer.name }}
+                            </router-link>
+                        </template>
+
                         <!-- Amounts -->
                         <template
                             slot="item.discounted_total_amount"
