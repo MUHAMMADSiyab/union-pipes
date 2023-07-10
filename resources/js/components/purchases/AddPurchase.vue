@@ -540,7 +540,7 @@ export default {
             if (this.validationErrors !== null) {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
-                this.data.date = "";
+                this.data.date = moment().format("Y-MM-DD HH:mm:ss");
                 this.data.invoice_no = "";
                 this.data.company_id = "";
                 this.data.category = "";

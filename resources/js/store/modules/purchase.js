@@ -12,6 +12,8 @@ import {
     OLD_PURCHASE,
 } from "../../mutation_constants";
 
+import moment from "moment";
+
 const state = {
     purchases: [],
     purchase: null,
@@ -34,6 +36,7 @@ const actions = {
     // Add purchase
     async addPurchase({ commit, dispatch }, data) {
         try {
+            data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
             const res = await axios.post("/api/purchases", data);
 
             commit(NEW_PURCHASE, res.data);
@@ -117,6 +120,7 @@ const actions = {
     // Update purchase
     async updatePurchase({ dispatch, commit }, data) {
         try {
+            data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
             const res = await axios.put(`/api/purchases/${data.id}`, data);
 
             // commit(UPDATE_PURCHASE, res.data.updated_purchase);

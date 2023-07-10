@@ -12,6 +12,7 @@ import {
     NEW_SELL,
     OLD_SELL,
 } from "../../mutation_constants";
+import moment from "moment";
 
 const state = {
     sells: [],
@@ -37,6 +38,7 @@ const actions = {
     // Add sell
     async addSell({ dispatch, commit }, data) {
         try {
+            data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
             const res = await axios.post("/api/sells", data);
 
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
@@ -122,6 +124,7 @@ const actions = {
     // Update sell
     async updateSell({ dispatch, commit }, data) {
         try {
+            data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
             const res = await axios.put(`/api/sells/${data.id}`, data);
 
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
