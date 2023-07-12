@@ -232,15 +232,26 @@ class ReportService
     {
         $companies = Company::with('purchases')->get();
 
-        $data = $companies->filter(function ($company) {
-            $balance = $company->purchases->sum(function ($purchase) {
-                return $purchase->getBalanceAttribute();
-            });
-            return $balance > 0;
-        })->map(function ($company) {
-            $balance = $company->purchases->sum(function ($purchase) {
-                return $purchase->getBalanceAttribute();
-            });
+        // $data = $companies->filter(function ($company) {
+        //     $balance = $company->purchases->sum(function ($purchase) {
+        //         return $purchase->getBalanceAttribute();
+        //     });
+        //     return $balance > 0;
+        // })->map(function ($company) {
+        //     $balance = $company->purchases->sum(function ($purchase) {
+        //         return $purchase->getBalanceAttribute();
+        //     });
+        //     return [
+        //         'name' => $company->name,
+        //         'balance' => $balance,
+        //     ];
+        // })
+        //     ->values()
+        //     ->all();
+
+
+        $data = Company::all()->map(function ($company) {
+            $balance = (new LedgerService)->getCompanyLastBalance($company->id);
             return [
                 'name' => $company->name,
                 'balance' => $balance,
@@ -248,6 +259,8 @@ class ReportService
         })
             ->values()
             ->all();
+
+
 
         return $data;
     }

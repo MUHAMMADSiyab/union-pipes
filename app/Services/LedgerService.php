@@ -73,7 +73,7 @@ class LedgerService
         return $entries;
     }
 
-    public function getCompanyLastBalance($company_id, $current_purchase_id)
+    public function getCompanyLastBalance($company_id, $current_purchase_id = null)
     {
         $last_record = collect(
             $this->getCompanyLedgerEntries(
