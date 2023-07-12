@@ -232,6 +232,9 @@ class ReportService
                 'balance' => $balance,
             ];
         })
+            ->filter(function ($item) {
+                return $item['balance'] != 0;
+            })
             ->values()
             ->all();
 
@@ -267,6 +270,9 @@ class ReportService
                 'balance' => $balance,
             ];
         })
+            ->filter(function ($item) {
+                return $item['balance'] != 0;
+            })
             ->values()
             ->all();
 
