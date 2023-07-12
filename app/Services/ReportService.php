@@ -206,17 +206,27 @@ class ReportService
 
     public function getReceivablesReport()
     {
-        $customers = Customer::with('sells')->get();
+        // $customers = Customer::with('sells')->get();
 
-        $data = $customers->filter(function ($customer) {
-            $balance = $customer->sells->sum(function ($sell) {
-                return $sell->getBalanceAttribute();
-            });
-            return $balance > 0;
-        })->map(function ($customer) {
-            $balance = $customer->sells->sum(function ($sell) {
-                return $sell->getBalanceAttribute();
-            });
+        // $data = $customers->filter(function ($customer) {
+        //     $balance = $customer->sells->sum(function ($sell) {
+        //         return $sell->getBalanceAttribute();
+        //     });
+        //     return $balance > 0;
+        // })->map(function ($customer) {
+        //     $balance = $customer->sells->sum(function ($sell) {
+        //         return $sell->getBalanceAttribute();
+        //     });
+        //     return [
+        //         'name' => $customer->name,
+        //         'balance' => $balance,
+        //     ];
+        // })
+        //     ->values()
+        //     ->all();
+
+        $data = Customer::all()->map(function ($customer) {
+            $balance = (new LedgerService)->getCustomerLastBalance($customer->id);
             return [
                 'name' => $customer->name,
                 'balance' => $balance,
@@ -230,7 +240,7 @@ class ReportService
 
     public function getPayblesReport()
     {
-        $companies = Company::with('purchases')->get();
+        // $companies = Company::with('purchases')->get();
 
         // $data = $companies->filter(function ($company) {
         //     $balance = $company->purchases->sum(function ($purchase) {
@@ -259,8 +269,6 @@ class ReportService
         })
             ->values()
             ->all();
-
-
 
         return $data;
     }

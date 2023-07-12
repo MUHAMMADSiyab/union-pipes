@@ -151,7 +151,7 @@ class LedgerService
         return $entries;
     }
 
-    public function getCustomerLastBalance($customer_id, $current_purchase_id)
+    public function getCustomerLastBalance($customer_id, $current_purchase_id = null)
     {
         $last_record = collect(
             $this->getCustomerLedgerEntries(
