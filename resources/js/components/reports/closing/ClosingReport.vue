@@ -94,14 +94,17 @@
                     <td><strong>Production Cost Per Unit</strong></td>
                     <td class="text-right font-weight-bold">
                         <span class="grey--text">
-                            Total Production / Total Expenses ({{
+                            Total Expenses / Total Production ({{
                                 money(data.expenses.expenses_total)
                             }}
                             /
-                            {{  money(
+                            {{
+                                money(
                                     data.production_cost_per_unit
                                         .total_weight_produced
-                                )}} ) =
+                                )
+                            }}
+                            ) =
                         </span>
 
                         {{
