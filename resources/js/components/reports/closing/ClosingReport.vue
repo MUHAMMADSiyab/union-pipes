@@ -95,13 +95,13 @@
                     <td class="text-right font-weight-bold">
                         <span class="grey--text">
                             Total Production / Total Expenses ({{
-                                money(
-                                    data.production_cost_per_unit
-                                        .total_weight_produced
-                                )
+                                money(data.expenses.expenses_total)
                             }}
                             /
-                            {{ money(data.expenses.expenses_total) }} ) =
+                            {{  money(
+                                    data.production_cost_per_unit
+                                        .total_weight_produced
+                                )}} ) =
                         </span>
 
                         {{
