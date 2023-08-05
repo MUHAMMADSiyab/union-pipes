@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SalaryRequest;
 use App\Models\Employee;
+use App\Models\Payment;
 use App\Models\Salary;
 use Illuminate\Support\Facades\Gate;
 
@@ -122,6 +123,10 @@ class SalaryController extends Controller
         Gate::authorize('salary_delete');
 
         if ($salary->delete()) {
+            Payment::where('model', Salary::class)
+                ->where('paymentable_id', $salary->id)
+                ->delete();
+
             return response()->json(['message' => "Salary payment deleted successfully"]);
         }
     }
