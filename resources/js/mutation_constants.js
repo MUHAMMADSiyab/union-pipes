@@ -123,6 +123,7 @@ export const NEW_SALARY = "NEW_SALARY";
 export const GET_SALARY = "GET_SALARY";
 export const UPDATE_SALARY = "UPDATE_SALARY";
 export const DELETE_SALARY = "DELETE_SALARY";
+export const OLD_SALARY = "OLD_SALARY";
 export const GET_SALARY_TOTALS = "GET_SALARY_TOTALS";
 
 export const GET_COMPANIES = "GET_COMPANIES";

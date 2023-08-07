@@ -1,22 +1,33 @@
 <template>
-  <div>
-    <Navbar v-if="!printMode" />
+    <div>
+        <Navbar v-if="!printMode" />
 
-    <print-button />
+        <print-button />
 
-    <v-container class="mt-4">
-      <h5 class="text-subtitle-1 mb-2">Employee Salaries Records</h5>
+        <v-container class="mt-4">
+            <h5 class="text-subtitle-1 mb-2">Employee Salaries Records</h5>
 
-      <EmployeeInfo :employee="employee" v-if="employee" />
+            <EmployeeInfo :employee="employee" v-if="employee" />
 
-      <Salaries
-        :salaries="salaries"
-        v-if="salaries"
-        :totals="totals"
-        :employee-id="employee ? employee.id : undefined"
-      />
-    </v-container>
-  </div>
+            <v-row>
+                <v-col cols="12">
+                    <v-switch
+                        color="purple"
+                        v-model="loan"
+                        label="Load only those entries having taken Loan / Advance"
+                        @change="handleLoanSwitch"
+                    ></v-switch>
+                </v-col>
+            </v-row>
+
+            <Salaries
+                :salaries="salaries"
+                v-if="salaries"
+                :totals="totals"
+                :employee-id="employee ? employee.id : undefined"
+            />
+        </v-container>
+    </div>
 </template>
 
 <script>
@@ -26,30 +37,54 @@ import Navbar from "../navs/Navbar.vue";
 import Salaries from "./partials/Salaries.vue";
 
 export default {
-  components: { Navbar, EmployeeInfo, Salaries },
+    components: { Navbar, EmployeeInfo, Salaries },
 
-  methods: {
-    ...mapActions({
-      getEmployee: "employee/getEmployee",
-      getSalaries: "salary/getSalaries",
-      getTotals: "salary/getTotals",
-    }),
-  },
+    data() {
+        return {
+            loan: false,
+        };
+    },
 
-  computed: {
-    ...mapGetters({
-      employee: "employee/employee",
-      salaries: "salary/salaries",
-      totals: "salary/totals",
-    }),
-  },
+    methods: {
+        ...mapActions({
+            getEmployee: "employee/getEmployee",
+            getSalaries: "salary/getSalaries",
+            getTotals: "salary/getTotals",
+        }),
 
-  mounted() {
-    Promise.all([
-      this.getEmployee(this.$route.params.employee_id),
-      this.getSalaries(this.$route.params.employee_id),
-      this.getTotals(this.$route.params.employee_id),
-    ]);
-  },
+        handleLoanSwitch(loan) {
+            this.getSalaries({
+                employeeId: this.$route.params.employee_id,
+                loan: loan,
+            }).then(() => {
+                this.getTotals({
+                    employeeId: this.$route.params.employee_id,
+                    loan: loan,
+                });
+            });
+        },
+    },
+
+    computed: {
+        ...mapGetters({
+            employee: "employee/employee",
+            salaries: "salary/salaries",
+            totals: "salary/totals",
+        }),
+    },
+
+    mounted() {
+        Promise.all([
+            this.getEmployee(this.$route.params.employee_id),
+            this.getSalaries({
+                employeeId: this.$route.params.employee_id,
+                loan: this.loan,
+            }),
+            this.getTotals({
+                employeeId: this.$route.params.employee_id,
+                loan: this.loan,
+            }),
+        ]);
+    },
 };
 </script>

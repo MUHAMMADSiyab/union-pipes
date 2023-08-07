@@ -35,7 +35,7 @@
                         </v-menu>
                     </v-col>
 
-                    <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
+                    <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                         <small
                             class="red--text"
                             v-if="validation.hasErrors()"
@@ -52,7 +52,7 @@
                         ></v-text-field>
                     </v-col>
 
-                    <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
+                    <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                         <small
                             class="red--text"
                             v-if="validation.hasErrors()"
@@ -67,6 +67,22 @@
                             dense
                             outlined
                         ></v-text-field>
+                    </v-col>
+
+                    <v-col
+                        xl="4"
+                        lg="4"
+                        md="4"
+                        sm="12"
+                        cols="12"
+                        class="py-0 mb-2"
+                    >
+                        <v-switch
+                            color="primary"
+                            v-model="data.loan"
+                            label="Taking Loan"
+                            class="mb-2"
+                        ></v-switch>
                     </v-col>
                 </v-row>
 
@@ -323,6 +339,7 @@ export default {
             data: {
                 month: "",
                 date: "",
+                loan: false,
                 total_paid: 0,
                 additional_amount: 0,
                 deducted_amount: 0,

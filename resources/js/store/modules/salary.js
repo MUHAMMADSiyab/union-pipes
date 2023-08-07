@@ -8,6 +8,7 @@ import {
     DELETE_SALARY,
     GET_SALARY,
     NEW_SALARY,
+    OLD_SALARY,
     GET_SALARY_TOTALS,
 } from "../../mutation_constants";
 
@@ -16,12 +17,14 @@ const state = {
     totals: [],
     salary: null,
     recent_salary: null,
+    old_salary: null,
 };
 
 const getters = {
     salaries: (state) => state.salaries,
     salary: (state) => state.salary,
     recent_salary: (state) => state.recent_salary,
+    old_salary: (state) => state.old_salary,
     totals: (state) => state.totals,
 };
 
@@ -65,10 +68,10 @@ const actions = {
     },
 
     // Get salaries
-    async getSalaries({ commit }, employeeId) {
+    async getSalaries({ commit }, { loan, employeeId }) {
         try {
             const res = await axios.get(
-                `/api/salaries/${employeeId}/get_records`
+                `/api/salaries/${employeeId}/get_records?loan=${loan}`
             );
 
             commit(SET_LOADING, false, { root: true });
@@ -80,10 +83,10 @@ const actions = {
     },
 
     // Get salaries totals
-    async getTotals({ commit }, employeeId) {
+    async getTotals({ commit }, { loan, employeeId }) {
         try {
             const res = await axios.get(
-                `/api/salaries/${employeeId}/get_totals`
+                `/api/salaries/${employeeId}/get_totals?loan=${loan}`
             );
 
             commit(SET_LOADING, false, { root: true });
@@ -112,7 +115,8 @@ const actions = {
         try {
             const res = await axios.put(`/api/salaries/${data.id}`, data);
 
-            commit(UPDATE_SALARY, res.data);
+            commit(UPDATE_SALARY, res.data.updated_salary);
+            commit(OLD_SALARY, res.data.old_salary);
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
 
             return dispatch(
@@ -174,6 +178,10 @@ const mutations = {
         );
 
         state.salaries.splice(index, 1, payload);
+    },
+
+    OLD_SALARY: (state, payload) => {
+        state.old_salary = payload;
     },
 
     UPDATE_SALARY: (state, payload) => {

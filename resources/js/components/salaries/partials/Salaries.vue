@@ -59,6 +59,7 @@
                                                             salary.status
                                                         )
                                                     "
+                                                    class="white--text"
                                                     x-small
                                                 >
                                                     {{ salary.status }}
@@ -85,13 +86,19 @@
                                                     ></v-btn
                                                 >
 
-                                                <!-- <v-btn
-                          x-small
-                          color="light"
-                          @click="showEditSalaryDialog(salary.id)"
-                          v-if="can('salary_edit')"
-                          ><v-icon x-small>mdi-pencil</v-icon></v-btn
-                        > -->
+                                                <v-btn
+                                                    x-small
+                                                    color="light"
+                                                    @click="
+                                                        showEditSalaryDialog(
+                                                            salary.id
+                                                        )
+                                                    "
+                                                    v-if="can('salary_edit')"
+                                                    ><v-icon x-small
+                                                        >mdi-pencil</v-icon
+                                                    ></v-btn
+                                                >
 
                                                 <v-btn
                                                     x-small
@@ -147,6 +154,13 @@
                                     </tr>
                                 </tbody>
                             </table>
+
+                            <small
+                                class="d-block mt-2 mb-4 font-weight-bold text-right primary--text"
+                            >
+                                Negative / Minus Balance indicates Advance /
+                                Loan
+                            </small>
 
                             <!-- Add payment dialog -->
                             <v-dialog

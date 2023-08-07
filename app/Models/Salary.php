@@ -19,12 +19,17 @@ class Salary extends Model
         'additional_amount',
         'deducted_amount',
         'employee_id',
+        'loan',
     ];
 
 
     protected $appends = [
         'status',
         'month_formatted'
+    ];
+
+    protected $casts = [
+        'loan' => 'boolean'
     ];
 
     public function getMonthFormattedAttribute()

@@ -22,7 +22,11 @@ class SalaryController extends Controller
 
         $data = $request->all();
 
-        $total_paid = ($request->total_paid  + $request->deducted_amount) - $request->additional_amount;
+        if (!$request->boolean('loan')) {
+            $total_paid = ($request->total_paid  + $request->deducted_amount) - $request->additional_amount;
+        } else {
+            $total_paid = ($request->total_paid  + $request->deducted_amount);
+        }
         $data['balance'] = (Employee::find($request->employee_id)->salary - $total_paid);
 
         $recordExists = Salary::whereMonth('month', date('m', strtotime($request->month)))
@@ -50,8 +54,12 @@ class SalaryController extends Controller
     {
         Gate::authorize('salary_access');
 
-        $salaries = Salary::with('payments')
+        $salaries = Salary::query()
+            ->with('payments')
             ->whereEmployeeId($employee->id)
+            ->when(request()->boolean('loan'), function ($q) {
+                $q->where('loan', true);
+            })
             ->get();
 
         return response()->json($salaries);
@@ -60,7 +68,11 @@ class SalaryController extends Controller
     public function getTotals(Employee $employee)
     {
         // Totals
-        $employeeSalaries = Salary::whereEmployeeId($employee->id);
+        $employeeSalaries = Salary::query()
+            ->when(request()->boolean('loan'), function ($q) {
+                $q->where('loan', true);
+            })
+            ->whereEmployeeId($employee->id);
 
         $total_additional = (int)$employeeSalaries->sum('additional_amount');
         $total_deducted = (int)$employeeSalaries->sum('deducted_amount');
@@ -84,10 +96,14 @@ class SalaryController extends Controller
      * @param App\Salary
      * @return \Illuminate\Http\Response
      */
-    public function show(Salary $salary)
+    public function show(int $salary)
     {
         Gate::authorize('salary_access');
         Gate::authorize('salary_show');
+
+        $salary = Salary::with(['payments' => function ($q) {
+            $q->where('first_payment', true)->with('bank');
+        }])->find($salary);
 
         return response()->json($salary);
     }
@@ -104,11 +120,30 @@ class SalaryController extends Controller
         Gate::authorize('salary_edit');
 
         $data = $request->all();
-        $data['balance'] = (Employee::find($salary->employee_id)->salary - $request->total_paid);
+
+        $afterPaymentsAmount = Payment::query()
+            ->where('model', Salary::class)
+            ->where('paymentable_id', $salary->id)
+            ->where('first_payment', false)
+            ->sum('amount');
+
+        if (!$request->boolean('loan')) {
+            $total_paid = ($request->total_paid + $afterPaymentsAmount  + $request->deducted_amount) - $request->additional_amount;
+        } else {
+            $total_paid = ($request->total_paid + $afterPaymentsAmount  + $request->deducted_amount);
+        }
+
+        $data['total_paid'] = $total_paid;
+        $data['balance'] = (Employee::find($salary->employee_id)->salary - $total_paid);
+
+        $old_salary = $salary->getOriginal();
 
         $salary->update($data);
 
-        return response()->json(Salary::with('payments')->find($salary->id));
+        return response()->json([
+            'updated_salary' =>  Salary::with('payments')->find($salary->id),
+            'old_salary' =>  $old_salary
+        ]);
     }
 
     /**

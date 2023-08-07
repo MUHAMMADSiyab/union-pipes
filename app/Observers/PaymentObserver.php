@@ -58,7 +58,7 @@ class PaymentObserver
         }
 
         // Salary Payments
-        if ($payment->model === Salary::class) {
+        if ($payment->model === Salary::class && !$payment->first_payment) {
             $salary = Salary::find($payment->paymentable_id);
             $salary->decrement('total_paid', $payment->getOriginal('amount'));
             $salary->increment('total_paid', $payment->amount);
