@@ -20,6 +20,39 @@
                     outlined
                 ></v-text-field>
 
+                <!-- Show additional amounts fields in case of salary payment -->
+                <template v-if="employeeId">
+                    <small
+                        class="red--text"
+                        v-if="validation.hasErrors()"
+                        v-text="validation.getMessage('additional_amount')"
+                    ></small>
+                    <v-text-field
+                        type="number"
+                        name="additional_amount"
+                        label="Additional Amount"
+                        id="additional_amount"
+                        v-model="data.additional_amount"
+                        dense
+                        outlined
+                    ></v-text-field>
+
+                    <small
+                        class="red--text"
+                        v-if="validation.hasErrors()"
+                        v-text="validation.getMessage('deducted_amount')"
+                    ></small>
+                    <v-text-field
+                        type="number"
+                        name="deducted_amount"
+                        label="Deducted Amount"
+                        id="deducted_amount"
+                        v-model="data.deducted_amount"
+                        dense
+                        outlined
+                    ></v-text-field>
+                </template>
+
                 <small
                     class="red--text"
                     v-if="validation.hasErrors()"
@@ -226,6 +259,8 @@ export default {
         const {
             id,
             amount,
+            additional_amount,
+            deducted_amount,
             payment_date,
             bank_id,
             paymentable_id,
@@ -246,6 +281,8 @@ export default {
             data: {
                 id,
                 amount,
+                additional_amount,
+                deducted_amount,
                 payment_date,
                 bank_id,
                 payment_method,
@@ -311,6 +348,8 @@ export default {
             handler(newPayment) {
                 this.data.id = newPayment.id;
                 this.data.amount = newPayment.amount;
+                this.data.additional_amount = newPayment.additional_amount;
+                this.data.deducted_amount = newPayment.deducted_amount;
                 this.data.payment_date = newPayment.payment_date;
                 this.data.bank_id = newPayment.bank_id;
                 this.data.paymentable_id = newPayment.paymentable_id;

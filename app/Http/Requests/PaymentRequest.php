@@ -32,6 +32,8 @@ class PaymentRequest extends FormRequest
 
         $rules =  [
             'amount' => 'required|numeric',
+            'additional_amount' => 'numeric',
+            'deducted_amount' => 'numeric',
             'payment_method' => ['required', Rule::in($payment_setting->payment_methods)],
             'cheque_no' => 'nullable|max:30|min:5',
             'cheque_type' => ['nullable', Rule::in($payment_setting->cheque_types)],

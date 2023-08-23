@@ -54,6 +54,8 @@ const actions = {
             paymentable_id,
             transaction_type,
             amount,
+            additional_amount = 0,
+            deducted_amount = 0,
             payment_date,
             bank_id,
             payment_method,
@@ -73,6 +75,8 @@ const actions = {
             fd.append("paymentable_id", paymentable_id);
             fd.append("transaction_type", transaction_type);
             fd.append("amount", amount);
+            fd.append("deducted_amount", deducted_amount);
+            fd.append("additional_amount", additional_amount);
             fd.append(
                 "payment_date",
                 moment(payment_date).format("Y-MM-DD HH:mm:ss")
@@ -165,6 +169,8 @@ const actions = {
             model,
             id,
             amount,
+            additional_amount = 0,
+            deducted_amount = 0,
             payment_date,
             bank_id,
             payment_method,
@@ -181,6 +187,8 @@ const actions = {
             const fd = new FormData();
 
             fd.append("amount", amount);
+            fd.append("deducted_amount", deducted_amount);
+            fd.append("additional_amount", additional_amount);
             fd.append(
                 "payment_date",
                 moment(payment_date).format("Y-MM-DD HH:mm:ss")

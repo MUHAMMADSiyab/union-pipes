@@ -20,6 +20,39 @@
                     outlined
                 ></v-text-field>
 
+                <!-- Show additional amounts fields in case of salary payment -->
+                <template v-if="employeeId">
+                    <small
+                        class="red--text"
+                        v-if="validation.hasErrors()"
+                        v-text="validation.getMessage('additional_amount')"
+                    ></small>
+                    <v-text-field
+                        type="number"
+                        name="additional_amount"
+                        label="Additional Amount"
+                        id="additional_amount"
+                        v-model="data.additional_amount"
+                        dense
+                        outlined
+                    ></v-text-field>
+
+                    <small
+                        class="red--text"
+                        v-if="validation.hasErrors()"
+                        v-text="validation.getMessage('deducted_amount')"
+                    ></small>
+                    <v-text-field
+                        type="number"
+                        name="deducted_amount"
+                        label="Deducted Amount"
+                        id="deducted_amount"
+                        v-model="data.deducted_amount"
+                        dense
+                        outlined
+                    ></v-text-field>
+                </template>
+
                 <small
                     class="red--text"
                     v-if="validation.hasErrors()"
@@ -231,6 +264,8 @@ export default {
                 model: this.entryData.model,
                 paymentable_id: this.entry.id,
                 amount: this.entry.balance,
+                additional_amount: 0,
+                deducted_amount: 0,
                 transaction_type: this.entryData.transaction_type,
                 payment_date: moment().format("Y-MM-DD HH:mm:ss"),
                 bank_id: "",
@@ -272,6 +307,8 @@ export default {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
                 this.data.amount = this.entry.balance - this.data.amount;
+                this.data.deducted_amount = 0;
+                this.data.additional_amount = 0;
                 this.data.payment_date = moment().format("Y-MM-DD HH:mm:ss");
                 this.data.bank_id = "";
                 this.data.payment_method = "";

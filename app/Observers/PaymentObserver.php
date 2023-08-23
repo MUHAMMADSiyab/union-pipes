@@ -31,8 +31,11 @@ class PaymentObserver
         // Salary Payments
         if ($payment->model === Salary::class && !$payment->first_payment) {
             $salary = Salary::find($payment->paymentable_id);
+            $total_paid = ($payment->amount + $payment->deducted_amount) - $payment->additional_amount;
+            $salary->increment('deducted_amount', $payment->deducted_amount);
+            $salary->increment('additional_amount', $payment->additional_amount);
             $salary->increment('total_paid', $payment->amount);
-            $salary->decrement('balance', $payment->amount);
+            $salary->decrement('balance', $total_paid);
         }
     }
 
@@ -60,10 +63,19 @@ class PaymentObserver
         // Salary Payments
         if ($payment->model === Salary::class && !$payment->first_payment) {
             $salary = Salary::find($payment->paymentable_id);
+            $total_paid = ($payment->amount + $payment->deducted_amount) - $payment->additional_amount;
+            $total_paid_original =
+                ($payment->getOriginal('amount') + $payment->getOriginal('deducted_amount')) - $payment->getOriginal('additional_amount');
+
+            $salary->decrement('deducted_amount', $payment->getOriginal('deducted_amount'));
+            $salary->increment('deducted_amount', $payment->deducted_amount);
+            $salary->decrement('additional_amount', $payment->getOriginal('additional_amount'));
+            $salary->increment('additional_amount', $payment->additional_amount);
             $salary->decrement('total_paid', $payment->getOriginal('amount'));
             $salary->increment('total_paid', $payment->amount);
-            $salary->increment('balance', $payment->getOriginal('amount'));
-            $salary->decrement('balance', $payment->amount);
+
+            $salary->increment('balance', $total_paid_original);
+            $salary->decrement('balance', $total_paid);
         }
     }
 

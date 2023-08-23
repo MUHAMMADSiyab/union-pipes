@@ -16,6 +16,8 @@ class Payment extends Model implements HasMedia
 
     protected $fillable = [
         'amount',
+        'additional_amount',
+        'deducted_amount',
         'model',
         'paymentable_id',
         'payment_method',
