@@ -89,6 +89,7 @@ export default {
     .table tr th,
     .table tr td {
         padding: 2px !important;
+        font-size: 12px !important;
     }
 }
 

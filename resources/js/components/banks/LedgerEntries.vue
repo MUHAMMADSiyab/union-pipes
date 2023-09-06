@@ -21,37 +21,37 @@
                         >
 
                         <v-card-text class="mt-1">
-                            <v-simple-table dense v-if="ledger_entries.length">
-                                <template v-slot:default>
-                                    <thead>
-                                        <tr>
-                                            <th>S#</th>
-                                            <th>Date</th>
-                                            <!-- <th>Particular</th> -->
-                                            <th>Description</th>
-                                            <th>Debit</th>
-                                            <th>Credit</th>
-                                            <th>Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr
-                                            v-for="(entry, i) in ledger_entries"
-                                            :key="i"
-                                        >
-                                            <td>{{ i + 1 }}</td>
-                                            <td>{{ entry.date }}</td>
-                                            <!-- <td>{{ entry.particular }}</td> -->
-                                            <td>{{ entry.description }}</td>
-                                            <td>{{ money(entry.debit) }}</td>
-                                            <td>{{ money(entry.credit) }}</td>
-                                            <td class="font-weight-bold">
-                                                {{ money(entry.balance) }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </template>
-                            </v-simple-table>
+                            <table dense v-if="ledger_entries.length">
+                                <!-- <template v-slot:default> -->
+                                <thead>
+                                    <tr>
+                                        <th>S#</th>
+                                        <th>Date</th>
+                                        <!-- <th>Particular</th> -->
+                                        <th>Description</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="(entry, i) in ledger_entries"
+                                        :key="i"
+                                    >
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ entry.date }}</td>
+                                        <!-- <td>{{ entry.particular }}</td> -->
+                                        <td>{{ entry.description }}</td>
+                                        <td>{{ money(entry.debit) }}</td>
+                                        <td>{{ money(entry.credit) }}</td>
+                                        <td class="font-weight-bold">
+                                            {{ money(entry.balance) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <!-- </template> -->
+                            </table>
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -102,3 +102,16 @@ export default {
     },
 };
 </script>
+<style scoped>
+table {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+}
+@media print {
+    table {
+        padding: 2px !important;
+        font-size: 10px !important;
+    }
+}
+</style>

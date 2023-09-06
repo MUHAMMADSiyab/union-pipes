@@ -150,4 +150,11 @@ th {
 td {
     font-size: small !important;
 }
+
+@media only print {
+    th,
+    td {
+        font-size: 10px !important;
+    }
+}
 </style>

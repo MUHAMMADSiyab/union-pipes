@@ -125,7 +125,9 @@ class ClosingReportService
             ->sum('total_weight')) ?? 0.0;
 
         $expenses_total = $this->getExpensesData($fromDate, $toDate)['expenses_total'];
-        $production_cost_per_unit = $expenses_total / $total_weight_produced;
+        $production_cost_per_unit = $total_weight_produced > 0
+            ? ($expenses_total / $total_weight_produced)
+            : 0;
 
         return compact('total_weight_produced', 'expenses_total', 'production_cost_per_unit');
     }
