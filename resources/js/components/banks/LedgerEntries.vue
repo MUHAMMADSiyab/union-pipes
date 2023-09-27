@@ -192,9 +192,14 @@ export default {
 <style scoped>
 table {
     width: 100%;
-    text-align: center;
+    text-align: left !important;
     padding: 5px;
 }
+
+table thead {
+    text-align: left !important;
+}
+
 @media print {
     table {
         padding: 2px !important;
