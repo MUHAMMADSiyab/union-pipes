@@ -25,10 +25,10 @@
                             <td>{{ i + 1 }}</td>
                             <td>{{ purchasedItem.purchase_item.name }}</td>
                             <td>{{ purchasedItem.rate }}</td>
-                            <td>{{ purchasedItem.quantity }}</td>
-                            <td>{{ purchasedItem.total }}</td>
-                            <td>{{ purchasedItem.sales_tax }}</td>
-                            <td>{{ purchasedItem.grand_total }}</td>
+                            <td>{{ money(purchasedItem.quantity) }}</td>
+                            <td>{{ money(purchasedItem.total) }}</td>
+                            <td>{{ money(purchasedItem.sales_tax) }}</td>
+                            <td>{{ money(purchasedItem.grand_total) }}</td>
                         </tr>
                     </tbody>
                 </template>

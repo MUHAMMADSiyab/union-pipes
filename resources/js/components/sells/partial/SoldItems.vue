@@ -26,12 +26,12 @@
                                     soldItem.product.size
                                 }})({{ soldItem.product.type }})
                             </td>
-                            <td>{{ soldItem.weight }}</td>
-                            <td>{{ soldItem.rate }}</td>
-                            <td>{{ soldItem.quantity }}</td>
-                            <td>{{ soldItem.total }}</td>
-                            <td>{{ soldItem.sales_tax }}</td>
-                            <td>{{ soldItem.grand_total }}</td>
+                            <td>{{ money(soldItem.weight) }}</td>
+                            <td>{{ money(soldItem.rate) }}</td>
+                            <td>{{ money(soldItem.quantity) }}</td>
+                            <td>{{ money(soldItem.total) }}</td>
+                            <td>{{ money(soldItem.sales_tax) }}</td>
+                            <td>{{ money(soldItem.grand_total) }}</td>
                         </tr>
                     </tbody>
                 </template>
