@@ -6,9 +6,9 @@
         <v-container class="mt-4">
             <h5 class="text-subtitle-1 mb-2">Ledger Entries</h5>
 
-            <v-card class="mb-2">
+            <v-card class="mb-2 d-print-none">
                 <v-card-text>
-                    <v-row class="d-print-none mt-2">
+                    <v-row class="mt-2">
                         <v-col
                             xl="6"
                             lg="6"
@@ -85,7 +85,10 @@
                         >
 
                         <v-card-text class="mt-1">
-                            <table dense v-if="filteredEntries.length">
+                            <table
+                                v-if="filteredEntries.length"
+                                cellspacing="0"
+                            >
                                 <!-- <template v-slot:default> -->
                                 <thead>
                                     <tr>
@@ -190,7 +193,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 table {
     width: 100%;
     text-align: left !important;
@@ -199,6 +202,12 @@ table {
 
 table thead {
     text-align: left !important;
+}
+
+td,
+th {
+    padding: 4px;
+    border-bottom: 1px solid rgb(207, 207, 207) !important;
 }
 
 @media print {

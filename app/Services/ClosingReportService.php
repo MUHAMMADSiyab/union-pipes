@@ -17,12 +17,14 @@ class ClosingReportService
     public function getPayments($fromDate, $toDate)
     {
         $paidToParties = Payment::query()
-            ->whereBetween('payment_date', [$fromDate, $toDate])
+            ->where('payment_date', '>=', $fromDate)
+            ->where('payment_date', '<=', $toDate)
             ->where('model', Purchase::class)
             ->sum('amount');
 
         $receivedFromCustomers = Payment::query()
-            ->whereBetween('payment_date', [$fromDate, $toDate])
+            ->where('payment_date', '>=', $fromDate)
+            ->where('payment_date', '<=', $toDate)
             ->where('model', Sell::class)
             ->sum('amount');
 
@@ -36,7 +38,8 @@ class ClosingReportService
     {
         $purchasedItems = PurchasedItem::query()
             ->whereHas('purchase', function ($q) use ($fromDate, $toDate) {
-                $q->whereBetween('date', [$fromDate, $toDate]);
+                $q->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate);
             })
             ->get();
 
@@ -45,7 +48,8 @@ class ClosingReportService
 
         $soldItems = SoldItem::query()
             ->whereHas('sell', function ($q) use ($fromDate, $toDate) {
-                $q->whereBetween('date', [$fromDate, $toDate]);
+                $q->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate);
             })
             ->get();
 
@@ -64,7 +68,8 @@ class ClosingReportService
     {
         $expensesQuery = Expense::query()
             ->whereHas('payment', function ($q) use ($fromDate, $toDate) {
-                $q->whereBetween('payment_date', [$fromDate, $toDate]);
+                $q->where('payment_date', '>=', $fromDate)
+                    ->where('payment_date', '<=', $toDate);
             })
             ->get();
 
@@ -80,7 +85,8 @@ class ClosingReportService
 
         $salaries = Payment::query()
             ->where('model', Salary::class)
-            ->whereBetween('payment_date', [$fromDate, $toDate])
+            ->where('payment_date', '>=', $fromDate)
+            ->where('payment_date', '<=', $toDate)
             ->sum('amount');
 
         $expenses->push(['name' => 'Salaries', 'total' => $salaries]);
@@ -88,7 +94,8 @@ class ClosingReportService
         $purchasedExpenseItems = PurchasedItem::query()
             ->with('purchase_item')
             ->whereHas('purchase', function ($q) use ($fromDate, $toDate) {
-                $q->whereBetween('date', [$fromDate, $toDate])
+                $q->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate)
                     ->where('category', 'Other');
             })
             ->get();
@@ -96,7 +103,8 @@ class ClosingReportService
         $purchased_expense_items = PurchasedItem::query()
             ->with('purchase_item')
             ->whereHas('purchase', function ($q) use ($fromDate, $toDate) {
-                $q->whereBetween('date', [$fromDate, $toDate])
+                $q->where('date', '>=', $fromDate)
+                    ->where('date', '<=', $toDate)
                     ->where('category', 'Other');
             })
             ->get();
@@ -121,7 +129,8 @@ class ClosingReportService
     public function getProductionCostPerUnit($fromDate, $toDate)
     {
         $total_weight_produced = floatval(Production::query()
-            ->whereBetween('date', [$fromDate, $toDate])
+            ->where('date', '>=', $fromDate)
+            ->where('date', '<=', $toDate)
             ->sum('total_weight')) ?? 0.0;
 
         $expenses_total = $this->getExpensesData($fromDate, $toDate)['expenses_total'];
