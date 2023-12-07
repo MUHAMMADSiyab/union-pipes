@@ -10,7 +10,6 @@ use App\Models\ExpenseSource;
 use App\Models\Machine;
 use App\Models\Purchase;
 use App\Models\PurchasedItem;
-use App\Models\Salary;
 use App\Models\Sell;
 use App\Models\SoldItem;
 
@@ -285,7 +284,8 @@ class ReportService
             $q->whereIn('id', $request->expense_sources);
         })
             ->whereHas('payment', function ($q) use ($request) {
-                $q->whereBetween('payment_date', [$request->from_date, $request->to_date]);
+                $q->where('payment_date', '>=', $request->from_date)
+                    ->where('payment_date', '<=', $request->to_date);
             })
             ->get();
 
@@ -318,7 +318,8 @@ class ReportService
     {
         $machines_productions = Machine::query()
             ->whereHas('productions', function ($q) use ($request) {
-                $q->whereBetween('date', [$request->from_date, $request->to_date]);
+                $q->where('date', '>=', $request->from_date)
+                    ->where('date', '<=', $request->to_date);
             })
             ->withSum('productions', 'total_weight')
             ->withAvg('productions', 'total_weight')
