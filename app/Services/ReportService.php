@@ -18,7 +18,8 @@ class ReportService
     public function getPurchaseReport($request)
     {
         $purchases = Purchase::with('purchased_items', 'company', 'purchased_items.purchase_item')
-            ->whereBetween('date', [$request->from_date, $request->to_date])
+            ->where('date', '>=', $request->from_date)
+            ->where('date', '<=', $request->to_date)
             ->whereIn('company_id', $request->companies)
             ->get()
             ->groupBy('company_id')
@@ -60,7 +61,9 @@ class ReportService
         $companyIds = $request->companies;
 
         $purchasedItems = PurchasedItem::whereHas('purchase', function ($query) use ($fromDate, $toDate, $companyIds) {
-            $query->whereBetween('date', [$fromDate, $toDate])
+            $query
+                ->where('date', '>=', $fromDate)
+                ->where('date', '<=', $toDate)
                 ->whereIn('company_id', $companyIds)
                 ->with('company');
         })
@@ -111,7 +114,8 @@ class ReportService
     public function getSellReport($request)
     {
         $sells = Sell::with('sold_items', 'customer', 'sold_items.product')
-            ->whereBetween('date', [$request->from_date, $request->to_date])
+            ->where('date', '>=', $request->from_date)
+            ->where('date', '<=', $request->to_date)
             ->whereIn('customer_id', $request->customers)
             ->get()
             ->groupBy('customer_id')
@@ -155,7 +159,9 @@ class ReportService
         $customerIds = $request->customers;
 
         $soldItems = SoldItem::whereHas('sell', function ($query) use ($fromDate, $toDate, $customerIds) {
-            $query->whereBetween('date', [$fromDate, $toDate])
+            $query
+                ->where('date', '>=', $fromDate)
+                ->where('date', '<=', $toDate)
                 ->whereIn('customer_id', $customerIds)
                 ->with('customer');
         })
