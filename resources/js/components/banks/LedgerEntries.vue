@@ -90,35 +90,43 @@
                                 v-if="filteredEntries.length"
                                 cellspacing="0"
                             >
-                                <!-- <template v-slot:default> -->
-                                <thead>
-                                    <tr>
-                                        <th>S#</th>
-                                        <th>Date</th>
-                                        <!-- <th>Particular</th> -->
-                                        <th>Description</th>
-                                        <th>Debit</th>
-                                        <th>Credit</th>
-                                        <th>Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="(entry, i) in filteredEntries"
-                                        :key="i"
-                                    >
-                                        <td>{{ i + 1 }}</td>
-                                        <td>{{ entry.date }}</td>
-                                        <!-- <td>{{ entry.particular }}</td> -->
-                                        <td>{{ entry.description }}</td>
-                                        <td>{{ money(entry.debit) }}</td>
-                                        <td>{{ money(entry.credit) }}</td>
-                                        <td class="font-weight-bold">
-                                            {{ money(entry.balance) }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <!-- </template> -->
+                                <tr>
+                                    <th>S#</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Balance</th>
+                                </tr>
+                                <tr
+                                    v-for="(entry, i) in filteredEntries"
+                                    :key="i"
+                                >
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ entry.date }}</td>
+                                    <!-- <td>{{ entry.particular }}</td> -->
+                                    <td>{{ entry.description }}</td>
+                                    <td>{{ money(entry.debit) }}</td>
+                                    <td>{{ money(entry.credit) }}</td>
+                                    <td class="font-weight-bold">
+                                        {{ money(entry.balance) }}
+                                    </td>
+                                </tr>
+
+                                <tr style="color: #000">
+                                    <td colspan="4" class="text-center">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <strong>{{ money(totalDebit) }}</strong>
+                                    </td>
+                                    <td>
+                                        <strong>{{
+                                            money(totalCredit)
+                                        }}</strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
                             </table>
                         </v-card-text>
                     </v-card>
@@ -182,6 +190,18 @@ export default {
                 toDate.setDate(toDate.getDate() + 1); // Add one day to the toDate
                 return entryDate >= fromDate && entryDate <= toDate;
             });
+        },
+
+        totalDebit() {
+            return this.filteredEntries.reduce((total, entry) => {
+                return total + entry.debit;
+            }, 0);
+        },
+
+        totalCredit() {
+            return this.filteredEntries.reduce((total, entry) => {
+                return total + entry.credit;
+            }, 0);
         },
     },
 

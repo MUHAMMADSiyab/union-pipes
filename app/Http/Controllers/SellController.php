@@ -56,28 +56,47 @@ class SellController extends Controller
     {
         $orderBy = request('orderBy');
         $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
+        $local = request()->boolean('local');
 
-        $sells = Sell::query()
+
+        $query = Sell::query()
             ->with([
                 'customer',
                 'sold_items.product',
                 'returned_items.product',
             ])
-            ->where(function ($query) {
-                $searchTerm = request('search');
-                $query->where('date', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('invoice_no', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('category', 'like', '%' . $searchTerm . '%')
-                    ->orWhereHas('customer', function ($q) use ($searchTerm) {
-                        $q->where('name', 'like', '%' . $searchTerm . '%');
-                    });
+            ->when(!empty(request('search')), function ($q) {
+                $q->where(function ($query) {
+                    $searchTerm = request('search');
+                    $query->where('date', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('invoice_no', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('category', 'like', '%' . $searchTerm . '%')
+                        ->orWhereHas('customer', function ($q) use ($searchTerm) {
+                            $q->where('name', 'like', '%' . $searchTerm . '%');
+                        });
+                });
+            })
+            ->when(!empty(request('date')), function ($q) {
+                $q->whereDate('date', request('date'));
             })
             ->when(Str::contains($orderBy, '.'), function ($query) use ($orderBy, $orderDirection) {
                 (new OrderByService)->applyRelationshipOrderBy($query, $orderBy, $orderDirection, 'sells');
             }, function ($query) use ($orderBy, $orderDirection) {
                 $query->orderBy($orderBy, $orderDirection);
             })
-            ->paginate(request('itemsPerPage'));
+            ->when($local, function ($q) {
+                $q->local();
+            })
+            ->when(!$local, function ($q) {
+                $q->notLocal();
+            });
+
+
+        if (!empty(request('search')) || !empty(request('date'))) {
+            $sells = $query->paginate(2000);
+        } else {
+            $sells = $query->paginate(request('itemsPerPage'));
+        }
 
         return response()->json($sells);
     }

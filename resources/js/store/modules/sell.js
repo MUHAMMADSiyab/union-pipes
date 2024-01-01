@@ -88,7 +88,7 @@ const actions = {
     // Search sells
     async searchSells(
         { commit },
-        { page, itemsPerPage, sortBy, sortDesc, search, local }
+        { page, itemsPerPage, sortBy, sortDesc, search, local, date }
     ) {
         try {
             commit(SET_LOADING, true);
@@ -98,7 +98,9 @@ const actions = {
                 sortDesc && sortDesc.length ? sortDesc[0] : true;
 
             const res = await axios.get(
-                `/api/search_sells?local=${local}&search=${search}&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
+                `/api/search_sells?local=${local}&search=${search || ""}&date=${
+                    date || ""
+                }&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
             );
             commit(SET_LOADING, false);
             commit(GET_SELLS, res.data);

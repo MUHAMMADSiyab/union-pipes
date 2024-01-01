@@ -258,12 +258,19 @@
                                 :local="local"
                             />
 
-                            <v-text-field
-                                v-model="search"
-                                placeholder="Search"
-                                class="mx-4"
-                                append-icon="mdi-magnify"
-                            ></v-text-field>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field
+                                        v-model="search"
+                                        placeholder="Search"
+                                        class="mx-4"
+                                        append-icon="mdi-magnify"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col>
+                                    <input type="date" v-model="date" />
+                                </v-col>
+                            </v-row>
                         </template>
                     </v-data-table>
 
@@ -369,6 +376,7 @@ export default {
     data() {
         return {
             local: false,
+            date: "",
             currentSoldItems: null,
             options: {},
             currentSoldItemsForReturn: null,
@@ -434,7 +442,11 @@ export default {
 
         handleLocalSwitch(local) {
             this.options.local = local;
-            this.getSells(this.options);
+            if (this.options.search || this.options.date) {
+                this.searchSells(this.options);
+            } else {
+                this.getSells(this.options);
+            }
         },
 
         setCurrentSoldItems(items) {
@@ -531,6 +543,14 @@ export default {
         search: {
             handler(newVal) {
                 this.options.search = newVal;
+                this.options.local = this.local;
+                this.searchSells(this.options);
+            },
+        },
+
+        date: {
+            handler(newVal) {
+                this.options.date = newVal;
                 this.options.local = this.local;
                 this.searchSells(this.options);
             },
