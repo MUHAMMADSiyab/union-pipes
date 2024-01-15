@@ -1,5 +1,9 @@
 @import "~vuetify/dist/vuetify.min.css";
 
+.v-date-picker-table {
+    height: 270px !important;
+}
+
 html {
     overflow-y: auto !important;
 }
