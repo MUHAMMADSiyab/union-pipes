@@ -114,7 +114,7 @@
                                 </tr>
 
                                 <tr style="color: #000">
-                                    <td colspan="4" class="text-center">
+                                    <td colspan="3" class="text-center">
                                         <strong>Total</strong>
                                     </td>
                                     <td>
