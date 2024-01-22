@@ -75,14 +75,32 @@ class LedgerService
 
     public function getCompanyLastBalance($company_id, $current_purchase_id = null)
     {
-        $last_record = collect(
-            $this->getCompanyLedgerEntries(
-                $company_id,
-                $current_purchase_id
-            )
-        )->last();
+        // $last_record = collect(
+        //     $this->getCompanyLedgerEntries(
+        //         $company_id,
+        //         $current_purchase_id
+        //     )
+        // )->last(); // orignal one...
 
-        return $last_record ? $last_record['balance'] : 0;
+        $fromDate = request('from_date');
+        $toDate = request('to_date');
+
+        $companyLedgerEntries = $this->getCompanyLedgerEntries($company_id, $current_purchase_id);
+
+        // Apply date filter only if both from_date and to_date are present
+        if ($fromDate !== null && $toDate !== null) {
+            $filteredEntries = collect($companyLedgerEntries)
+                ->where('date', '>=', $fromDate)
+                ->where('date', '<=', $toDate);
+        } else {
+            // If either from_date or to_date is missing, include all entries
+            $filteredEntries = collect($companyLedgerEntries);
+        }
+
+        // Get the last record from the filtered collection
+        $lastRecord = $filteredEntries->last();
+
+        return $lastRecord ? $lastRecord['balance'] : 0;
     }
 
     public function getCustomerLedgerEntries($customer_id, $current_sell_id = null)
@@ -153,14 +171,33 @@ class LedgerService
 
     public function getCustomerLastBalance($customer_id, $current_purchase_id = null)
     {
-        $last_record = collect(
-            $this->getCustomerLedgerEntries(
-                $customer_id,
-                $current_purchase_id
-            )
-        )->last();
+        // $last_record = collect(
+        //     $this->getCustomerLedgerEntries(
+        //         $customer_id,
+        //         $current_purchase_id
+        //     )
+        // )->last(); // original one..
 
-        return $last_record ? $last_record['balance'] : 0;
+        $fromDate = request('from_date');
+        $toDate = request('to_date');
+
+        $ledgerEntries = $this->getCustomerLedgerEntries($customer_id, $current_purchase_id);
+
+        // Apply date filter only if both from_date and to_date are present
+        if ($fromDate !== null && $toDate !== null) {
+            $filteredEntries = collect($ledgerEntries)
+                ->where('date', '>=', $fromDate)
+                ->where('date', '<=', $toDate);
+        } else {
+            // If either from_date or to_date is missing, include all entries
+            $filteredEntries = collect($ledgerEntries);
+        }
+
+        // Get the last record from the filtered collection
+        $lastRecord = $filteredEntries->last();
+
+
+        return $lastRecord ? $lastRecord['balance'] : 0;
     }
 
     public function getBankLedgerEntries($bank_id)

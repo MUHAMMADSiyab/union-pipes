@@ -92,9 +92,14 @@ const actions = {
     },
 
     // Get receivables report
-    async getReceivablesReportData({ dispatch, commit }) {
+    async getReceivablesReportData(
+        { dispatch, commit },
+        { from_date, to_date }
+    ) {
         try {
-            const res = await axios.get("/api/reports/receivables");
+            const res = await axios.get(
+                `/api/reports/receivables?from_date=${from_date}&to_date=${to_date}`
+            );
 
             commit(GET_REPORT_DATA, res.data);
             commit(SET_LOADING, false, { root: true });
@@ -105,9 +110,11 @@ const actions = {
     },
 
     // Get payables report
-    async getPayablesReportData({ dispatch, commit }) {
+    async getPayablesReportData({ dispatch, commit }, { from_date, to_date }) {
         try {
-            const res = await axios.get("/api/reports/payables");
+            const res = await axios.get(
+                `/api/reports/payables?from_date=${from_date}&to_date=${to_date}`
+            );
 
             commit(GET_REPORT_DATA, res.data);
             commit(SET_LOADING, false, { root: true });
