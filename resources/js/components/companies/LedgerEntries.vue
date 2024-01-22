@@ -220,6 +220,7 @@ table {
     width: 100%;
     text-align: left !important;
     padding: 5px;
+    color: rgb(29, 29, 29) !important;
 }
 
 table thead {
