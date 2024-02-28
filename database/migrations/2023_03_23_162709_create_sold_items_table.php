@@ -19,7 +19,7 @@ class CreateSoldItemsTable extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->float('quantity')->default(0);
             $table->float('weight')->default(0);
-            $table->float('rate')->default(0);
+            $table->float('rate', 15, 2)->default(0);
             $table->decimal('total', 15, 2)->default(0);
             $table->decimal('sales_tax', 15, 2)->default(0);
             $table->decimal('grand_total', 15, 2)->default(0);

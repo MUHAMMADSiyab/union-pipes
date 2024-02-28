@@ -18,8 +18,9 @@ class ReportService
     public function getPurchaseReport($request)
     {
         $purchases = Purchase::with('purchased_items', 'company', 'purchased_items.purchase_item')
-            ->where('date', '>=', $request->from_date)
-            ->where('date', '<=', $request->to_date)
+            ->whereBetween(
+                'date', [$request->from_date.' 00:00:00', $request->to_date.' 23:59:59']
+            )
             ->whereIn('company_id', $request->companies)
             ->get()
             ->groupBy('company_id')
@@ -62,8 +63,7 @@ class ReportService
 
         $purchasedItems = PurchasedItem::whereHas('purchase', function ($query) use ($fromDate, $toDate, $companyIds) {
             $query
-                ->where('date', '>=', $fromDate)
-                ->where('date', '<=', $toDate)
+                ->whereBetween('date', [$fromDate.' 00:00:00', $toDate.' 23:59:59'])
                 ->whereIn('company_id', $companyIds)
                 ->with('company');
         })
@@ -114,8 +114,9 @@ class ReportService
     public function getSellReport($request)
     {
         $sells = Sell::with('sold_items', 'customer', 'sold_items.product')
-            ->where('date', '>=', $request->from_date)
-            ->where('date', '<=', $request->to_date)
+             ->whereBetween(
+                'date', [$request->from_date.' 00:00:00', $request->to_date.' 23:59:59']
+            )
             ->whereIn('customer_id', $request->customers)
             ->get()
             ->groupBy('customer_id')
@@ -160,8 +161,7 @@ class ReportService
 
         $soldItems = SoldItem::whereHas('sell', function ($query) use ($fromDate, $toDate, $customerIds) {
             $query
-                ->where('date', '>=', $fromDate)
-                ->where('date', '<=', $toDate)
+                ->whereBetween('date', [$fromDate.' 00:00:00', $toDate.' 23:59:59'])
                 ->whereIn('customer_id', $customerIds)
                 ->with('customer');
         })
@@ -290,8 +290,10 @@ class ReportService
             $q->whereIn('id', $request->expense_sources);
         })
             ->whereHas('payment', function ($q) use ($request) {
-                $q->where('payment_date', '>=', $request->from_date)
-                    ->where('payment_date', '<=', $request->to_date);
+                $q->whereBetween('payment_date', [
+                    $request->from_date.' 00:00:00', $request->to_date.' 23:59:59'
+                    ]
+                );
             })
             ->get();
 
@@ -324,8 +326,9 @@ class ReportService
     {
         $machines_productions = Machine::query()
             ->whereHas('productions', function ($q) use ($request) {
-                $q->where('date', '>=', $request->from_date)
-                    ->where('date', '<=', $request->to_date);
+                $q->whereBetween(
+                    'date', [$request->from_date.' 00:00:00', $request->to_date.' 23:59:59']
+                );
             })
             ->withSum('productions', 'total_weight')
             ->withAvg('productions', 'total_weight')
