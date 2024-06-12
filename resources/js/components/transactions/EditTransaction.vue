@@ -143,7 +143,7 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-menu
+                                        <!-- <v-menu
                                             max-width="290px"
                                             min-width="auto"
                                         >
@@ -170,7 +170,27 @@
                                                 dense
                                                 show-current
                                             ></v-date-picker>
-                                        </v-menu>
+                                        </v-menu> -->
+
+                                        <v-datetime-picker
+                                            label="Date"
+                                            v-model="data.payment.payment_date"
+                                            :textFieldProps="{
+                                                dense: true,
+                                                outlined: true,
+                                            }"
+                                            :timePickerProps="{
+                                                'use-seconds': true,
+                                            }"
+                                            timeFormat="HH:mm:ss"
+                                        >
+                                            <v-icon slot="timeIcon"
+                                                >mdi-clock-time-three</v-icon
+                                            >
+                                            <v-icon slot="dateIcon"
+                                                >mdi-calendar</v-icon
+                                            >
+                                        </v-datetime-picker>
                                     </v-col>
 
                                     <v-col
