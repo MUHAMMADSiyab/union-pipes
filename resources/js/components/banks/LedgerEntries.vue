@@ -225,6 +225,12 @@ table thead {
     text-align: left !important;
 }
 
+td,
+th {
+    padding: 4px;
+    border-bottom: 1px solid rgb(83, 83, 83) !important;
+}
+
 @media print {
     table {
         padding: 2px !important;

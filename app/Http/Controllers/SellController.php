@@ -118,6 +118,7 @@ class SellController extends Controller
             $sell = Sell::create($request->only([
                 'date',
                 'invoice_no',
+                'gate_pass_id',
                 'customer_id',
                 'sales_tax_percentage',
                 'category',
@@ -207,6 +208,7 @@ class SellController extends Controller
             $sell->update($request->only([
                 'date',
                 'invoice_no',
+                'gate_pass_id',
                 'customer_id',
                 'sales_tax_percentage',
                 'category',

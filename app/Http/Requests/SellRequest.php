@@ -26,6 +26,7 @@ class SellRequest extends FormRequest
         return [
             'date' => 'required',
             'invoice_no' => 'nullable|max:50',
+            'gate_pass_id' => 'nullable|exists:gate_passes,id',
             'customer_id' => 'required|exists:customers,id',
             'sales_tax_percentage' => 'numeric',
             'category' => 'required|max:100',

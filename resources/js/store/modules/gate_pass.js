@@ -9,16 +9,19 @@ import {
     UPDATE_GATE_PASS,
     DELETE_GATE_PASS,
     DELETE_GATE_PASSES,
+    GET_NO_SELL_GATE_PASSES,
 } from "../../mutation_constants";
 
 const state = {
     gate_passes: [],
+    no_sell_gate_passes: [],
     gate_pass: null,
     new_gate_pass: null,
 };
 
 const getters = {
     gate_passes: (state) => state.gate_passes,
+    no_sell_gate_passes: (state) => state.no_sell_gate_passes,
     gate_pass: (state) => state.gate_pass,
     new_gate_pass: (state) => state.new_gate_pass,
 };
@@ -58,6 +61,18 @@ const actions = {
 
             commit(SET_LOADING, false, { root: true });
             commit(GET_GATE_PASSES, res.data);
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+            console.log(error);
+        }
+    },
+
+    async getNoSellGatePasses({ commit }) {
+        try {
+            const res = await axios.get("/api/no_sell_gate_passes");
+
+            commit(SET_LOADING, false, { root: true });
+            commit(GET_NO_SELL_GATE_PASSES, res.data);
         } catch (error) {
             commit(SET_LOADING, false, { root: true });
             console.log(error);
@@ -149,6 +164,9 @@ const actions = {
 
 const mutations = {
     GET_GATE_PASSES: (state, payload) => (state.gate_passes = payload),
+
+    GET_NO_SELL_GATE_PASSES: (state, payload) =>
+        (state.no_sell_gate_passes = payload),
 
     GET_GATE_PASS: (state, payload) => (state.gate_pass = payload),
 

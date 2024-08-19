@@ -23,10 +23,18 @@
                         v-model="selectedItems"
                         dense
                     >
-                        <!-- S# -->
                         <template slot="item.sno" slot-scope="props">{{
                             props.index + 1
                         }}</template>
+
+                        <template slot="item.sell" slot-scope="props">
+                            <v-icon
+                                v-if="hasSell(props.item)"
+                                class="green--text"
+                                >mdi-check</v-icon
+                            >
+                            <v-icon v-else class="red--text">mdi-close</v-icon>
+                        </template>
 
                         <!-- Top -->
                         <template v-slot:top v-if="!printMode">
@@ -63,6 +71,18 @@
 
                         <!-- Actions -->
                         <template slot="item.actions" slot-scope="props">
+                            <v-btn
+                                x-small
+                                text
+                                color="indigo"
+                                :to="`/sells/add?gate_pass_id=${props.item.id}`"
+                                title="Add Sell"
+                                v-if="can('sell_create')"
+                                :disabled="hasSell(props.item)"
+                            >
+                                <v-icon small>mdi-plus</v-icon>
+                            </v-btn>
+
                             <v-btn
                                 x-small
                                 text
@@ -125,6 +145,7 @@ export default {
                 { text: "Date", value: "date" },
                 { text: "Receiver", value: "receiver" },
                 { text: "Vehicle No.", value: "vehicle_no" },
+                { text: "Sell Entry", value: "sell" },
                 { text: "Actions", value: "actions", align: " d-print-none" },
             ],
             selectedItems: [],
@@ -133,6 +154,10 @@ export default {
     },
 
     methods: {
+        hasSell(gatePass) {
+            return gatePass.sell ? true : false;
+        },
+
         ...mapActions({
             getGatePasses: "gate_pass/getGatePasses",
             deleteGatePass: "gate_pass/deleteGatePass",

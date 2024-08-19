@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ExpenseRequest extends FormRequest
 {
@@ -25,7 +24,7 @@ class ExpenseRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => "required|min:3|max:50",
+            'name' => "required|min:3|max:200",
             'amount' => 'required|numeric',
             'description' => 'nullable|max:500',
         ];

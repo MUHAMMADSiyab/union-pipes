@@ -11,6 +11,22 @@
 
                         <v-card-text class="mt-3">
                             <v-form @submit.prevent="add">
+                                <!-- Gate pass -->
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-select
+                                            :items="gate_passes"
+                                            item-text="full_name"
+                                            item-value="id"
+                                            v-model="data.gate_pass_id"
+                                            placeholder="Select Gate Pass"
+                                            autocomplete
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+
                                 <v-row>
                                     <v-col
                                         xl="4"
@@ -548,6 +564,7 @@ export default {
             categories: ["Pipe", "Opening Balance", "Advance Payment"],
             data: {
                 date: moment().format("Y-MM-DD HH:mm:ss"),
+                gate_pass_id: "",
                 customer_id: "",
                 invoice_no: "",
                 category: "",
@@ -575,6 +592,7 @@ export default {
         ...mapActions({
             getAllCustomers: "customer/getAllCustomers",
             getProducts: "product/getProducts",
+            getGatePasses: "gate_pass/getGatePasses",
             addSell: "sell/addSell",
         }),
 
@@ -618,6 +636,7 @@ export default {
             } else {
                 this.data.date = moment().format("Y-MM-DD HH:mm:ss");
                 this.data.invoice_no = "";
+                this.data.gate_pass_id = "";
                 this.data.customer_id = "";
                 this.data.unit = "";
                 this.data.category = "";
@@ -647,6 +666,7 @@ export default {
         ...mapGetters({
             customers: "customer/customers",
             products: "product/products",
+            gate_passes: "gate_pass/gate_passes",
             validationErrors: "validationErrors",
         }),
     },
@@ -677,7 +697,13 @@ export default {
     },
 
     async mounted() {
-        await Promise.all([this.getAllCustomers(), this.getProducts()]);
+        await Promise.all([
+            this.getGatePasses(),
+            this.getAllCustomers(),
+            this.getProducts(),
+        ]);
+
+        this.data.gate_pass_id = parseInt(this.$route.query.gate_pass_id);
     },
 };
 </script>

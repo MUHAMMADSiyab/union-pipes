@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sell extends Model
 {
@@ -12,6 +13,7 @@ class Sell extends Model
     protected $fillable = [
         'date',
         'invoice_no',
+        'gate_pass_id',
         'customer_id',
         'sales_tax_percentage',
         'unit',
@@ -26,7 +28,8 @@ class Sell extends Model
         'discount_amount',
         'discounted_total_amount',
         'balance',
-        'status'
+        'status',
+
     ];
 
     public function getPaidAttribute()
@@ -84,6 +87,11 @@ class Sell extends Model
     public function returned_items()
     {
         return $this->hasMany(ReturnedSoldItem::class, 'sell_id');
+    }
+
+    public function gate_pass(): BelongsTo
+    {
+        return $this->belongsTo(GatePass::class);
     }
 
     public function payments()

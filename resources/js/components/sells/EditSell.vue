@@ -6,11 +6,27 @@
             <v-row>
                 <v-col cols="12">
                     <v-card :loading="formLoading" :disabled="formLoading">
-                        <v-card-title primary-title>New Sell</v-card-title>
-                        <v-card-subtitle>Add a New Sell</v-card-subtitle>
+                        <v-card-title primary-title>Edit Sell</v-card-title>
+                        <v-card-subtitle>Edit this sell</v-card-subtitle>
 
                         <v-card-text class="mt-3">
                             <v-form @submit.prevent="add">
+                                <!-- Gate pass -->
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-select
+                                            :items="gate_passes"
+                                            item-text="full_name"
+                                            item-value="id"
+                                            v-model="data.gate_pass_id"
+                                            placeholder="Select Gate Pass"
+                                            autocomplete
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+
                                 <v-row>
                                     <v-col
                                         xl="4"
@@ -541,6 +557,7 @@ export default {
             categories: ["Pipe", "Return", "Misc", "Advance Payment"],
             data: {
                 date: "",
+                gate_pass_id: "",
                 customer_id: "",
                 invoice_no: "",
                 category: "",
@@ -568,6 +585,7 @@ export default {
         ...mapActions({
             getAllCustomers: "customer/getAllCustomers",
             getProducts: "product/getProducts",
+            getGatePasses: "gate_pass/getGatePasses",
             getSell: "sell/getSell",
             updateSell: "sell/updateSell",
         }),
@@ -616,6 +634,7 @@ export default {
             customers: "customer/customers",
             products: "product/products",
             sell: "sell/sell",
+            gate_passes: "gate_pass/gate_passes",
             validationErrors: "validationErrors",
         }),
     },
@@ -647,6 +666,7 @@ export default {
 
     async mounted() {
         await Promise.all([
+            this.getGatePasses(),
             this.getAllCustomers(),
             this.getProducts(),
             this.getSell(this.$route.params.id),
@@ -665,6 +685,7 @@ export default {
         this.data.description = this.sell.description;
         this.data.category = this.sell.category;
         this.data.customer_id = this.sell.customer_id;
+        this.data.gate_pass_id = this.sell.gate_pass_id;
         this.data.items = this.sell.sold_items;
     },
 };

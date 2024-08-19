@@ -7,6 +7,8 @@
         <v-container class="mt-4">
             <h5 class="text-subtitle-1 mb-2">Sells</h5>
 
+            <NoSellGatePasses />
+
             <v-row>
                 <v-col cols="12">
                     <v-switch
@@ -37,9 +39,18 @@
                         dense
                     >
                         <!-- S# -->
-                        <template slot="item.sno" slot-scope="props">{{
-                            props.index + 1
-                        }}</template>
+                        <template slot="item.sno" slot-scope="props">
+                            <a
+                                :href="`/gate_passes/${props.item.gate_pass_id}`"
+                                target="_blank"
+                                class="text-decoration-none"
+                                title="View Gate Pass"
+                                v-if="props.item.gate_pass_id"
+                            >
+                                📃 {{ props.index + 1 }}
+                            </a>
+                            <span v-else> {{ props.index + 1 }}</span>
+                        </template>
 
                         <template slot="item.customer.name" slot-scope="props">
                             <router-link
@@ -350,6 +361,7 @@ import Confirmation from "../globals/Confirmation";
 import Navbar from "../navs/Navbar";
 import SoldItems from "./partial/SoldItems.vue";
 import SoldItemsForReturn from "./partial/SoldItemsForReturn.vue";
+import NoSellGatePasses from "./partial/NoSellGatePasses.vue";
 import Excel from "../globals/exports/Excel.vue";
 import CSV from "../globals/exports/CSV.vue";
 import PDF from "../globals/exports/PDF.vue";
@@ -366,6 +378,7 @@ export default {
         Confirmation,
         SoldItems,
         SoldItemsForReturn,
+        NoSellGatePasses,
         AddPayment,
         Payments,
         Excel,

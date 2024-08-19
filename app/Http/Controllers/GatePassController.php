@@ -18,8 +18,12 @@ class GatePassController extends Controller
     {
         Gate::authorize('gate_pass_access');
 
-        $companies = GatePass::all();
-        return response()->json($companies);
+        $gate_passes = GatePass::query()
+            ->with(['sell' => function ($q) {
+                $q->select('id', 'gate_pass_id');
+            }])
+            ->get();
+        return response()->json($gate_passes);
     }
 
     /**
@@ -101,5 +105,15 @@ class GatePassController extends Controller
         }
 
         return response()->json(['success' => 'Gate Pass deleted successfully']);
+    }
+
+    public function get_no_sell_gate_passes()
+    {
+        $gate_passes = GatePass::query()
+            ->doesntHave('sell')
+            ->orderBy('date', 'desc')
+            ->get();
+
+        return response()->json($gate_passes);
     }
 }

@@ -4,6 +4,11 @@
 
         <v-container class="mt-4" v-if="dashboardData">
             <TotalsCards :totals="dashboardData.totals" />
+
+            <UnclearedChequesCard
+                :uncleared-cheques="dashboardData.unclearedCheques"
+            />
+
             <v-row>
                 <v-col xl="12" lg="12" md="12" sm="12" cols="12">
                     <Last30DaysProduction
@@ -44,6 +49,7 @@ import Last12MonthsExpensesChart from "./partial/charts/Last12MonthsExpensesChar
 import SellsLast12MonthsChart from "./partial/charts/SellsLast12MonthsChart.vue";
 import ReceivablesChart from "./partial/charts/ReceivablesChart.vue";
 import Last30DaysProduction from "./partial/charts/Last30DaysProduction.vue";
+import UnclearedChequesCard from "./partial/UnclearedChequesCard.vue";
 import TotalsCards from "./partial/TotalsCards.vue";
 
 export default {
@@ -53,6 +59,7 @@ export default {
         SellsLast12MonthsChart,
         ReceivablesChart,
         Last30DaysProduction,
+        UnclearedChequesCard,
         TotalsCards,
     },
 

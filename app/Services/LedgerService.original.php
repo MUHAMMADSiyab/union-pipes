@@ -91,8 +91,7 @@ class LedgerService
         if ($fromDate !== null && $toDate !== null) {
             $filteredEntries = collect($companyLedgerEntries)
                 ->whereBetween(
-                    'date',
-                    [$fromDate . ' 00:00:00', $toDate . ' 23:59:59']
+                    'date', [$fromDate.' 00:00:00', $toDate.' 23:59:59']
                 );
         } else {
             // If either from_date or to_date is missing, include all entries
@@ -104,7 +103,7 @@ class LedgerService
 
         return $lastRecord ? $lastRecord['balance'] : 0;
     }
-    // -----------------------------------------------------------------------------
+
     public function getCustomerLedgerEntries($customer_id, $current_sell_id = null)
     {
         $sells = Sell::query()
@@ -120,31 +119,7 @@ class LedgerService
             ->where('model', Sell::class)
             ->whereIn('paymentable_id', $sells->pluck('id')->all())
             ->orderBy('payment_date')
-            ->get(['id', 'payment_method', 'payment_date', 'amount', 'description'])
-            ->groupBy(fn($item) => date('Y-m-d', strtotime($item['payment_date'])))
-            ->map(function ($groupedItems, $date) {
-                // return collect([
-                //     'id' => $groupedItems->first()->id,
-                //     'description' => $groupedItems->first()->description,
-                //     'payment_date' => $date . " 12:00:00",
-                //     'amount' => $groupedItems->sum('amount'),
-                // ]);
-
-                return collect($groupedItems)
-                    ->groupBy('payment_method')
-                    ->map(function ($groupedByMethod, $payment_method) use ($date) {
-                        return [
-                            'id' => $groupedByMethod->first()->id,
-                            // 'description' => $groupedByMethod->implode('description', " | "),
-                            'description' => $groupedByMethod->first()->description,
-                            'payment_date' => $groupedByMethod->first()->payment_date,
-                            'amount' => $groupedByMethod->sum('amount'),
-                            'payment_method' => $payment_method
-                        ];
-                    })
-                    ->values();
-            })
-            ->collapse();
+            ->get(['id', 'payment_date', 'amount', 'description']);
 
         $dates = collect(
             array_merge(
@@ -171,11 +146,12 @@ class LedgerService
             } else {
                 // $particular = "Sell Payment from Customer";
                 $invoice_no = "";
-                $description = $payment['description'];
+                $description = $payment->description;
             }
 
+
             $debit = $sell ? (int)$sell->discounted_total_amount : 0;
-            $credit = $payment ? (int)$payment['amount'] : 0;
+            $credit = $payment ? (int)$payment->amount : 0;
             $balance += $debit - $credit;
 
             if ($debit !== 0 || $credit !== 0) {
@@ -183,7 +159,7 @@ class LedgerService
                     // 'particular' => $particular,
                     'invoice_no' => $invoice_no,
                     'description' => $description,
-                    'date' => date('Y-m-d', strtotime($date)),
+                    'date' => $date,
                     'debit' => $debit,
                     'credit' => $credit,
                     'balance' => $balance,
@@ -193,8 +169,6 @@ class LedgerService
 
         return $entries;
     }
-    // ------------------------------------------------------------------------------
-
 
     public function getCustomerLastBalance($customer_id, $current_purchase_id = null)
     {
@@ -214,8 +188,7 @@ class LedgerService
         if ($fromDate !== null && $toDate !== null) {
             $filteredEntries = collect($ledgerEntries)
                 ->whereBetween(
-                    'date',
-                    [$fromDate . ' 00:00:00', $toDate . ' 23:59:59']
+                    'date', [$fromDate.' 00:00:00', $toDate.' 23:59:59']
                 );
         } else {
             // If either from_date or to_date is missing, include all entries

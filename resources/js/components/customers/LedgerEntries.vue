@@ -230,7 +230,7 @@ table thead {
 td,
 th {
     padding: 4px;
-    border-bottom: 1px solid rgb(207, 207, 207) !important;
+    border-bottom: 1px solid rgb(83, 83, 83) !important;
 }
 
 @media print {

@@ -29,6 +29,7 @@ class Payment extends Model implements HasMedia
         'bank_id',
         'first_payment',
         'description',
+        'cheque_cleared_at'
     ];
 
     protected $with = [

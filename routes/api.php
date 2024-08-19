@@ -4,6 +4,7 @@ use App\Http\Controllers\AbilityController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ChequeClearanceController;
 use App\Http\Controllers\ClosingReportController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
@@ -101,17 +102,20 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     // Employee
     Route::delete('employees/delete_multiple', [
-        EmployeeController::class, 'destroy_multiple'
+        EmployeeController::class,
+        'destroy_multiple'
     ]);
     Route::resource('employees', EmployeeController::class)->except([
-        'create', 'edit'
+        'create',
+        'edit'
     ]);
 
     // Salary
     Route::get('salaries/{employee}/get_totals', [SalaryController::class, 'getTotals']);
     Route::get('salaries/{employee}/get_records', [SalaryController::class, 'salaryRecords']);
     Route::resource('salaries', SalaryController::class)->except([
-        'create', 'edit'
+        'create',
+        'edit'
     ]);
 
     // Customer
@@ -153,6 +157,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     ]);
 
     // Gate Pass
+    Route::get('no_sell_gate_passes', [GatePassController::class, 'get_no_sell_gate_passes']);
     Route::delete('gate_passes/delete_multiple', [GatePassController::class, 'destroy_multiple']);
     Route::resource('gate_passes', GatePassController::class, [
         'except' => ['create', 'edit']
@@ -190,7 +195,8 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     // Payment
     Route::post('payments/get_payments', [PaymentController::class, 'get_payments']);
     Route::resource('payments', PaymentController::class)->except([
-        'create', 'edit'
+        'create',
+        'edit'
     ]);
 
     // Payment Setting
@@ -222,6 +228,16 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
         Route::post('closing', [ClosingReportController::class, 'index']);
     });
+
+    Route::put('uncleared_cheques/{payment}', [
+        ChequeClearanceController::class,
+        'markAsCleared'
+    ]);
+
+    Route::put('uncleared_cheques', [
+        ChequeClearanceController::class,
+        'markAllAsCleared'
+    ]);
 });
 
 // Public routes
