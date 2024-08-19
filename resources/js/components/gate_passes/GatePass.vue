@@ -20,7 +20,7 @@
                 "
             >
                 <h3 class="title">GATE PASS</h3>
-                <h4 class="serial-number">7689</h4>
+                <h4 class="serial-number">{{ gate_pass.number }}</h4>
 
                 <tr>
                     <th colspan="4">
