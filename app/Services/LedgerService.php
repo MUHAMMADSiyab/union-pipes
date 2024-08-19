@@ -24,7 +24,32 @@ class LedgerService
             ->where('model', Purchase::class)
             ->whereIn('paymentable_id', $purchases->pluck('id')->all())
             ->orderBy('payment_date')
-            ->get(['id', 'payment_date', 'amount', 'description']);
+            ->get(['id', 'payment_date', 'payment_method', 'amount', 'description'])
+            ->groupBy(fn($item) => date('Y-m-d', strtotime($item['payment_date'])))
+            ->map(function ($groupedItems, $date) {
+                // return collect([
+                //     'id' => $groupedItems->first()->id,
+                //     'description' => $groupedItems->first()->description,
+                //     'payment_date' => $date . " 12:00:00",
+                //     'amount' => $groupedItems->sum('amount'),
+                // ]);
+
+                return collect($groupedItems)
+                    ->groupBy('payment_method')
+                    ->map(function ($groupedByMethod, $payment_method) use ($date) {
+                        return [
+                            'id' => $groupedByMethod->first()->id,
+                            // 'description' => $groupedByMethod->implode('description', " | "),
+                            'description' => $groupedByMethod->first()->description,
+                            'payment_date' => $groupedByMethod->first()->payment_date,
+                            'amount' => $groupedByMethod->sum('amount'),
+                            'payment_method' => $payment_method
+                        ];
+                    })
+                    ->values();
+            })
+            ->collapse();
+
 
         $dates = collect(
             array_merge(
@@ -50,11 +75,11 @@ class LedgerService
             } else {
                 // $particular = "Purchase Payment to Party";
                 $invoice_no = "";
-                $description = $payment->description;
+                $description = $payment['description'];
             }
 
             $debit = $purchase ? (int)$purchase->total_amount : 0;
-            $credit = $payment ? (int)$payment->amount : 0;
+            $credit = $payment ? (int)$payment['amount'] : 0;
             $balance += $debit - $credit;
 
             if ($debit !== 0 || $credit !== 0) {

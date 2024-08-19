@@ -91,7 +91,8 @@ class LedgerService
         if ($fromDate !== null && $toDate !== null) {
             $filteredEntries = collect($companyLedgerEntries)
                 ->whereBetween(
-                    'date', [$fromDate.' 00:00:00', $toDate.' 23:59:59']
+                    'date',
+                    [$fromDate . ' 00:00:00', $toDate . ' 23:59:59']
                 );
         } else {
             // If either from_date or to_date is missing, include all entries
@@ -188,7 +189,8 @@ class LedgerService
         if ($fromDate !== null && $toDate !== null) {
             $filteredEntries = collect($ledgerEntries)
                 ->whereBetween(
-                    'date', [$fromDate.' 00:00:00', $toDate.' 23:59:59']
+                    'date',
+                    [$fromDate . ' 00:00:00', $toDate . ' 23:59:59']
                 );
         } else {
             // If either from_date or to_date is missing, include all entries
