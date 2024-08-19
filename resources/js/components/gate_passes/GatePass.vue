@@ -20,6 +20,7 @@
                 "
             >
                 <h3 class="title">GATE PASS</h3>
+                <h4 class="serial-number">7689</h4>
 
                 <tr>
                     <th colspan="4">
@@ -180,6 +181,8 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
 .container {
     padding: 5px;
     background: #fff;
@@ -196,6 +199,16 @@ table tr td {
     font-size: 0.9rem !important;
     background: #000;
     color: #fff;
+}
+.serial-number {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #5e5e5e;
+    border-bottom: 2px dotted #c4c4c4;
 }
 .bordered-row th,
 .bordered-row td {

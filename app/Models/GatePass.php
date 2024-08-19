@@ -18,6 +18,7 @@ class GatePass extends Model
         'in_time',
         'out_time',
         'items',
+        'number',
     ];
 
     protected $casts = [
@@ -36,5 +37,12 @@ class GatePass extends Model
     public function sell(): HasOne
     {
         return $this->hasOne(Sell::class);
+    }
+
+    public static function booted()
+    {
+        static::creating(function ($model) {
+            $model->number = GatePass::query()->max('number') + 1;
+        });
     }
 }
