@@ -224,6 +224,22 @@
                                             >Delete</v-list-item-title
                                         >
                                     </v-list-item>
+                                    <v-list-item
+                                        @click="
+                                            showGatePassDialog({
+                                                id: props.item.id,
+                                            })
+                                        "
+                                        title="View Gate Pass"
+                                        v-if="
+                                            can('sell_access') &&
+                                            props.item.gate_pass_id
+                                        "
+                                    >
+                                        <v-list-item-title
+                                            >Gate Pass</v-list-item-title
+                                        >
+                                    </v-list-item>
                                 </v-list>
                             </v-menu>
                         </template>
@@ -317,6 +333,14 @@
                         />
                     </v-dialog>
 
+                    <!-- Add payment dialog -->
+                    <v-dialog v-model="gatePassDialog" max-width="600">
+                        <SellGatePass
+                            @closeDialog="closeGatePassDialog"
+                            :sell-id="currentSell"
+                        />
+                    </v-dialog>
+
                     <!-- Sold Items -->
                     <v-dialog v-model="soldItemsDialog" width="800">
                         <SoldItems
@@ -342,7 +366,7 @@
                         @confirmDeletion="
                             sellId
                                 ? handleSellDelete()
-                                : handleMultipleSellsDelete()
+                                : handleMultshowipleSellsDelete()
                         "
                     />
                 </v-col>
@@ -360,6 +384,7 @@ import EditSell from "./EditSell.vue";
 import Confirmation from "../globals/Confirmation";
 import Navbar from "../navs/Navbar";
 import SoldItems from "./partial/SoldItems.vue";
+import SellGatePass from "./partial/SellGatePass.vue";
 import SoldItemsForReturn from "./partial/SoldItemsForReturn.vue";
 import NoSellGatePasses from "./partial/NoSellGatePasses.vue";
 import Excel from "../globals/exports/Excel.vue";
@@ -377,6 +402,7 @@ export default {
         Navbar,
         Confirmation,
         SoldItems,
+        SellGatePass,
         SoldItemsForReturn,
         NoSellGatePasses,
         AddPayment,
@@ -421,6 +447,7 @@ export default {
             sellId: null,
             addPaymentDialog: false,
             paymentsDialog: false,
+            gatePassDialog: false,
             currentSell: null,
             currentPhoto: null,
         };
@@ -492,9 +519,19 @@ export default {
             this.addPaymentDialog = true;
         },
 
+        showGatePassDialog(currentSell) {
+            this.currentSell = currentSell.id;
+            this.gatePassDialog = true;
+        },
+
         closeAddPaymentDialog() {
             this.currentSell = null;
             this.addPaymentDialog = false;
+        },
+
+        closeGatePassDialog() {
+            this.currentSell = null;
+            this.gatePassDialog = false;
         },
 
         async showPaymentsDialog(currentSell) {

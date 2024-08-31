@@ -158,6 +158,7 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     // Gate Pass
     Route::get('no_sell_gate_passes', [GatePassController::class, 'get_no_sell_gate_passes']);
+    Route::get('sell_gate_passes/{sell}', [GatePassController::class, 'get_sell_gate_pass']);
     Route::delete('gate_passes/delete_multiple', [GatePassController::class, 'destroy_multiple']);
     Route::resource('gate_passes', GatePassController::class, [
         'except' => ['create', 'edit']

@@ -79,13 +79,6 @@
                                             border-bottom: 2px solid gray !important;
                                         "
                                     >
-                                        S.No.
-                                    </th>
-                                    <th
-                                        style="
-                                            border-bottom: 2px solid gray !important;
-                                        "
-                                    >
                                         Particulars
                                     </th>
                                     <th
@@ -117,7 +110,6 @@
                                     :key="item.id"
                                     id="sold-items-row"
                                 >
-                                    <td>{{ item.id }}</td>
                                     <td width="50%">
                                         {{ item.product.name }} ({{
                                             item.product.size
@@ -132,11 +124,9 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
                                 </tr>
                                 <tr id="footer-total">
                                     <th
-                                        colspan="2"
                                         class="text-center"
                                         style="
                                             border-top: 2px solid gray !important;
@@ -167,7 +157,6 @@
                                 </tr>
                                 <tr>
                                     <th
-                                        colspan="2"
                                         style="
                                             border-top: 2px solid gray !important;
                                         "
@@ -181,7 +170,7 @@
                                     </th>
                                     <th
                                         class="indigo--text"
-                                        colspan="4"
+                                        colspan="3"
                                         style="
                                             border-top: 2px solid gray !important;
                                         "

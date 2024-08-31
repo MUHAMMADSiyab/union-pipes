@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GatePassRequest;
 use App\Models\GatePass;
+use App\Models\Sell;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -115,5 +116,13 @@ class GatePassController extends Controller
             ->get();
 
         return response()->json($gate_passes);
+    }
+
+    public function get_sell_gate_pass(Sell $sell)
+    {
+        Gate::authorize('sell_access');
+        Gate::authorize('gate_pass_access');
+
+        return response()->json($sell->gate_pass);
     }
 }
