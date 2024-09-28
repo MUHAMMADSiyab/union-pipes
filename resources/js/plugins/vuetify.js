@@ -12,8 +12,8 @@ export default new Vuetify({
         dark: localStorage.getItem("dark") == "true",
         themes: {
             light: {
-                primary: "#1A68D2", // #8500dd
-                lighter: "#D2E3FC",
+                primary: "#464646", // #8500dd
+                lighter: "#e4e4e4",
                 default: "#ededed",
                 app_bg: "#f7f7f7",
                 black: "#000000",

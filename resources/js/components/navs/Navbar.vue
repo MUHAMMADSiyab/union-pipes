@@ -7,8 +7,8 @@
                 <v-img
                     v-if="app_setting"
                     :src="app_setting.app_logo"
-                    max-height="40"
-                    max-width="80"
+                    max-height="45"
+                    max-width="45"
                     class="mx-auto"
                 ></v-img>
             </v-app-bar-title>
@@ -61,7 +61,7 @@
             </v-btn>
         </v-toolbar>
 
-        <v-navigation-drawer v-model="drawer" app color="primary" dark>
+        <v-navigation-drawer v-model="drawer" app color="grey-darken-4" dark>
             <!-- eslint-disable vue/no-use-v-if-with-v-for -->
             <v-list dense>
                 <!-- Header -->
@@ -644,7 +644,7 @@ export default {
 
 <style>
 .v-list-group--active.v-application .primary--text {
-    color: aquamarine !important;
+    color: #c7c7c7 !important;
     font-weight: bold !important;
 }
 .v-navigation-drawer__content {
@@ -652,7 +652,7 @@ export default {
 }
 
 .v-navigation-drawer__content::-webkit-scrollbar-track {
-    background-color: #1a68d2;
+    background-color: #464646;
 }
 
 .v-navigation-drawer__content::-webkit-scrollbar {
@@ -667,8 +667,8 @@ export default {
 
 .v-navigation-drawer__content::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    box-shadow: inset 0 0 6px #6ba5f7;
-    -webkit-box-shadow: inset 0 0 6px #6ba5f7;
-    background-color: #6ba5f7;
+    box-shadow: inset 0 0 6px #666666;
+    -webkit-box-shadow: inset 0 0 6px #666666;
+    background-color: #666666;
 }
 </style>
