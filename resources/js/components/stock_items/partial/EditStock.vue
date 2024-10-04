@@ -8,6 +8,21 @@
                 <small
                     class="red--text"
                     v-if="validation.hasErrors()"
+                    v-text="validation.getMessage('length')"
+                ></small>
+                <v-text-field
+                    name="length"
+                    label="Length (Meter/Foot)"
+                    id="length"
+                    v-model="data.length"
+                    type="number"
+                    dense
+                    outlined
+                ></v-text-field>
+
+                <small
+                    class="red--text"
+                    v-if="validation.hasErrors()"
                     v-text="validation.getMessage('quantity')"
                 ></small>
                 <v-text-field
@@ -80,13 +95,15 @@ export default {
     mixins: [ValidationMixin],
 
     data() {
-        const { id, quantity, date, stock_item_id, description } = this.stock;
+        const { id, quantity, length, date, stock_item_id, description } =
+            this.stock;
 
         return {
             formLoading: false,
             data: {
                 stock_item_id,
                 id,
+                length,
                 quantity,
                 date,
                 description,

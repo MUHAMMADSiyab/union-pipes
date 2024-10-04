@@ -12,11 +12,18 @@ class StockItem extends Model
     protected $fillable = [
         'name',
         'available_quantity',
+        'available_length',
         'description',
+        'product_id'
     ];
 
     public function stocks()
     {
         return $this->hasMany(Stock::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

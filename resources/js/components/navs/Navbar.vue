@@ -563,6 +563,29 @@ export default {
                 },
 
                 {
+                    text: "Bulk Payments",
+                    icon: "mdi-cash-multiple",
+                    active: this.activeMenu("bulk_payments"),
+                    gate: "bulk_payment_access",
+                    submenu: [
+                        {
+                            text: "Add Bulk Payment",
+                            to: "/bulk_payments/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "bulk_payment_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Bulk Payments",
+                            to: "/bulk_payments",
+                            icon: "mdi-chevron-double-right",
+                            gate: "bulk_payment_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "User Management",
                     icon: "mdi-account-group",
                     gate: "user_management_access",

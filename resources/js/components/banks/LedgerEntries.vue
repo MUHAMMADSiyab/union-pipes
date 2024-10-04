@@ -187,7 +187,7 @@ export default {
                 const toDate = new Date(to_date);
 
                 // Include entries on the selected date
-                toDate.setDate(toDate.getDate() + 1); // Add one day to the toDate
+                toDate.setDate(toDate.getDate()); // Add one day to the toDate
                 return entryDate >= fromDate && entryDate <= toDate;
             });
         },

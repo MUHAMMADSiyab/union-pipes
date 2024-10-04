@@ -26,6 +26,41 @@
                                             class="red--text"
                                             v-if="validation.hasErrors()"
                                             v-text="
+                                                validation.getMessage(
+                                                    'product_id'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-select
+                                            :items="products"
+                                            item-text="product_full_name"
+                                            item-value="id"
+                                            v-model="data.product_id"
+                                            placeholder="Select Product"
+                                            @change="
+                                                (e) =>
+                                                    (data.name = products.find(
+                                                        (p) => p.id == e
+                                                    )?.product_full_name)
+                                            "
+                                            autocomplete
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+
+                                    <v-col
+                                        xl="6"
+                                        lg="6"
+                                        md="6"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
                                                 validation.getMessage('name')
                                             "
                                         ></small>
@@ -61,6 +96,34 @@
                                             label="Available Quantity (Weight)"
                                             id="stock_item-available-quantity"
                                             v-model="data.available_quantity"
+                                            type="number"
+                                            dense
+                                            outlined
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <v-col
+                                        xl="6"
+                                        lg="6"
+                                        md="6"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'available_length'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-text-field
+                                            name="stock_item-available-length"
+                                            label="Available Length (Meter/Foot)"
+                                            id="stock_item-available-length"
+                                            v-model="data.available_length"
                                             type="number"
                                             dense
                                             outlined
@@ -116,8 +179,10 @@ export default {
             formLoading: false,
             data: {
                 id: "",
+                product_id: "",
                 name: "",
-                available_quantity: "",
+                available_quantity: 0,
+                available_length: 0,
                 description: "",
             },
         };
@@ -127,6 +192,7 @@ export default {
         ...mapActions({
             getStockItem: "stock_item/getStockItem",
             updateStockItem: "stock_item/updateStockItem",
+            getProducts: "product/getProducts",
         }),
 
         async update() {
@@ -150,20 +216,26 @@ export default {
     computed: {
         ...mapGetters({
             stock_item: "stock_item/stock_item",
+            products: "product/products",
             validationErrors: "validationErrors",
         }),
     },
 
     async mounted() {
-        await this.getStockItem(this.$route.params.id);
+        await Promise.all([
+            this.getProducts(),
+            this.getStockItem(this.$route.params.id),
+        ]);
 
         if (!this.stock_item) {
             return this.$router.push({ name: "not_found" });
         }
 
         this.data.id = this.stock_item.id;
+        this.data.product_id = this.stock_item.product_id;
         this.data.name = this.stock_item.name;
         this.data.available_quantity = this.stock_item.available_quantity;
+        this.data.available_length = this.stock_item.available_length;
         this.data.description = this.stock_item.description;
     },
 };

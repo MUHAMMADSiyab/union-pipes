@@ -29,7 +29,8 @@ class Payment extends Model implements HasMedia
         'bank_id',
         'first_payment',
         'description',
-        'cheque_cleared_at'
+        'cheque_cleared_at',
+        'bulk_payment_id',
     ];
 
     protected $with = [
@@ -43,8 +44,8 @@ class Payment extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('cheque_image')
-            ->width('200')
-            ->height('200');
+            ->width('500')
+            ->height('500');
     }
 
     public function purchase()
@@ -55,6 +56,12 @@ class Payment extends Model implements HasMedia
     public function sell()
     {
         return $this->belongsTo(Sell::class, 'paymentable_id');
+    }
+
+
+    public function bulk_payment()
+    {
+        return $this->belongsTo(BulkPayment::class);
     }
 
 

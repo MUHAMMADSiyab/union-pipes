@@ -95,6 +95,10 @@ import EditPaymentSetting from "./components/payment_settings/EditPaymentSetting
 
 import EditUserAccount from "./components/user-management/users/EditUserAccount";
 
+import AddBulkPayment from "./components/bulk_payments/AddBulkPayment";
+import BulkPayments from "./components/bulk_payments/BulkPayments";
+import BulkPaymentDetails from "./components/bulk_payments/BulkPaymentDetails";
+
 const router = new VueRouter({
     mode: "history",
     routes: [
@@ -791,6 +795,39 @@ const router = new VueRouter({
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Edit User Account - ${process.env.MIX_APP_NAME}`,
+            },
+        },
+
+        // Bulk Payment
+        {
+            path: "/bulk_payments/add",
+            name: "bulk_payment_add",
+            component: AddBulkPayment,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Bulk Payment - ${process.env.MIX_APP_NAME}`,
+                gate: "bulk_payment_create",
+            },
+        },
+        {
+            path: "/bulk_payments",
+            name: "bulk_payments",
+            component: BulkPayments,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Bulk Payments - ${process.env.MIX_APP_NAME}`,
+                gate: "bulk_payment_access",
+            },
+        },
+
+        {
+            path: "/bulk_payments/:id",
+            name: "bulk_payment_details",
+            component: BulkPaymentDetails,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Bulk Payment Details - ${process.env.MIX_APP_NAME}`,
+                gate: "bulk_payment_show",
             },
         },
     ],

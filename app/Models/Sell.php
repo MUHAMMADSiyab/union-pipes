@@ -29,7 +29,6 @@ class Sell extends Model
         'discounted_total_amount',
         'balance',
         'status',
-
     ];
 
     public function getPaidAttribute()

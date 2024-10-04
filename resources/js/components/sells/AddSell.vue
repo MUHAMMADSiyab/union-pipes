@@ -5,6 +5,8 @@
         <v-container class="mt-4">
             <v-row>
                 <v-col cols="12">
+                    <SellGatePass v-if="data.gate_pass_id" class="mb-2" />
+
                     <v-card :loading="formLoading" :disabled="formLoading">
                         <v-card-title primary-title>New Sell</v-card-title>
                         <v-card-subtitle>Add a New Sell</v-card-subtitle>
@@ -20,6 +22,7 @@
                                             item-value="id"
                                             v-model="data.gate_pass_id"
                                             placeholder="Select Gate Pass"
+                                            @change="handleGatePassChange"
                                             autocomplete
                                             dense
                                             outlined
@@ -549,12 +552,14 @@ import { mapActions, mapGetters } from "vuex";
 import ValidationMixin from "../../mixins/ValidationMixin";
 import Navbar from "../navs/Navbar";
 import moment from "moment";
+import SellGatePass from "./partial/SellGatePass.vue";
 
 export default {
     mixins: [ValidationMixin],
 
     components: {
         Navbar,
+        SellGatePass,
     },
 
     data() {
@@ -623,6 +628,14 @@ export default {
             this.data.items = this.data.items.filter((item, i) => i !== index);
         },
 
+        handleGatePassChange(gate_pass_id) {
+            if ("URLSearchParams" in window) {
+                var searchParams = new URLSearchParams(window.location.search);
+                searchParams.set("gate_pass_id", gate_pass_id);
+                window.location.search = searchParams.toString();
+            }
+        },
+
         async add() {
             this.formLoading = true;
 
@@ -673,7 +686,7 @@ export default {
 
     watch: {
         data: {
-            handler(data) {
+            handler(data, oldData) {
                 let total_amount = 0;
 
                 this.data.items.forEach((item, index) => {

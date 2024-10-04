@@ -76,18 +76,28 @@
                     </template>
 
                     <!-- Cheque Images (Button) -->
-                    <template
-                        slot="item.cheque_images"
-                        slot-scope="props"
-                        v-if="props.item.cheque_images.length"
-                    >
+                    <template slot="item.cheque_images" slot-scope="props">
                         <v-btn
                             color="light"
                             x-small
                             title="Cheque Image(s)"
+                            v-if="
+                                props.item.cheque_images.length &&
+                                !props.item.bulk_payment_id
+                            "
                             @click="
                                 setCurrentChequeImages(props.item.cheque_images)
                             "
+                            ><v-icon>mdi-file-image-outline</v-icon></v-btn
+                        >
+
+                        <v-btn
+                            color="light"
+                            x-small
+                            title="Cheque Image(s)"
+                            v-if="props.item.bulk_payment_id"
+                            :to="`/bulk_payments/${props.item.bulk_payment_id}`"
+                            target="_blank"
                             ><v-icon>mdi-file-image-outline</v-icon></v-btn
                         >
                     </template>

@@ -196,6 +196,12 @@ class PermissionsTableSeeder extends Seeder
 
             ['name' => 'app_setting_edit'],
 
+
+            ['name' => 'bulk_payment_create'],
+            ['name' => 'bulk_payment_access'],
+            ['name' => 'bulk_payment_delete'],
+            ['name' => 'bulk_payment_show'],
+
         ];
 
 

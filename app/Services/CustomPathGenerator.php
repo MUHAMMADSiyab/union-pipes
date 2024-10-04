@@ -21,6 +21,10 @@ class CustomPathGenerator implements PathGenerator
       return 'payments/' . $media->id . '/';
     }
 
+    if ($media->model_type === 'App\\Models\\BulkPayment') {
+      return 'bulk_payments/' . $media->id . '/';
+    }
+
     if ($media->model_type === 'App\\Models\\Company') {
       return 'companies/' . $media->id . '/';
     }
@@ -47,6 +51,10 @@ class CustomPathGenerator implements PathGenerator
       return 'payments/conversions/' . $media->id . '/';
     }
 
+    if ($media->model_type === 'App\\Models\\BulkPayment') {
+      return 'bulk_payments/conversions/' . $media->id . '/';
+    }
+
     if ($media->model_type === 'App\\Models\\Company') {
       return 'companies/conversions/' . $media->id . '/';
     }
@@ -71,6 +79,10 @@ class CustomPathGenerator implements PathGenerator
 
     if ($media->model_type === 'App\\Models\\Payment') {
       return 'payments/responsive-images/' . $media->id . '/';
+    }
+
+    if ($media->model_type === 'App\\Models\\BulkPayment') {
+      return 'bulk_payments/responsive-images/' . $media->id . '/';
     }
 
     if ($media->model_type === 'App\\Models\\Company') {

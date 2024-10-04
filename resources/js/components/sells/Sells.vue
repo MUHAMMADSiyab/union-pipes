@@ -79,7 +79,7 @@
 
                         <template slot="item.paid" slot-scope="props">
                             <span>
-                                {{ money(props.item.discounted_paid) }}
+                                {{ money(props.item.paid) }}
                                 <small
                                     v-if="props.item.discounts > 0"
                                     class="d-block purple--text"
@@ -197,7 +197,11 @@
 
                                     <v-list-item
                                         link
-                                        :to="`/sells/edit/${props.item.id}`"
+                                        :to="
+                                            !props.item.gate_pass_id
+                                                ? `/sells/edit/${props.item.id}`
+                                                : `/sells/edit/${props.item.id}?gate_pass_id=${props.item.gate_pass_id}`
+                                        "
                                         title="Edit"
                                         v-if="can('sell_edit')"
                                     >
@@ -338,6 +342,7 @@
                         <SellGatePass
                             @closeDialog="closeGatePassDialog"
                             :sell-id="currentSell"
+                            :is-sell-gate-pass="true"
                         />
                     </v-dialog>
 

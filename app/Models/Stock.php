@@ -13,6 +13,7 @@ class Stock extends Model
         'stock_item_id',
         'date',
         'quantity',
+        'length',
         'description'
     ];
 

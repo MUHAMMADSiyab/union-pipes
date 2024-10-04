@@ -49,6 +49,8 @@ class StockItemController extends Controller
         Gate::authorize('stock_item_access');
         Gate::authorize('stock_item_show');
 
+        $stock_item->load('product');
+
         return response()->json($stock_item);
     }
 

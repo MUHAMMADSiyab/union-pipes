@@ -4,6 +4,7 @@ use App\Http\Controllers\AbilityController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\BulkPaymentController;
 use App\Http\Controllers\ChequeClearanceController;
 use App\Http\Controllers\ClosingReportController;
 use App\Http\Controllers\CompanyController;
@@ -210,6 +211,8 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
 
     // Dashboard
     Route::post('dashboard', DashboardController::class);
+
+    Route::apiResource('bulk_payments', BulkPaymentController::class);
 
     Route::group(['prefix' => 'reports'], function () {
         Route::post('purchase', [ReportController::class, 'get_purchase_report']);

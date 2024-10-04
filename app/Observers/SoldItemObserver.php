@@ -19,6 +19,7 @@ class SoldItemObserver
 
         if ($stock_item) {
             $stock_item->decrement('available_quantity', $soldItem->weight);
+            $stock_item->decrement('available_length', $soldItem->quantity);
         }
     }
 
@@ -35,6 +36,9 @@ class SoldItemObserver
         if ($stock_item) {
             $stock_item->increment('available_quantity', $soldItem->getOriginal('weight'));
             $stock_item->decrement('available_quantity', $soldItem->weight);
+
+            $stock_item->increment('available_length', $soldItem->getOriginal('quantity'));
+            $stock_item->decrement('available_length', $soldItem->quantity);
         }
     }
 
@@ -50,6 +54,7 @@ class SoldItemObserver
 
         if ($stock_item) {
             $stock_item->increment('available_quantity', $soldItem->getOriginal('weight'));
+            $stock_item->increment('available_length', $soldItem->getOriginal('quantity'));
         }
     }
 }

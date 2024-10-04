@@ -49,6 +49,31 @@
                                             class="red--text"
                                             v-if="validation.hasErrors()"
                                             v-text="
+                                                validation.getMessage('type')
+                                            "
+                                        ></small>
+                                        <v-text-field
+                                            name="product-type"
+                                            label="Type"
+                                            id="product-type"
+                                            v-model="data.type"
+                                            dense
+                                            outlined
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <v-col
+                                        xl="6"
+                                        lg="6"
+                                        md="6"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
                                                 validation.getMessage(
                                                     'per_kg_price'
                                                 )
@@ -88,31 +113,6 @@
                                             label="Size"
                                             id="product-size"
                                             v-model="data.size"
-                                            dense
-                                            outlined
-                                        ></v-text-field>
-                                    </v-col>
-
-                                    <v-col
-                                        xl="6"
-                                        lg="6"
-                                        md="6"
-                                        sm="12"
-                                        cols="12"
-                                        class="py-0"
-                                    >
-                                        <small
-                                            class="red--text"
-                                            v-if="validation.hasErrors()"
-                                            v-text="
-                                                validation.getMessage('type')
-                                            "
-                                        ></small>
-                                        <v-text-field
-                                            name="product-type"
-                                            label="Type"
-                                            id="product-type"
-                                            v-model="data.type"
                                             dense
                                             outlined
                                         ></v-text-field>

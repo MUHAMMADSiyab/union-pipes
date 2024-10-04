@@ -15,8 +15,9 @@ class StockObserver
      */
     public function created(Stock $stock)
     {
-        StockItem::find($stock->stock_item_id)
-            ->increment('available_quantity', $stock->quantity);
+        $stock_item = StockItem::find($stock->stock_item_id);
+        $stock_item->increment('available_quantity', $stock->quantity);
+        $stock_item->increment('available_length', $stock->length);
     }
 
     /**
@@ -30,6 +31,9 @@ class StockObserver
         $stock_item = StockItem::find($stock->stock_item_id);
         $stock_item->decrement('available_quantity', $stock->getOriginal('quantity'));
         $stock_item->increment('available_quantity', $stock->quantity);
+
+        $stock_item->decrement('available_length', $stock->getOriginal('length'));
+        $stock_item->increment('available_length', $stock->length);
     }
 
     /**
@@ -42,5 +46,6 @@ class StockObserver
     {
         $stock_item = StockItem::find($stock->stock_item_id);
         $stock_item->decrement('available_quantity', $stock->quantity);
+        $stock_item->decrement('available_length', $stock->length);
     }
 }

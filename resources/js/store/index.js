@@ -32,6 +32,7 @@ import machine from "./modules/machine";
 import production from "./modules/production";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
+import bulk_payment from "./modules/bulk_payment";
 
 // Subscriber
 import subscriber from "./subscriber";
@@ -169,6 +170,10 @@ const store = new Vuex.Store({
 
         dashboard: {
             ...dashboard,
+            namespaced: true,
+        },
+        bulk_payment: {
+            ...bulk_payment,
             namespaced: true,
         },
     },
