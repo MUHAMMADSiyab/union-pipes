@@ -8,6 +8,21 @@
                 <small
                     class="red--text"
                     v-if="validation.hasErrors()"
+                    v-text="validation.getMessage('length')"
+                ></small>
+                <v-text-field
+                    name="length"
+                    label="Length (Meter/Foot)"
+                    id="length"
+                    v-model="data.length"
+                    type="number"
+                    dense
+                    outlined
+                ></v-text-field>
+
+                <small
+                    class="red--text"
+                    v-if="validation.hasErrors()"
                     v-text="validation.getMessage('quantity')"
                 ></small>
                 <v-text-field
@@ -82,7 +97,8 @@ export default {
             formLoading: false,
             data: {
                 stock_item_id: this.stockItemId,
-                quantity: "",
+                length: 0,
+                quantity: 0,
                 date: "",
                 description: "",
             },
@@ -105,7 +121,8 @@ export default {
             if (this.validationErrors !== null) {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
-                this.data.quantity = "";
+                this.data.length = 0;
+                this.data.quantity = 0;
                 this.data.date = "";
                 this.data.description = "";
                 // Clear the validation messages object

@@ -9,9 +9,9 @@
 
             <v-row>
                 <v-col
-                    xl="12"
-                    lg="12"
-                    md="12"
+                    xl="6"
+                    lg="6"
+                    md="6"
                     sm="12"
                     cols="12"
                     v-for="(stock_item, i) in stock_items"
@@ -27,17 +27,30 @@
                         </v-card-subtitle>
 
                         <v-card-text>
-                            <h3>
-                                Available Quantity (Weight)
+                            <h4 class="d-flex justify-space-between">
+                                <span> Available Weight </span>
                                 <v-chip
-                                    pill
-                                    color="purple"
-                                    class="white--text"
+                                    class="float-right"
+                                    color="green"
+                                    label
+                                    outlined
                                     >{{
                                         money(stock_item.available_quantity)
                                     }}</v-chip
                                 >
-                            </h3>
+                            </h4>
+                            <h4 class="mt-1 d-flex justify-space-between">
+                                <span> Available Length (Meter/Foot)</span>
+                                <v-chip
+                                    class="float-right"
+                                    color="green"
+                                    label
+                                    outlined
+                                    >{{
+                                        money(stock_item.available_length)
+                                    }}</v-chip
+                                >
+                            </h4>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -66,7 +79,7 @@
 
                             <v-btn
                                 small
-                                color="info"
+                                color="success"
                                 @click="showAddStockDialog(stock_item.id)"
                                 title="Add Stock"
                             >

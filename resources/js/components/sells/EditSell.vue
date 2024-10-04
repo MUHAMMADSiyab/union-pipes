@@ -5,12 +5,14 @@
         <v-container class="mt-4">
             <v-row>
                 <v-col cols="12">
+                    <SellGatePass v-if="data.gate_pass_id" class="mb-2" />
+
                     <v-card :loading="formLoading" :disabled="formLoading">
                         <v-card-title primary-title>Edit Sell</v-card-title>
                         <v-card-subtitle>Edit this sell</v-card-subtitle>
 
                         <v-card-text class="mt-3">
-                            <v-form @submit.prevent="add">
+                            <v-form @submit.prevent="update">
                                 <!-- Gate pass -->
                                 <v-row>
                                     <v-col cols="12">
@@ -19,6 +21,7 @@
                                             item-text="full_name"
                                             item-value="id"
                                             v-model="data.gate_pass_id"
+                                            @change="handleGatePassChange"
                                             placeholder="Select Gate Pass"
                                             autocomplete
                                             dense
@@ -542,12 +545,14 @@
 import { mapActions, mapGetters } from "vuex";
 import ValidationMixin from "../../mixins/ValidationMixin";
 import Navbar from "../navs/Navbar";
+import SellGatePass from "./partial/SellGatePass.vue";
 
 export default {
     mixins: [ValidationMixin],
 
     components: {
         Navbar,
+        SellGatePass,
     },
 
     data() {
@@ -609,7 +614,15 @@ export default {
             this.data.items = this.data.items.filter((item, i) => i !== index);
         },
 
-        async add() {
+        handleGatePassChange(gate_pass_id) {
+            if ("URLSearchParams" in window) {
+                var searchParams = new URLSearchParams(window.location.search);
+                searchParams.set("gate_pass_id", gate_pass_id);
+                window.location.search = searchParams.toString();
+            }
+        },
+
+        async update() {
             this.formLoading = true;
 
             await this.updateSell({

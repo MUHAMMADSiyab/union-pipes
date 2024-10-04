@@ -4,37 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Payment extends Model implements HasMedia
+class BulkPayment extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    public $timestamps = false;
-
     protected $fillable = [
+        'customer_id',
         'amount',
-        'additional_amount',
-        'deducted_amount',
-        'model',
-        'paymentable_id',
+        'date',
         'payment_method',
         'cheque_no',
         'cheque_type',
         'cheque_due_date',
-        'payment_date',
-        'transaction_type',
         'bank_id',
-        'first_payment',
         'description',
-        'cheque_cleared_at',
-        'bulk_payment_id',
-    ];
-
-    protected $with = [
-        'bank'
     ];
 
     protected $appends = [
@@ -48,26 +37,24 @@ class Payment extends Model implements HasMedia
             ->height('500');
     }
 
-    public function purchase()
+    public function customer(): BelongsTo
     {
-        return $this->belongsTo(Purchase::class, 'paymentable_id');
+        return $this->belongsTo(Customer::class);
     }
 
-    public function sell()
+    public function bank(): BelongsTo
     {
-        return $this->belongsTo(Sell::class, 'paymentable_id');
+        return $this->belongsTo(Bank::class);
     }
 
-
-    public function bulk_payment()
+    public function payments(): HasMany
     {
-        return $this->belongsTo(BulkPayment::class);
+        return $this->hasMany(Payment::class);
     }
-
 
     public function getChequeImagesAttribute()
     {
-        $media = $this->getMedia('payments');
+        $media = $this->getMedia('bulk_payments');
         $chequeImages = [];
 
         for ($i = 0; $i < count($media); $i++) {
@@ -77,14 +64,5 @@ class Payment extends Model implements HasMedia
         }
 
         return $chequeImages;
-    }
-
-    /**
-     * Relations
-     */
-
-    public function bank()
-    {
-        return $this->belongsTo(Bank::class);
     }
 }

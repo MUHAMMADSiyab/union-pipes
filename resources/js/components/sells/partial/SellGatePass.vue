@@ -1,34 +1,70 @@
 <template>
-    <v-card class="mt-2">
+    <v-card class="mt-2" v-if="gate_pass || sell_gate_pass">
         <v-card-title primary-title>
             <h6 class="text-uppercase">Sell Gate Pass</h6>
         </v-card-title>
         <v-card-text>
-            <v-simple-table>
+            <v-simple-table dense>
                 <tbody>
                     <tr>
                         <td>Receiver</td>
-                        <td>{{ sell_gate_pass.receiver }}</td>
+                        <td>
+                            {{
+                                isSellGatePass
+                                    ? sell_gate_pass.receiver
+                                    : gate_pass.receiver
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Vehicle No</td>
-                        <td>{{ sell_gate_pass.vehicle_no }}</td>
+                        <td>
+                            {{
+                                isSellGatePass
+                                    ? sell_gate_pass.vehicle_no
+                                    : gate_pass.vehicle_no
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Driver Name</td>
-                        <td>{{ sell_gate_pass.driver_name }}</td>
+                        <td>
+                            {{
+                                isSellGatePass
+                                    ? sell_gate_pass.driver_name
+                                    : gate_pass.driver_name
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Date</td>
-                        <td>{{ sell_gate_pass.date }}</td>
+                        <td>
+                            {{
+                                isSellGatePass
+                                    ? sell_gate_pass.date
+                                    : gate_pass.date
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>In Time</td>
-                        <td>{{ sell_gate_pass.in_time }}</td>
+                        <td>
+                            {{
+                                isSellGatePass
+                                    ? sell_gate_pass.in_time
+                                    : gate_pass.in_time
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Out Time</td>
-                        <td>{{ sell_gate_pass.out_time }}</td>
+                        <td>
+                            {{
+                                isSellGatePass
+                                    ? sell_gate_pass.out_time
+                                    : gate_pass.out_time
+                            }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Items</td>
@@ -40,7 +76,7 @@
 
         <v-divider></v-divider>
 
-        <v-card-actions>
+        <v-card-actions v-if="isSellGatePass">
             <v-btn color="secondary" right @click="closeDialog">Close</v-btn>
         </v-card-actions>
     </v-card>
@@ -50,24 +86,20 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-    props: ["sellId"],
+    props: ["sellId", "isSellGatePass"],
 
     methods: {
         ...mapActions({
             getSellGatePass: "gate_pass/getSellGatePass",
+            getGatePass: "gate_pass/getGatePass",
         }),
 
         closeDialog() {
             this.$emit("closeDialog");
         },
-    },
 
-    computed: {
-        ...mapGetters({
-            sell_gate_pass: "gate_pass/sell_gate_pass",
-        }),
-        itemsJoined() {
-            return this.sell_gate_pass.items
+        mappedItems(items) {
+            return items
                 .map(
                     (item) =>
                         `${item.particular}: ${item.quantity} (${item.remarks})`
@@ -76,17 +108,45 @@ export default {
         },
     },
 
+    computed: {
+        ...mapGetters({
+            sell_gate_pass: "gate_pass/sell_gate_pass",
+            gate_pass: "gate_pass/gate_pass",
+        }),
+        itemsJoined() {
+            if (this.isSellGatePass) {
+                return this.mappedItems(this.sell_gate_pass.items);
+            }
+
+            return this.mappedItems(this.gate_pass.items);
+        },
+    },
+
     watch: {
-        entry: {
+        sellId: {
             handler(newVal) {
-                this.getSellGatePass(newVal);
+                if (this.isSellGatePass) {
+                    this.getSellGatePass(newVal);
+                } else {
+                    const gatePassId = window.location.search.split("=")[1];
+                    if (gatePassId) {
+                        this.getGatePass(gatePassId);
+                    }
+                }
             },
             deep: true,
         },
     },
 
     mounted() {
-        this.getSellGatePass(this.sellId);
+        if (this.isSellGatePass) {
+            this.getSellGatePass(this.sellId);
+        } else {
+            const gatePassId = window.location.search.split("=")[1];
+            if (gatePassId) {
+                this.getGatePass(gatePassId);
+            }
+        }
     },
 };
 </script>
