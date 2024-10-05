@@ -20,7 +20,8 @@ class Sell extends Model
         'category',
         'discount',
         'description',
-        'total_amount'
+        'total_amount',
+        'stock_item_id'
     ];
 
     protected $appends = [
@@ -76,6 +77,11 @@ class Sell extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function stock_item()
+    {
+        return $this->belongsTo(StockItem::class);
     }
 
     public function sold_items()

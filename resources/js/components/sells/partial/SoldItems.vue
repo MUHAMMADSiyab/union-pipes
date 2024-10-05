@@ -22,9 +22,7 @@
                         <tr v-for="(soldItem, i) in soldItems" :key="i">
                             <td>{{ i + 1 }}</td>
                             <td>
-                                {{ soldItem.product.name }} ({{
-                                    soldItem.product.size
-                                }})({{ soldItem.product.type }})
+                                {{ soldItem.product.product_full_name }}
                             </td>
                             <td>{{ money(soldItem.weight) }}</td>
                             <td>{{ money(soldItem.rate) }}</td>

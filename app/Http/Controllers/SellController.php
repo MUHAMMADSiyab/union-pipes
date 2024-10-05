@@ -6,6 +6,7 @@ use App\Http\Requests\SellRequest;
 use App\Models\Payment;
 use App\Models\Sell;
 use App\Models\SoldItem;
+use App\Models\StockItem;
 use App\Services\LedgerService;
 use App\Services\OrderByService;
 use Carbon\Carbon;
@@ -126,11 +127,21 @@ class SellController extends Controller
                 'discount',
                 'total_amount',
                 'description',
+                'stock_item_id'
             ]));
 
             if ($request->category === 'Pipe') {
                 foreach ($request->items as $item) {
-                    $sell->sold_items()->create($item);
+                    $soldItem = $sell->sold_items()->create($item);
+
+                    if (is_null($sell->stock_item_id)) {
+                        $stock_item = StockItem::query()->where('product_id', $soldItem->product_id)->first();
+                    } else {
+                        $stock_item = StockItem::query()->find($sell->stock_item_id);
+                    }
+
+                    $stock_item->decrement('available_quantity', $soldItem->weight);
+                    $stock_item->decrement('available_length', $soldItem->quantity);
                 }
             }
 
@@ -184,7 +195,8 @@ class SellController extends Controller
         $sell = Sell::with([
             'customer',
             'sold_items.product',
-            'returned_items.product'
+            'returned_items.product',
+            'stock_item',
         ])->find($sell);
 
         return response()->json($sell);
@@ -205,6 +217,56 @@ class SellController extends Controller
         try {
             DB::beginTransaction();
 
+            if ($request->category === 'Pipe') {
+                // Delete old items 
+                foreach ($request->old_items as $item) {
+                    $soldItem = SoldItem::find($item['id']);
+                    if (is_null($sell->stock_item_id)) {
+                        $stock_item = StockItem::query()->where('product_id', $soldItem->product_id)->first();
+                    } else {
+                        $stock_item = StockItem::query()->find($sell->stock_item_id);
+                    }
+
+                    $stock_item->increment('available_quantity', $soldItem->weight);
+                    $stock_item->increment('available_length', $soldItem->quantity);
+
+                    $soldItem->delete();
+                }
+
+                foreach ($request->items as $item) {
+                    $soldItem = $sell->sold_items()->create($item);
+
+
+                    // ###
+                    if ($sell->stock_item_id == $request->stock_item_id) {
+                        if (is_null($sell->stock_item_id)) {
+                            $stock_item = StockItem::query()->where('product_id', $soldItem->product_id)->first();
+                        } else {
+                            $stock_item = StockItem::query()->find($sell->stock_item_id);
+                        }
+
+                        $stock_item->decrement('available_quantity', $soldItem->weight);
+                        $stock_item->decrement('available_length', $soldItem->quantity);
+                    } else {
+                        if (is_null($sell->stock_item_id) && !empty($request->stock_item_id)) {
+                            $stock_item = StockItem::find($request->stock_item_id);
+
+                            $stock_item->decrement('available_quantity', $soldItem->weight);
+                            $stock_item->decrement('available_length', $soldItem->quantity);
+                        } else if (!is_null($sell->stock_item_id) && empty($request->stock_item_id)) {
+                            $stock_item = StockItem::query()->where('product_id', $soldItem->product_id)->first();
+
+                            $stock_item->decrement('available_quantity', $soldItem->weight);
+                            $stock_item->decrement('available_length', $soldItem->quantity);
+                        }
+                    }
+                    // ###
+
+
+                }
+            }
+
+
             $sell->update($request->only([
                 'date',
                 'invoice_no',
@@ -216,25 +278,15 @@ class SellController extends Controller
                 'discount',
                 'total_amount',
                 'description',
+                'stock_item_id',
             ]));
-
-            if ($request->category === 'Pipe') {
-                // Delete old items 
-                foreach ($request->old_items as $item) {
-                    SoldItem::find($item['id'])->delete();
-                }
-
-                foreach ($request->items as $item) {
-                    $sell->sold_items()->create($item);
-                }
-            }
 
             DB::commit();
 
             return response()->noContent(201);
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json("Server Error", 500);
+            return response()->json(["Server Error" . $e->getMessage()], 500);
         }
     }
 
@@ -249,13 +301,35 @@ class SellController extends Controller
         Gate::authorize('sell_access');
         Gate::authorize('sell_delete');
 
-        if ($sell->delete()) {
-            // Delete associated payments, too
+        try {
+            DB::beginTransaction();
+
+            $sell->load('sold_items');
+
             Payment::where('model', Sell::class)
                 ->where('paymentable_id', $sell->id)
                 ->delete();
 
+            foreach ($sell->sold_items as $item) {
+                $soldItem = SoldItem::find($item['id']);
+
+                if (is_null($sell->stock_item_id)) {
+                    $stock_item = StockItem::query()->where('product_id', $soldItem->product_id)->first();
+                } else {
+                    $stock_item = StockItem::query()->find($sell->stock_item_id);
+                }
+
+                $stock_item->increment('available_quantity', $soldItem->weight);
+                $stock_item->increment('available_length', $soldItem->quantity);
+            }
+
+            $sell->delete();
+            DB::commit();
+
             return response()->json(["success" =>  "Sell deleted successfully"]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['Server Error' => $e->getMessage()], 500);
         }
     }
 

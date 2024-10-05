@@ -25,16 +25,7 @@ class Product extends Model
 
     public function getProductFullNameAttribute()
     {
-        return $this->name . "-" . $this->type . "-" . $this->size;
-    }
-
-    public function tanks(): HasMany
-    {
-        return $this->hasMany(Tank::class);
-    }
-
-    public function rates(): HasMany
-    {
-        return $this->hasMany(Rate::class);
+        $size = empty($this->size) ?  '' : " - " . $this->size;
+        return $this->name . " - " . $this->type . $size;
     }
 }
