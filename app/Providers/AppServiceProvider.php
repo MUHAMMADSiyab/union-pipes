@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Payment::observe(PaymentObserver::class);
         ReturnedSoldItem::observe(ReturnedSoldItemObserver::class);
         Stock::observe(StockObserver::class);
-        Sell::observe(SellObserver::class);
-        SoldItem::observe(SoldItemObserver::class);
+        // Sell::observe(SellObserver::class);
+        // SoldItem::observe(SoldItemObserver::class);
     }
 }

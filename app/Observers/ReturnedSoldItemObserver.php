@@ -30,11 +30,23 @@ class ReturnedSoldItemObserver
         // Decrement sell total amount
         Sell::find($sold_item->sell_id)->decrement('total_amount', $returnedSolItem->total);
 
-        // Add back to stock the weight
-        $stock_item = StockItem::first();
+        // Add back weight and length to stock
+        // $stock_item = StockItem::first();
+
+        // if ($stock_item) {
+        //     $stock_item->increment('available_quantity', $returnedSolItem->weight);
+        // }
+
+        $sell = $returnedSolItem->sell;
+        if (is_null($sell->stock_item_id)) {
+            $stock_item = StockItem::query()->where('product_id', $returnedSolItem->product_id)->first();
+        } else {
+            $stock_item = StockItem::find($sell->stock_item_id);
+        }
 
         if ($stock_item) {
             $stock_item->increment('available_quantity', $returnedSolItem->weight);
+            $stock_item->increment('available_length', $returnedSolItem->quantity);
         }
     }
 

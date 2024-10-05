@@ -14,9 +14,7 @@ class SellObserver
      * @param  \App\Models\Sell  $sell
      * @return void
      */
-    public function created(Sell $sell)
-    {
-    }
+    public function created(Sell $sell) {}
 
     /**
      * Handle the Sell "updated" event.
@@ -24,9 +22,7 @@ class SellObserver
      * @param  \App\Models\Sell  $sell
      * @return void
      */
-    public function updated(Sell $sell)
-    {
-    }
+    public function updated(Sell $sell) {}
 
     /**
      * Handle the Sell "deleted" event.

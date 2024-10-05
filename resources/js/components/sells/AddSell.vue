@@ -533,6 +533,37 @@
                                     </v-col>
                                 </v-row>
 
+                                <v-row class="mb-4">
+                                    <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'stock_item_id'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-select
+                                            :items="stock_items"
+                                            item-text="name"
+                                            item-value="id"
+                                            v-model="data.stock_item_id"
+                                            placeholder="Select Stock Item"
+                                            autocomplete
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+
                                 <v-btn color="primary" type="submit"
                                     >Add Sell</v-btn
                                 >
@@ -589,6 +620,7 @@ export default {
                         grand_total: 0,
                     },
                 ],
+                stock_item_id: "",
             },
         };
     },
@@ -598,6 +630,7 @@ export default {
             getAllCustomers: "customer/getAllCustomers",
             getProducts: "product/getProducts",
             getGatePasses: "gate_pass/getGatePasses",
+            getStockItems: "stock_item/getStockItems",
             addSell: "sell/addSell",
         }),
 
@@ -630,9 +663,13 @@ export default {
 
         handleGatePassChange(gate_pass_id) {
             if ("URLSearchParams" in window) {
-                var searchParams = new URLSearchParams(window.location.search);
-                searchParams.set("gate_pass_id", gate_pass_id);
-                window.location.search = searchParams.toString();
+                if (gate_pass_id) {
+                    const searchParams = new URLSearchParams(
+                        window.location.search
+                    );
+                    searchParams.set("gate_pass_id", gate_pass_id);
+                    window.location.search = searchParams.toString();
+                }
             }
         },
 
@@ -668,6 +705,7 @@ export default {
                         grand_total: 0,
                     },
                 ];
+                this.data.stock_item_id = "";
 
                 // Clear the validation messages object
                 this.validation.setMessages({});
@@ -680,6 +718,7 @@ export default {
             customers: "customer/customers",
             products: "product/products",
             gate_passes: "gate_pass/gate_passes",
+            stock_items: "stock_item/stock_items",
             validationErrors: "validationErrors",
         }),
     },
@@ -714,6 +753,7 @@ export default {
             this.getGatePasses(),
             this.getAllCustomers(),
             this.getProducts(),
+            this.getStockItems(),
         ]);
 
         this.data.gate_pass_id = parseInt(this.$route.query.gate_pass_id);

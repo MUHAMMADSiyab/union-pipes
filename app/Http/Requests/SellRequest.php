@@ -40,6 +40,7 @@ class SellRequest extends FormRequest
             'items.*.total' => 'required_if:category,Pipe|numeric',
             'items.*.sales_tax' => 'required_if:category,Pipe|numeric',
             'items.*.grand_total' => 'required_if:category,Pipe|numeric',
+            'stock_item_id' => 'nullable|exists:stock_items,id',
         ];
     }
 
