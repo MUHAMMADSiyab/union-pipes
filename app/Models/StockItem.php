@@ -13,6 +13,7 @@ class StockItem extends Model
         'name',
         'available_quantity',
         'available_length',
+        // 'per_unit_price',
         'description',
         'product_id'
     ];

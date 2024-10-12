@@ -48,6 +48,7 @@ class BulkPaymentController extends Controller
         Gate::authorize('bulk_payment_show');
 
         $bulk_payment->load('customer');
+        $bulk_payment->load('company');
         $bulk_payment->load('bank');
 
         return response()->json($bulk_payment);

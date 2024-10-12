@@ -140,8 +140,10 @@ class SellController extends Controller
                         $stock_item = StockItem::query()->find($sell->stock_item_id);
                     }
 
-                    $stock_item->decrement('available_quantity', $soldItem->weight);
-                    $stock_item->decrement('available_length', $soldItem->quantity);
+                    if (!is_null($stock_item)) {
+                        $stock_item->decrement('available_quantity', $soldItem->weight);
+                        $stock_item->decrement('available_length', $soldItem->quantity);
+                    }
                 }
             }
 
@@ -227,15 +229,16 @@ class SellController extends Controller
                         $stock_item = StockItem::query()->find($sell->stock_item_id);
                     }
 
-                    $stock_item->increment('available_quantity', $soldItem->weight);
-                    $stock_item->increment('available_length', $soldItem->quantity);
+                    if (!is_null($stock_item)) {
+                        $stock_item->increment('available_quantity', $soldItem->weight);
+                        $stock_item->increment('available_length', $soldItem->quantity);
+                    }
 
                     $soldItem->delete();
                 }
 
                 foreach ($request->items as $item) {
                     $soldItem = $sell->sold_items()->create($item);
-
 
                     // ###
                     if ($sell->stock_item_id == $request->stock_item_id) {
@@ -245,19 +248,25 @@ class SellController extends Controller
                             $stock_item = StockItem::query()->find($sell->stock_item_id);
                         }
 
-                        $stock_item->decrement('available_quantity', $soldItem->weight);
-                        $stock_item->decrement('available_length', $soldItem->quantity);
+                        if (!is_null($stock_item)) {
+                            $stock_item->decrement('available_quantity', $soldItem->weight);
+                            $stock_item->decrement('available_length', $soldItem->quantity);
+                        }
                     } else {
                         if (is_null($sell->stock_item_id) && !empty($request->stock_item_id)) {
                             $stock_item = StockItem::find($request->stock_item_id);
 
-                            $stock_item->decrement('available_quantity', $soldItem->weight);
-                            $stock_item->decrement('available_length', $soldItem->quantity);
+                            if (!is_null($stock_item)) {
+                                $stock_item->decrement('available_quantity', $soldItem->weight);
+                                $stock_item->decrement('available_length', $soldItem->quantity);
+                            }
                         } else if (!is_null($sell->stock_item_id) && empty($request->stock_item_id)) {
                             $stock_item = StockItem::query()->where('product_id', $soldItem->product_id)->first();
 
-                            $stock_item->decrement('available_quantity', $soldItem->weight);
-                            $stock_item->decrement('available_length', $soldItem->quantity);
+                            if (!is_null($stock_item)) {
+                                $stock_item->decrement('available_quantity', $soldItem->weight);
+                                $stock_item->decrement('available_length', $soldItem->quantity);
+                            }
                         }
                     }
                     // ###

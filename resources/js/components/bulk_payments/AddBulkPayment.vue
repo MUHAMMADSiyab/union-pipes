@@ -17,9 +17,9 @@
                             <v-form @submit.prevent="add">
                                 <v-row>
                                     <v-col
-                                        xl="12"
-                                        lg="12"
-                                        md="12"
+                                        xl="6"
+                                        lg="6"
+                                        md="6"
                                         sm="12"
                                         cols="12"
                                         class="py-0"
@@ -28,21 +28,75 @@
                                             class="red--text"
                                             v-if="validation.hasErrors()"
                                             v-text="
-                                                validation.getMessage(
-                                                    'customer_id'
-                                                )
+                                                validation.getMessage('type')
                                             "
                                         ></small>
                                         <v-select
-                                            :items="customers"
-                                            item-text="name"
-                                            item-value="id"
-                                            v-model="data.customer_id"
-                                            placeholder="Select Customer"
+                                            :items="['Purchase', 'Sell']"
+                                            v-model="data.type"
+                                            placeholder="Select Type"
                                             autocomplete
+                                            clearable
                                             dense
                                             outlined
                                         ></v-select>
+                                    </v-col>
+
+                                    <v-col
+                                        xl="6"
+                                        lg="6"
+                                        md="6"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <template v-if="data.type === 'Sell'">
+                                            <small
+                                                class="red--text"
+                                                v-if="validation.hasErrors()"
+                                                v-text="
+                                                    validation.getMessage(
+                                                        'customer_id'
+                                                    )
+                                                "
+                                            ></small>
+                                            <v-select
+                                                :items="customers"
+                                                item-text="name"
+                                                item-value="id"
+                                                v-model="data.customer_id"
+                                                placeholder="Select Customer"
+                                                autocomplete
+                                                clearable
+                                                dense
+                                                outlined
+                                            ></v-select>
+                                        </template>
+
+                                        <template
+                                            v-if="data.type === 'Purchase'"
+                                        >
+                                            <small
+                                                class="red--text"
+                                                v-if="validation.hasErrors()"
+                                                v-text="
+                                                    validation.getMessage(
+                                                        'company_id'
+                                                    )
+                                                "
+                                            ></small>
+                                            <v-select
+                                                :items="companies"
+                                                item-text="name"
+                                                item-value="id"
+                                                v-model="data.company_id"
+                                                placeholder="Select Company"
+                                                autocomplete
+                                                clearable
+                                                dense
+                                                outlined
+                                            ></v-select>
+                                        </template>
                                     </v-col>
                                 </v-row>
 
@@ -387,7 +441,9 @@ export default {
         return {
             formLoading: false,
             data: {
+                type: "",
                 customer_id: "",
+                company_id: "",
                 amount: "",
                 description: "",
                 amount: "",
@@ -408,6 +464,7 @@ export default {
             getExpenseSources: "expense_source/getExpenseSources",
             getBanks: "bank/getBanks",
             getCustomers: "customer/getCustomers",
+            getCompanies: "company/getCompanies",
             getPaymentSetting: "getPaymentSetting",
             addBulkPayment: "bulk_payment/addBulkPayment",
             addNewPayment: "payment/addNewPayment",
@@ -428,7 +485,9 @@ export default {
             if (this.validationErrors !== null) {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
+                this.data.type = "";
                 this.data.customer_id = "";
+                this.data.company_id = "";
                 this.data.description = "";
                 this.data.amount = "";
                 this.data.date = "";
@@ -451,6 +510,7 @@ export default {
             validationErrors: "validationErrors",
             expense_sources: "expense_source/expense_sources",
             customers: "customer/customers",
+            companies: "company/companies",
             banks: "bank/banks",
             paymentSetting: "paymentSetting",
             recent_expense: "expense/recent_expense",
@@ -463,6 +523,7 @@ export default {
             this.getExpenseSources(),
             this.getBanks(),
             this.getCustomers(),
+            this.getCompanies(),
         ]);
     },
 };

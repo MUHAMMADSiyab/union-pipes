@@ -11,10 +11,17 @@
                     <v-card>
                         <v-card-text>
                             <v-simple-table>
-                                <tr></tr>
                                 <tr>
+                                    <td>Type</td>
+                                    <td>{{ bulk_payment.type }}</td>
+                                </tr>
+                                <tr v-if="bulk_payment.type === 'Sell'">
                                     <td>Customer</td>
                                     <td>{{ bulk_payment.customer?.name }}</td>
+                                </tr>
+                                <tr v-if="bulk_payment.type === 'Purchase'">
+                                    <td>Company</td>
+                                    <td>{{ bulk_payment.company?.name }}</td>
                                 </tr>
                                 <tr>
                                     <td>Date</td>

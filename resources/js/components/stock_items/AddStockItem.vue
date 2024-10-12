@@ -74,6 +74,34 @@
                                         ></v-text-field>
                                     </v-col>
 
+                                    <!-- <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'per_unit_price'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-text-field
+                                            name="per_unit_price"
+                                            label="Per Unit Price"
+                                            id="per_unit_price"
+                                            v-model="data.per_unit_price"
+                                            type="number"
+                                            dense
+                                            outlined
+                                        ></v-text-field>
+                                    </v-col> -->
+
                                     <v-col
                                         xl="6"
                                         lg="6"
@@ -180,6 +208,7 @@ export default {
             data: {
                 product_id: "",
                 name: "",
+                // per_unit_price: 0,
                 available_quantity: 0,
                 available_length: 0,
                 description: "",
@@ -206,6 +235,7 @@ export default {
             } else {
                 this.data.product_id = "";
                 this.data.name = "";
+                // this.data.per_unit_price = 0;
                 this.data.available_quantity = 0;
                 this.data.available_length = 0;
                 this.data.description = "";
@@ -221,6 +251,15 @@ export default {
             validationErrors: "validationErrors",
         }),
     },
+
+    // watch: {
+    //     data: {
+    //         handler(newVal) {
+    //             data.
+    //         },
+    //         deep: true
+    //     }
+    // },
 
     mounted() {
         this.getProducts();

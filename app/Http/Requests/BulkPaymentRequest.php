@@ -27,8 +27,8 @@ class BulkPaymentRequest extends FormRequest
     {
         $payment_setting = PaymentSetting::first();
 
-        return [
-            'customer_id' => 'required|exists:customers,id',
+        $data = [
+            'type' => ['required', Rule::in(['Sell', 'Purchase'])],
             'amount' => 'required|numeric|gt:0',
             'date' => 'required|date',
             'payment_method' => ['required', Rule::in($payment_setting->payment_methods)],
@@ -38,7 +38,16 @@ class BulkPaymentRequest extends FormRequest
             'cheque_images.*' => 'nullable|image|max:2000',
             'bank_id' => 'nullable|exists:banks,id',
             'description' => ['nullable', 'max:1000'],
-
         ];
+
+        if ($this->type === 'Sell') {
+            $data['customer_id'] = 'required|exists:customers,id';
+            $data['company_id'] = 'nullable';
+        } else if ($this->type === 'Purchase') {
+            $data['company_id'] = 'required|exists:companies,id';
+            $data['customer_id'] = 'nullable';
+        }
+
+        return $data;
     }
 }

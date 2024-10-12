@@ -98,6 +98,7 @@ import EditUserAccount from "./components/user-management/users/EditUserAccount"
 import AddBulkPayment from "./components/bulk_payments/AddBulkPayment";
 import BulkPayments from "./components/bulk_payments/BulkPayments";
 import BulkPaymentDetails from "./components/bulk_payments/BulkPaymentDetails";
+import store from "./store";
 
 const router = new VueRouter({
     mode: "history",
@@ -106,7 +107,7 @@ const router = new VueRouter({
             path: "*",
             name: "not_found",
             component: NotFound,
-            meta: { title: `404 - Not Found - ${process.env.MIX_APP_NAME}` },
+            meta: { title: `404 - Not Found - PipeSync` },
         },
 
         {
@@ -115,7 +116,7 @@ const router = new VueRouter({
             component: Dashboard,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Dashboard - ${process.env.MIX_APP_NAME}`,
+                title: `Dashboard - PipeSync`,
             },
         },
 
@@ -125,7 +126,7 @@ const router = new VueRouter({
             component: Login,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Login - ${process.env.MIX_APP_NAME}`,
+                title: `Login - PipeSync`,
             },
         },
 
@@ -135,7 +136,7 @@ const router = new VueRouter({
             component: Unauthorized,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `403 - Unauthorized Page - ${process.env.MIX_APP_NAME}`,
+                title: `403 - Unauthorized Page - PipeSync`,
             },
         },
 
@@ -145,7 +146,7 @@ const router = new VueRouter({
             component: AddProduct,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Product - ${process.env.MIX_APP_NAME}`,
+                title: `New Product - PipeSync`,
                 gate: "product_create",
             },
         },
@@ -156,7 +157,7 @@ const router = new VueRouter({
             component: Products,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Products - ${process.env.MIX_APP_NAME}`,
+                title: `Products - PipeSync`,
                 gate: "product_access",
             },
         },
@@ -167,7 +168,7 @@ const router = new VueRouter({
             component: Banks,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Banks - ${process.env.MIX_APP_NAME}`,
+                title: `Banks - PipeSync`,
                 gate: "bank_access",
             },
         },
@@ -178,7 +179,7 @@ const router = new VueRouter({
             component: BankLedgerEntries,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
+                title: `Ledger Entries - PipeSync`,
                 gate: "bank_access",
             },
         },
@@ -189,7 +190,7 @@ const router = new VueRouter({
             component: AddBank,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Add Bank - ${process.env.MIX_APP_NAME}`,
+                title: `Add Bank - PipeSync`,
                 gate: "bank_create",
             },
         },
@@ -200,7 +201,7 @@ const router = new VueRouter({
             component: ExpenseSourcesGroup,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Expense Sources - ${process.env.MIX_APP_NAME}`,
+                title: `Expense Sources - PipeSync`,
                 gate: "expense_access",
             },
         },
@@ -211,7 +212,7 @@ const router = new VueRouter({
             component: AddExpense,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Expense - ${process.env.MIX_APP_NAME}`,
+                title: `New Expense - PipeSync`,
                 gate: "expense_create",
             },
         },
@@ -222,7 +223,7 @@ const router = new VueRouter({
             component: EditExpense,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Expense - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Expense - PipeSync`,
                 gate: "expense_edit",
             },
         },
@@ -233,7 +234,7 @@ const router = new VueRouter({
             component: Expenses,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Expenses - ${process.env.MIX_APP_NAME}`,
+                title: `Expenses - PipeSync`,
                 gate: "expense_access",
             },
         },
@@ -244,7 +245,7 @@ const router = new VueRouter({
             component: AddEmployee,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Employee - ${process.env.MIX_APP_NAME}`,
+                title: `New Employee - PipeSync`,
                 gate: "employee_create",
             },
         },
@@ -255,7 +256,7 @@ const router = new VueRouter({
             component: Employees,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Employees - ${process.env.MIX_APP_NAME}`,
+                title: `Employees - PipeSync`,
                 gate: "employee_access",
             },
         },
@@ -266,7 +267,7 @@ const router = new VueRouter({
             component: AddCompany,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Company - ${process.env.MIX_APP_NAME}`,
+                title: `New Company - PipeSync`,
                 gate: "company_create",
             },
         },
@@ -277,7 +278,7 @@ const router = new VueRouter({
             component: CompanyLedgerEntries,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
+                title: `Ledger Entries - PipeSync`,
                 gate: "company_access",
             },
         },
@@ -288,7 +289,7 @@ const router = new VueRouter({
             component: SalariesView,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Employee's Salaries - ${process.env.MIX_APP_NAME}`,
+                title: `Employee's Salaries - PipeSync`,
                 gate: "salary_access",
             },
         },
@@ -299,7 +300,7 @@ const router = new VueRouter({
             component: Companies,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Companies - ${process.env.MIX_APP_NAME}`,
+                title: `Companies - PipeSync`,
                 gate: "company_access",
             },
         },
@@ -310,7 +311,7 @@ const router = new VueRouter({
             component: EditCompany,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Company - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Company - PipeSync`,
                 gate: "company_edit",
             },
         },
@@ -321,7 +322,7 @@ const router = new VueRouter({
             component: AddCustomer,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Customer - ${process.env.MIX_APP_NAME}`,
+                title: `New Customer - PipeSync`,
                 gate: "customer_create",
             },
         },
@@ -332,7 +333,7 @@ const router = new VueRouter({
             component: Customers,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Customers - ${process.env.MIX_APP_NAME}`,
+                title: `Customers - PipeSync`,
                 gate: "customer_access",
             },
         },
@@ -343,7 +344,7 @@ const router = new VueRouter({
             component: EditCustomer,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Customer - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Customer - PipeSync`,
                 gate: "customer_edit",
             },
         },
@@ -354,7 +355,7 @@ const router = new VueRouter({
             component: CustomerLedgerEntries,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Ledger Entries - ${process.env.MIX_APP_NAME}`,
+                title: `Ledger Entries - PipeSync`,
                 gate: "customer_access",
             },
         },
@@ -365,7 +366,7 @@ const router = new VueRouter({
             component: PurchaseItemsGroup,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Purchase Items - ${process.env.MIX_APP_NAME}`,
+                title: `Purchase Items - PipeSync`,
                 gate: "purchase_item_access",
             },
         },
@@ -376,7 +377,7 @@ const router = new VueRouter({
             component: AddPurchase,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Purchase - ${process.env.MIX_APP_NAME}`,
+                title: `New Purchase - PipeSync`,
                 gate: "purchase_create",
             },
         },
@@ -387,7 +388,7 @@ const router = new VueRouter({
             component: EditPurchase,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Purchase - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Purchase - PipeSync`,
                 gate: "purchase_edit",
             },
         },
@@ -398,7 +399,7 @@ const router = new VueRouter({
             component: Purchases,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Purchases - ${process.env.MIX_APP_NAME}`,
+                title: `Purchases - PipeSync`,
                 gate: "purchase_access",
             },
         },
@@ -409,7 +410,7 @@ const router = new VueRouter({
             component: PurchaseDetails,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Purchase Details - ${process.env.MIX_APP_NAME}`,
+                title: `Purchase Details - PipeSync`,
                 gate: "purchase_show",
             },
         },
@@ -420,7 +421,7 @@ const router = new VueRouter({
             component: AddSell,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Sell - ${process.env.MIX_APP_NAME}`,
+                title: `New Sell - PipeSync`,
                 gate: "sell_create",
             },
         },
@@ -431,7 +432,7 @@ const router = new VueRouter({
             component: EditSell,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Sell - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Sell - PipeSync`,
                 gate: "sell_edit",
             },
         },
@@ -442,7 +443,7 @@ const router = new VueRouter({
             component: Sells,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Sells - ${process.env.MIX_APP_NAME}`,
+                title: `Sells - PipeSync`,
                 gate: "sell_access",
             },
         },
@@ -453,7 +454,7 @@ const router = new VueRouter({
             component: SellDetails,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Sell Details - ${process.env.MIX_APP_NAME}`,
+                title: `Sell Details - PipeSync`,
                 gate: "sell_show",
             },
         },
@@ -464,7 +465,7 @@ const router = new VueRouter({
             component: AddTransaction,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Transaction - ${process.env.MIX_APP_NAME}`,
+                title: `New Transaction - PipeSync`,
                 gate: "transaction_create",
             },
         },
@@ -475,7 +476,7 @@ const router = new VueRouter({
             component: EditTransaction,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Transaction - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Transaction - PipeSync`,
                 gate: "transaction_edit",
             },
         },
@@ -486,7 +487,7 @@ const router = new VueRouter({
             component: Transactions,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Transactions - ${process.env.MIX_APP_NAME}`,
+                title: `Transactions - PipeSync`,
                 gate: "transaction_access",
             },
         },
@@ -497,7 +498,7 @@ const router = new VueRouter({
             component: PaymentReceipt,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Payment Receipt - ${process.env.MIX_APP_NAME}`,
+                title: `Payment Receipt - PipeSync`,
                 gate: "payment_access",
             },
         },
@@ -508,7 +509,7 @@ const router = new VueRouter({
             component: PurchaseReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Purchase Report - ${process.env.MIX_APP_NAME}`,
+                title: `Purchase Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -519,7 +520,7 @@ const router = new VueRouter({
             component: PurchasedItemsReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Purchased Items Report - ${process.env.MIX_APP_NAME}`,
+                title: `Purchased Items Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -530,7 +531,7 @@ const router = new VueRouter({
             component: SellReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Sell Report - ${process.env.MIX_APP_NAME}`,
+                title: `Sell Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -541,7 +542,7 @@ const router = new VueRouter({
             component: SoldItemsReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Sold Items Report - ${process.env.MIX_APP_NAME}`,
+                title: `Sold Items Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -552,7 +553,7 @@ const router = new VueRouter({
             component: ReceivablesReport,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Receivables Report - ${process.env.MIX_APP_NAME}`,
+                title: `Receivables Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -563,7 +564,7 @@ const router = new VueRouter({
             component: PayablesReport,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Payables Report - ${process.env.MIX_APP_NAME}`,
+                title: `Payables Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -574,7 +575,7 @@ const router = new VueRouter({
             component: ExpenseReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Expense Report - ${process.env.MIX_APP_NAME}`,
+                title: `Expense Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -585,7 +586,7 @@ const router = new VueRouter({
             component: MachineReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Machine Report - ${process.env.MIX_APP_NAME}`,
+                title: `Machine Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -596,7 +597,7 @@ const router = new VueRouter({
             component: SalaryReport,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Salary Report - ${process.env.MIX_APP_NAME}`,
+                title: `Salary Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -607,7 +608,7 @@ const router = new VueRouter({
             component: ClosingReportSearch,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Closing Report - ${process.env.MIX_APP_NAME}`,
+                title: `Closing Report - PipeSync`,
                 gate: "report_access",
             },
         },
@@ -618,7 +619,7 @@ const router = new VueRouter({
             component: CreateGatePass,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Gate Pass - ${process.env.MIX_APP_NAME}`,
+                title: `New Gate Pass - PipeSync`,
                 gate: "gate_pass_create",
             },
         },
@@ -629,7 +630,7 @@ const router = new VueRouter({
             component: GatePasses,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Gate Passes - ${process.env.MIX_APP_NAME}`,
+                title: `Gate Passes - PipeSync`,
                 gate: "gate_pass_access",
             },
         },
@@ -640,7 +641,7 @@ const router = new VueRouter({
             component: GatePass,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Gate Pass - ${process.env.MIX_APP_NAME}`,
+                title: `Gate Pass - PipeSync`,
                 gate: "gate_pass_access",
             },
         },
@@ -651,7 +652,7 @@ const router = new VueRouter({
             component: AddStockItem,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Stock Item - ${process.env.MIX_APP_NAME}`,
+                title: `New Stock Item - PipeSync`,
                 gate: "stock_item_create",
             },
         },
@@ -662,7 +663,7 @@ const router = new VueRouter({
             component: StockItems,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Stock Items - ${process.env.MIX_APP_NAME}`,
+                title: `Stock Items - PipeSync`,
                 gate: "stock_item_access",
             },
         },
@@ -673,7 +674,7 @@ const router = new VueRouter({
             component: EditStockItem,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Stock Item - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Stock Item - PipeSync`,
                 gate: "stock_item_edit",
             },
         },
@@ -684,7 +685,7 @@ const router = new VueRouter({
             component: AddMachine,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Machine - ${process.env.MIX_APP_NAME}`,
+                title: `New Machine - PipeSync`,
                 gate: "machine_create",
             },
         },
@@ -695,7 +696,7 @@ const router = new VueRouter({
             component: Machines,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Machines - ${process.env.MIX_APP_NAME}`,
+                title: `Machines - PipeSync`,
                 gate: "machine_access",
             },
         },
@@ -706,7 +707,7 @@ const router = new VueRouter({
             component: AddProduction,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Production - ${process.env.MIX_APP_NAME}`,
+                title: `New Production - PipeSync`,
                 gate: "production_create",
             },
         },
@@ -717,7 +718,7 @@ const router = new VueRouter({
             component: EditProduction,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Production - ${process.env.MIX_APP_NAME}`,
+                title: `Edit Production - PipeSync`,
                 gate: "production_edit",
             },
         },
@@ -728,7 +729,7 @@ const router = new VueRouter({
             component: Productions,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Machines Productions - ${process.env.MIX_APP_NAME}`,
+                title: `Machines Productions - PipeSync`,
                 gate: "production_access",
             },
         },
@@ -739,7 +740,7 @@ const router = new VueRouter({
             component: PermissionsGroup,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Permissions - ${process.env.MIX_APP_NAME}`,
+                title: `Permissions - PipeSync`,
                 gate: "permission_access",
             },
         },
@@ -750,7 +751,7 @@ const router = new VueRouter({
             component: RolesGroup,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Roles - ${process.env.MIX_APP_NAME}`,
+                title: `Roles - PipeSync`,
                 gate: "role_access",
             },
         },
@@ -761,7 +762,7 @@ const router = new VueRouter({
             component: UsersGroup,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Users - ${process.env.MIX_APP_NAME}`,
+                title: `Users - PipeSync`,
                 gate: "user_access",
             },
         },
@@ -772,7 +773,7 @@ const router = new VueRouter({
             component: EditSetting,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit App Setting - ${process.env.MIX_APP_NAME}`,
+                title: `Edit App Setting - PipeSync`,
                 gate: "app_setting_edit",
             },
         },
@@ -783,7 +784,7 @@ const router = new VueRouter({
             component: EditPaymentSetting,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Payment Setting - ${process.env.MIX_APP_NAME}`,
+                title: `Payment Setting - PipeSync`,
                 gate: "payment_setting_edit",
             },
         },
@@ -794,7 +795,7 @@ const router = new VueRouter({
             component: EditUserAccount,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit User Account - ${process.env.MIX_APP_NAME}`,
+                title: `Edit User Account - PipeSync`,
             },
         },
 
@@ -805,7 +806,7 @@ const router = new VueRouter({
             component: AddBulkPayment,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Bulk Payment - ${process.env.MIX_APP_NAME}`,
+                title: `New Bulk Payment - PipeSync`,
                 gate: "bulk_payment_create",
             },
         },
@@ -815,7 +816,7 @@ const router = new VueRouter({
             component: BulkPayments,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Bulk Payments - ${process.env.MIX_APP_NAME}`,
+                title: `Bulk Payments - PipeSync`,
                 gate: "bulk_payment_access",
             },
         },
@@ -826,7 +827,7 @@ const router = new VueRouter({
             component: BulkPaymentDetails,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Bulk Payment Details - ${process.env.MIX_APP_NAME}`,
+                title: `Bulk Payment Details - PipeSync`,
                 gate: "bulk_payment_show",
             },
         },

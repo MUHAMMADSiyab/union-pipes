@@ -121,7 +121,7 @@
                                 v-if="can('bulk_payment_create')"
                             >
                                 <v-icon left>mdi-account-plus-outline</v-icon>
-                                New BulkPayment</v-btn
+                                New Bulk Payment</v-btn
                             >
 
                             <!-- <Excel
@@ -223,7 +223,9 @@ export default {
             chequeImagesDialog: false,
             headers: [
                 { text: "S#", value: "sno", show: true },
+                { text: "Type", value: "type", show: true },
                 { text: "Customer", value: "customer.name", show: true },
+                { text: "Company", value: "company.name", show: true },
                 { text: "Amount", value: "amount", show: true },
                 {
                     text: "Payment Method",

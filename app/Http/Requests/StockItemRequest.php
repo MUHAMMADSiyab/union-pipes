@@ -26,6 +26,8 @@ class StockItemRequest extends FormRequest
         return [
             'name' => 'required|max:100',
             'available_quantity' => 'required|numeric',
+            'available_length' => 'required|numeric',
+            // 'per_unit_price' => 'required|numeric',
             'description' => 'nullable|max:500',
         ];
     }

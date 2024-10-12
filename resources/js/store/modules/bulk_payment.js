@@ -29,7 +29,9 @@ const actions = {
     async addBulkPayment(
         { dispatch, commit },
         {
+            type,
             customer_id,
+            company_id,
             amount,
             date,
             bank_id,
@@ -44,7 +46,9 @@ const actions = {
         try {
             const fd = new FormData();
 
+            fd.append("type", type);
             fd.append("customer_id", customer_id);
+            fd.append("company_id", company_id);
             fd.append("amount", amount);
             fd.append("date", moment(date).format("Y-MM-DD HH:mm:ss"));
             fd.append("bank_id", bank_id);

@@ -15,7 +15,9 @@ class BulkPayment extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
+        'type',
         'customer_id',
+        'company_id',
         'amount',
         'date',
         'payment_method',
@@ -40,6 +42,11 @@ class BulkPayment extends Model implements HasMedia
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function bank(): BelongsTo
