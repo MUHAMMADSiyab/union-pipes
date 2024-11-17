@@ -23,15 +23,18 @@ use App\Http\Controllers\ExpenseSourceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GatePassController;
 use App\Http\Controllers\MachineController;
+use App\Http\Controllers\MonthlySheetController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseItemController;
+use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnedSoldItemController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\StockItemController;
+use App\Http\Controllers\StockSheetController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\AuthGates;
 use App\Http\Middleware\NullToEmptyString;
@@ -213,6 +216,15 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::post('dashboard', DashboardController::class);
 
     Route::apiResource('bulk_payments', BulkPaymentController::class);
+
+    Route::delete('raw_materials/delete_multiple', [RawMaterialController::class, 'destroy_multiple']);
+    Route::apiResource('raw_materials', RawMaterialController::class);
+
+    Route::delete('stock_sheets/delete_multiple', [StockSheetController::class, 'destroy_multiple']);
+    Route::apiResource('stock_sheets', StockSheetController::class);
+
+    Route::delete('monthly_sheets/delete_multiple', [MonthlySheetController::class, 'destroy_multiple']);
+    Route::apiResource('monthly_sheets', MonthlySheetController::class);
 
     Route::group(['prefix' => 'reports'], function () {
         Route::post('purchase', [ReportController::class, 'get_purchase_report']);

@@ -98,6 +98,22 @@ import EditUserAccount from "./components/user-management/users/EditUserAccount"
 import AddBulkPayment from "./components/bulk_payments/AddBulkPayment";
 import BulkPayments from "./components/bulk_payments/BulkPayments";
 import BulkPaymentDetails from "./components/bulk_payments/BulkPaymentDetails";
+
+import AddRawMaterial from "./components/raw_materials/AddRawMaterial";
+import RawMaterials from "./components/raw_materials/RawMaterials";
+import EditRawMaterial from "./components/raw_materials/EditRawMaterial";
+import RawMaterialEntries from "./components/raw_materials/RawMaterialEntries";
+
+import AddStockSheet from "./components/stock_sheets/AddStockSheet";
+import StockSheets from "./components/stock_sheets/StockSheets";
+import EditStockSheet from "./components/stock_sheets/EditStockSheet";
+import StockSheetEntries from "./components/stock_sheets/StockSheetEntries";
+
+import AddMonthlySheet from "./components/monthly_sheets/AddMonthlySheet";
+import EditMonthlySheet from "./components/monthly_sheets/EditMonthlySheet";
+import MonthlySheets from "./components/monthly_sheets/MonthlySheets";
+import MonthlySheetEntries from "./components/monthly_sheets/MonthlySheetEntries";
+
 import store from "./store";
 
 const router = new VueRouter({
@@ -829,6 +845,132 @@ const router = new VueRouter({
             meta: {
                 title: `Bulk Payment Details - PipeSync`,
                 gate: "bulk_payment_show",
+            },
+        },
+
+        // Raw Materials
+        {
+            path: "/raw_materials/add",
+            name: "raw_material_add",
+            component: AddRawMaterial,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Add Raw Material - PipeSync`,
+                gate: "raw_material_create",
+            },
+        },
+        {
+            path: "/raw_materials",
+            name: "raw_materials",
+            component: RawMaterials,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Raw Materials - PipeSync`,
+                gate: "raw_material_access",
+            },
+        },
+        {
+            path: "/raw_materials/edit/:id",
+            name: "raw_material_edit",
+            component: EditRawMaterial,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Raw Material - PipeSync`,
+                gate: "raw_material_edit",
+            },
+        },
+        {
+            path: "/raw_materials/:id",
+            name: "raw_material_entries",
+            component: RawMaterialEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: ` Raw Material Entries - PipeSync`,
+                gate: "raw_material_show",
+            },
+        },
+
+        // Stock Sheets
+        {
+            path: "/stock_sheets/add",
+            name: "stock_sheet_add",
+            component: AddStockSheet,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Add Stock Sheet - PipeSync`,
+                gate: "stock_sheet_create",
+            },
+        },
+        {
+            path: "/stock_sheets",
+            name: "stock_sheets",
+            component: StockSheets,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Stock Sheets - PipeSync`,
+                gate: "stock_sheet_access",
+            },
+        },
+        {
+            path: "/stock_sheets/edit/:id",
+            name: "stock_sheet_edit",
+            component: EditStockSheet,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Stock Sheet - PipeSync`,
+                gate: "stock_sheet_edit",
+            },
+        },
+        {
+            path: "/stock_sheets/:id",
+            name: "stock_sheet_entries",
+            component: StockSheetEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: ` Stock Sheet Entries - PipeSync`,
+                gate: "stock_sheet_show",
+            },
+        },
+
+        // Monthly Sheet (Profit/Loss)
+        {
+            path: "/monthly_sheets/add",
+            name: "monthly_sheet_add",
+            component: AddMonthlySheet,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Add Monthly Profit/Loss Sheet - PipeSync`,
+                gate: "monthly_sheet_create",
+            },
+        },
+        {
+            path: "/monthly_sheets/edit/:id",
+            name: "monthly_sheet_edit",
+            component: EditMonthlySheet,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Monthly Sheet - PipeSync`,
+                gate: "monthly_sheet_edit",
+            },
+        },
+        {
+            path: "/monthly_sheets",
+            name: "monthly_sheets",
+            component: MonthlySheets,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Monthly Sheets - PipeSync`,
+                gate: "monthly_sheet_access",
+            },
+        },
+        {
+            path: "/monthly_sheets/:id",
+            name: "monthly_sheet_entries",
+            component: MonthlySheetEntries,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: ` Monthly Sheet Entries - PipeSync`,
+                gate: "monthly_sheet_show",
             },
         },
     ],

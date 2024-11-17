@@ -196,11 +196,28 @@ class PermissionsTableSeeder extends Seeder
 
             ['name' => 'app_setting_edit'],
 
-
             ['name' => 'bulk_payment_create'],
             ['name' => 'bulk_payment_access'],
             ['name' => 'bulk_payment_delete'],
             ['name' => 'bulk_payment_show'],
+
+            ['name' => 'raw_material_create'],
+            ['name' => 'raw_material_access'],
+            ['name' => 'raw_material_edit'],
+            ['name' => 'raw_material_delete'],
+            ['name' => 'raw_material_show'],
+
+            ['name' => 'stock_sheet_create'],
+            ['name' => 'stock_sheet_access'],
+            ['name' => 'stock_sheet_edit'],
+            ['name' => 'stock_sheet_delete'],
+            ['name' => 'stock_sheet_show'],
+
+            ['name' => 'monthly_sheet_create'],
+            ['name' => 'monthly_sheet_access'],
+            ['name' => 'monthly_sheet_edit'],
+            ['name' => 'monthly_sheet_delete'],
+            ['name' => 'monthly_sheet_show'],
 
         ];
 

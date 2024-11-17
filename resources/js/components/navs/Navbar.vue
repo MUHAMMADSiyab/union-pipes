@@ -444,6 +444,75 @@ export default {
                 },
 
                 {
+                    text: "Raw Materials",
+                    icon: "mdi-grain",
+                    active: this.activeMenu("raw_materials"),
+                    gate: "raw_material_access",
+                    submenu: [
+                        {
+                            text: "Add Raw Material",
+                            to: "/raw_materials/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "raw_material_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Raw Materials",
+                            to: "/raw_materials",
+                            icon: "mdi-chevron-double-right",
+                            gate: "raw_material_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
+                    text: "Stock Sheets",
+                    icon: "mdi-table",
+                    active: this.activeMenu("stock_sheets"),
+                    gate: "stock_sheet_access",
+                    submenu: [
+                        {
+                            text: "Add Stock Sheet",
+                            to: "/stock_sheets/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "stock_sheet_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Stock Sheets",
+                            to: "/stock_sheets",
+                            icon: "mdi-chevron-double-right",
+                            gate: "stock_sheet_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
+                    text: "Monthly Sheets",
+                    icon: "mdi-text-box-outline",
+                    active: this.activeMenu("monthly_sheets"),
+                    gate: "monthly_sheet_access",
+                    submenu: [
+                        {
+                            text: "Add Monthly Sheet",
+                            to: "/monthly_sheets/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "monthly_sheet_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Monthly Sheets",
+                            to: "/monthly_sheets",
+                            icon: "mdi-chevron-double-right",
+                            gate: "monthly_sheet_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "Productions",
                     icon: "mdi-cogs",
                     active: this.activeMenu("productions"),

@@ -33,6 +33,9 @@ import production from "./modules/production";
 import payment from "./modules/payment";
 import dashboard from "./modules/dashboard";
 import bulk_payment from "./modules/bulk_payment";
+import raw_material from "./modules/raw_material";
+import stock_sheet from "./modules/stock_sheet";
+import monthly_sheet from "./modules/monthly_sheet";
 
 // Subscriber
 import subscriber from "./subscriber";
@@ -172,8 +175,24 @@ const store = new Vuex.Store({
             ...dashboard,
             namespaced: true,
         },
+
         bulk_payment: {
             ...bulk_payment,
+            namespaced: true,
+        },
+
+        raw_material: {
+            ...raw_material,
+            namespaced: true,
+        },
+
+        stock_sheet: {
+            ...stock_sheet,
+            namespaced: true,
+        },
+
+        monthly_sheet: {
+            ...monthly_sheet,
             namespaced: true,
         },
     },
