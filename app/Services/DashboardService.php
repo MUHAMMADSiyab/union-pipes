@@ -20,7 +20,7 @@ class DashboardService
     {
         $materials_purchased = PurchasedItem::query()->sum('grand_total');
         $pipe_sold = SoldItem::query()->sum('grand_total');
-        $stock_weight_available = StockItem::first()->available_quantity ?? 0;
+        $stock_weight_available = StockItem::all()?->sum('available_quantity');
         $total_expenses = Payment::where('model', Expense::class)->sum('amount');
 
         return compact('materials_purchased', 'pipe_sold', 'stock_weight_available', 'total_expenses');

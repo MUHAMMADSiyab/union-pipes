@@ -153,6 +153,7 @@ export default {
 
     data() {
         return {
+            filteredEntries: [],
             filters: {
                 from_date: "",
                 to_date: "",
@@ -165,6 +166,20 @@ export default {
             getLedgerEntries: "bank/getLedgerEntries",
             getBank: "bank/getBank",
         }),
+
+        async filterEntries() {
+            if (this.filters.from_date && this.filters.to_date) {
+                try {
+                    const res = await axios.post(
+                        `/api/banks/${this.bank.id}/ledger_entries?from_date=${this.filters.from_date}&to_date=${this.filters.to_date}`
+                    );
+
+                    this.filteredEntries = res.data;
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
     },
 
     computed: {
@@ -174,23 +189,23 @@ export default {
             loading: "loading",
         }),
 
-        filteredEntries() {
-            const { from_date, to_date } = this.filters;
+        // filteredEntries() {
+        //     const { from_date, to_date } = this.filters;
 
-            if (!from_date || !to_date) {
-                return this.ledger_entries;
-            }
+        //     if (!from_date || !to_date) {
+        //         return this.ledger_entries;
+        //     }
 
-            return this.ledger_entries.filter((entry) => {
-                const entryDate = new Date(entry.date);
-                const fromDate = new Date(from_date);
-                const toDate = new Date(to_date);
+        //     return this.ledger_entries.filter((entry) => {
+        //         const entryDate = new Date(entry.date);
+        //         const fromDate = new Date(from_date);
+        //         const toDate = new Date(to_date);
 
-                // Include entries on the selected date
-                toDate.setDate(toDate.getDate()); // Add one day to the toDate
-                return entryDate >= fromDate && entryDate <= toDate;
-            });
-        },
+        //         // Include entries on the selected date
+        //         toDate.setDate(toDate.getDate()); // Add one day to the toDate
+        //         return entryDate >= fromDate && entryDate <= toDate;
+        //     });
+        // },
 
         totalDebit() {
             return this.filteredEntries.reduce((total, entry) => {
@@ -205,11 +220,24 @@ export default {
         },
     },
 
-    mounted() {
-        Promise.all([
+    watch: {
+        filters: {
+            handler(newVal) {
+                if (newVal.from_date && newVal.to_date) {
+                    this.filterEntries();
+                }
+            },
+            deep: true,
+        },
+    },
+
+    async mounted() {
+        await Promise.all([
             this.getBank(this.$route.params.id),
             this.getLedgerEntries(this.$route.params.id),
         ]);
+
+        this.filteredEntries = this.ledger_entries;
     },
 };
 </script>

@@ -95,7 +95,7 @@ class LedgerService
             }
         }
 
-        return $entries;
+        return $this->filterBetweenDateRange($entries);;
     }
 
     public function getCompanyLastBalance($company_id, $current_purchase_id = null)
@@ -216,7 +216,7 @@ class LedgerService
             }
         }
 
-        return $entries;
+        return $this->filterBetweenDateRange($entries);
     }
     // ------------------------------------------------------------------------------
 
@@ -287,6 +287,26 @@ class LedgerService
             $ledger[] = $entry;
         }
 
-        return $ledger;
+        return $this->filterBetweenDateRange($ledger);
+    }
+
+    private function filterBetweenDateRange($entries)
+    {
+        $fromDate = request('from_date');
+        $toDate = request('to_date');
+
+        if ($fromDate && $toDate) {
+            $fromDate = Carbon::parse($fromDate)->startOfDay();
+            $toDate = Carbon::parse($toDate)->endOfDay();
+
+            $filteredEntries = collect($entries)->filter(function ($entry) use ($fromDate, $toDate) {
+                $entryDate = Carbon::parse($entry['date']);
+                return $entryDate->between($fromDate, $toDate);
+            })->values()->all();
+        } else {
+            $filteredEntries = $entries;
+        }
+
+        return $filteredEntries;
     }
 }

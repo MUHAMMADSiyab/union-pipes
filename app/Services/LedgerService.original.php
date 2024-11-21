@@ -168,7 +168,22 @@ class LedgerService
             }
         }
 
-        return $entries;
+        $fromDate = request('from_date');
+        $toDate = request('to_date');
+
+        if ($fromDate && $toDate) {
+            $fromDate = Carbon::parse($fromDate);
+            $toDate = Carbon::parse($toDate);
+
+            $filteredEntries = collect($entries)->filter(function ($entry) use ($fromDate, $toDate) {
+                $entryDate = Carbon::parse($entry['date']);
+                return $entryDate->between($fromDate, $toDate);
+            });
+        } else {
+            $filteredEntries = $entries;
+        }
+
+        return $filteredEntries;
     }
 
     public function getCustomerLastBalance($customer_id, $current_purchase_id = null)
