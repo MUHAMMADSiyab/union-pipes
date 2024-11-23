@@ -1,105 +1,108 @@
 <template>
     <div>
         <Navbar v-if="!printMode" />
-
         <print-button />
 
         <v-container class="mt-4">
-            <h5 class="text-subtitle-1 mb-2">Stock Items</h5>
+            <div class="d-flex align-center justify-space-between mb-4">
+                <h5 class="text-subtitle-1 mb-0">Stock Items</h5>
+                <v-text-field
+                    v-model="search"
+                    append-icon="mdi-magnify"
+                    label="Search stock items..."
+                    single-line
+                    hide-details
+                    outlined
+                    dense
+                    class="ml-4"
+                    style="max-width: 300px"
+                    clearable
+                />
+            </div>
 
-            <v-row>
-                <v-col
-                    xl="6"
-                    lg="6"
-                    md="6"
-                    sm="12"
-                    cols="12"
-                    v-for="(stock_item, i) in stock_items"
-                    :key="i"
-                >
-                    <v-card class="mx-auto" ripple>
-                        <v-card-title primary-title>
-                            {{ stock_item.name }}
-                        </v-card-title>
+            <v-data-table
+                :headers="headers"
+                :items="stock_items"
+                :loading="loading"
+                :search="search"
+                class="elevation-1"
+                :custom-filter="customFilter"
+            >
+                <!-- Weight and Length Column Templates -->
+                <template v-slot:item.available_quantity="{ item }">
+                    <v-chip color="green" label outlined small>
+                        {{ money(item.available_quantity) }}
+                    </v-chip>
+                </template>
 
-                        <v-card-subtitle>
-                            {{ stock_item.description }}
-                        </v-card-subtitle>
+                <template v-slot:item.available_length="{ item }">
+                    <v-chip color="green" label outlined small>
+                        {{ money(item.available_length) }}
+                    </v-chip>
+                </template>
 
-                        <v-card-text>
-                            <h4 class="d-flex justify-space-between">
-                                <span> Available Weight </span>
-                                <v-chip
-                                    class="float-right"
-                                    color="green"
-                                    label
-                                    outlined
-                                    >{{
-                                        money(stock_item.available_quantity)
-                                    }}</v-chip
-                                >
-                            </h4>
-                            <h4 class="mt-1 d-flex justify-space-between">
-                                <span> Available Length (Meter/Foot)</span>
-                                <v-chip
-                                    class="float-right"
-                                    color="green"
-                                    label
-                                    outlined
-                                    >{{
-                                        money(stock_item.available_length)
-                                    }}</v-chip
-                                >
-                            </h4>
-                        </v-card-text>
+                <!-- Actions Column Template -->
+                <template v-slot:item.actions="{ item }">
+                    <v-btn
+                        x-small
+                        text
+                        color="secondary"
+                        :to="`/stock_items/edit/${item.id}`"
+                        title="Edit"
+                        v-if="can('stock_item_edit')"
+                        class="mr-1"
+                    >
+                        <v-icon small>mdi-pencil</v-icon>
+                    </v-btn>
 
-                        <v-divider></v-divider>
+                    <v-btn
+                        x-small
+                        text
+                        color="red darken-2"
+                        @click="setStockItemId(item.id)"
+                        title="Delete"
+                        v-if="can('stock_item_delete')"
+                        class="mr-1"
+                    >
+                        <v-icon small>mdi-delete</v-icon>
+                    </v-btn>
 
-                        <v-card-actions>
-                            <v-btn
-                                x-small
-                                text
-                                color="secondary"
-                                :to="`/stock_items/edit/${stock_item.id}`"
-                                title="Edit"
-                                v-if="can('stock_item_edit')"
-                            >
-                                <v-icon small>mdi-pencil</v-icon>
-                            </v-btn>
-                            <v-btn
-                                x-small
-                                text
-                                color="red darken-2"
-                                @click="setStockItemId(stock_item.id)"
-                                title="Delete"
-                                v-if="can('stock_item_delete')"
-                            >
-                                <v-icon small>mdi-delete</v-icon>
-                            </v-btn>
+                    <v-btn
+                        x-small
+                        color="success"
+                        @click="showAddStockDialog(item.id)"
+                        title="Add Stock"
+                        class="mr-1"
+                    >
+                        Add Stock
+                    </v-btn>
 
-                            <v-btn
-                                small
-                                color="success"
-                                @click="showAddStockDialog(stock_item.id)"
-                                title="Add Stock"
-                            >
-                                Add Stock
-                            </v-btn>
+                    <v-btn
+                        x-small
+                        color="info"
+                        @click="showStocksDialog(item.id)"
+                        title="View Stocks"
+                    >
+                        View History
+                    </v-btn>
+                </template>
 
-                            <v-btn
-                                small
-                                color="info"
-                                @click="showStocksDialog(stock_item.id)"
-                                title="View Stocks"
-                            >
-                                View Stock History
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
-            </v-row>
+                <!-- No Data Template -->
+                <template v-slot:no-data>
+                    <v-alert type="info" class="ma-2" outlined>
+                        No stock items found.
+                    </v-alert>
+                </template>
 
-            <!-- Add Stock -->
+                <!-- No Results Template -->
+                <template v-slot:no-results>
+                    <v-alert type="info" class="ma-2" outlined>
+                        No results found for "{{ search }}".
+                    </v-alert>
+                </template>
+            </v-data-table>
+
+            <!-- Add Stock Dialog -->
             <v-dialog v-model="addStockDialog" max-width="600" persistent>
                 <AddStock
                     :stock-item-id="currentStockItemId"
@@ -107,7 +110,7 @@
                 />
             </v-dialog>
 
-            <!-- Stocks -->
+            <!-- Stocks Dialog -->
             <v-dialog v-model="stocksDialog" max-width="800" persistent>
                 <Stocks
                     :stock-item-id="currentStockItemId"
@@ -115,7 +118,7 @@
                 />
             </v-dialog>
 
-            <!-- Confirmation -->
+            <!-- Confirmation Dialog -->
             <Confirmation
                 ref="confirmationComponent"
                 :id="stockItemId"
@@ -153,10 +156,40 @@ export default {
 
     data() {
         return {
+            search: "",
             addStockDialog: false,
             stocksDialog: false,
             stockItemId: null,
             currentStockItemId: null,
+            headers: [
+                {
+                    text: "Name",
+                    align: "start",
+                    value: "name",
+                },
+                {
+                    text: "Description",
+                    align: "start",
+                    value: "description",
+                },
+                {
+                    text: "Available Weight",
+                    align: "center",
+                    value: "available_quantity",
+                },
+                {
+                    text: "Available Length (Meter/Foot)",
+                    align: "center",
+                    value: "available_length",
+                },
+                {
+                    text: "Actions",
+                    align: "center",
+                    value: "actions",
+                    sortable: false,
+                    filterable: false,
+                },
+            ],
         };
     },
 
@@ -212,6 +245,23 @@ export default {
 
             this.$refs.confirmationComponent.setDialog(false);
             this.selectedItems = [];
+        },
+
+        customFilter(value, search, item) {
+            if (!search) return true;
+
+            const searchText = search.toString().toLowerCase();
+            const itemName = item.name.toString().toLowerCase();
+            const itemDescription = (item.description || "")
+                .toString()
+                .toLowerCase();
+
+            return (
+                itemName.includes(searchText) ||
+                itemDescription.includes(searchText) ||
+                this.money(item.available_quantity).includes(searchText) ||
+                this.money(item.available_length).includes(searchText)
+            );
         },
     },
 
