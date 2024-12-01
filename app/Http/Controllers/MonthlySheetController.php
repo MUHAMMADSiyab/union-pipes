@@ -21,8 +21,16 @@ class MonthlySheetController extends Controller
     {
         Gate::authorize('monthly_sheet_access');
 
-        $monthly_sheets = MonthlySheet::query()->get();
-        return response()->json($monthly_sheets);
+        $monthly_sheets = MonthlySheet::query()->with('entries')->get();
+        $monthlySheetsWithTotals = $monthly_sheets->map(function ($sheet) {
+            return [
+                'id' => $sheet->id,
+                'month' => $sheet->month,
+                'previous_month_total' => $sheet->previous_month_total,
+                'totals' => $sheet->calculateTotals(),
+            ];
+        });
+        return response()->json($monthlySheetsWithTotals);
     }
 
     /**

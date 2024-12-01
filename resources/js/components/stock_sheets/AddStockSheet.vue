@@ -279,7 +279,7 @@ export default {
             handler(updatedEntries) {
                 updatedEntries.forEach((entry) => {
                     const total_weight = entry.quantity * entry.weight;
-                    const total_amount = entry.quantity * entry.rate;
+                    const total_amount = total_weight * entry.rate;
                     entry.total_weight = total_weight;
                     entry.total_amount = total_amount;
                 });

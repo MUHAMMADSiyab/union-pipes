@@ -147,6 +147,128 @@
                             </v-simple-table>
                         </v-card-text>
                     </v-card>
+
+                    <v-card class="mb-2">
+                        <v-card-title> Total Income</v-card-title>
+                        <v-card-text>
+                            <v-simple-table dense bordered>
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Description</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="(entry, index) in income"
+                                        :key="index"
+                                    >
+                                        <td>{{ entry.description }}</td>
+                                        <td class="text-right">
+                                            {{ money(entry.amount) }}
+                                        </td>
+                                    </tr>
+                                    <tr class="font-weight-bold">
+                                        <td>Totals</td>
+                                        <td class="text-right">
+                                            {{ money(incomeTotal) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-simple-table>
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card class="mb-2">
+                        <v-card-title> Total Expenses</v-card-title>
+                        <v-card-text>
+                            <v-simple-table dense bordered>
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Description</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="(entry, index) in expenses"
+                                        :key="index"
+                                    >
+                                        <td>{{ entry.description }}</td>
+                                        <td class="text-right">
+                                            {{ money(entry.amount) }}
+                                        </td>
+                                    </tr>
+                                    <tr class="font-weight-bold">
+                                        <td>Totals</td>
+                                        <td class="text-right">
+                                            {{ money(expensesTotal) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-simple-table>
+                        </v-card-text>
+                    </v-card>
+
+                    <v-card class="mb-2">
+                        <v-card-text>
+                            <v-simple-table dense bordered>
+                                <tbody>
+                                    <tr class="font-weight-bold">
+                                        <td class="text-left">
+                                            + Total Profit/Loss Before any
+                                            Expense/Income
+                                        </td>
+                                        <td class="text-right">
+                                            {{
+                                                money(
+                                                    asssetsTotal -
+                                                        payablesTotal -
+                                                        monthly_sheet.previous_month_total
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                    <tr class="font-weight-bold">
+                                        <td class="text-left">
+                                            + Total Income
+                                        </td>
+                                        <td class="text-right">
+                                            {{ money(incomeTotal) }}
+                                        </td>
+                                    </tr>
+                                    <tr class="font-weight-bold">
+                                        <td class="text-left">
+                                            - Total Expense
+                                        </td>
+                                        <td class="text-right">
+                                            {{ money(expensesTotal) }}
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        class="font-weight-bold overall-summary"
+                                    >
+                                        <td class="text-left">
+                                            = Overall Total Profit/Loss after
+                                            Everything
+                                        </td>
+                                        <td
+                                            class="text-right"
+                                            :class="
+                                                overallProfitLossAfterEverythingClass
+                                            "
+                                        >
+                                            {{
+                                                money(
+                                                    overallProfitLossAfterEverything
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </v-simple-table>
+                        </v-card-text>
+                    </v-card>
                 </v-col>
             </v-row>
         </v-container>
@@ -169,6 +291,8 @@ export default {
         return {
             assets: [],
             payables: [],
+            income: [],
+            expenses: [],
         };
     },
 
@@ -205,6 +329,35 @@ export default {
             }, 0);
         },
 
+        incomeTotal() {
+            return this.income.reduce(function (b, a) {
+                return b + parseInt(a.amount, 10);
+            }, 0);
+        },
+
+        expensesTotal() {
+            return this.expenses.reduce(function (b, a) {
+                return b + parseInt(a.amount, 10);
+            }, 0);
+        },
+
+        overallProfitLossAfterEverything() {
+            return (
+                this.asssetsTotal -
+                this.payablesTotal -
+                this.monthly_sheet.previous_month_total +
+                this.incomeTotal -
+                this.expensesTotal
+            );
+        },
+
+        overallProfitLossAfterEverythingClass() {
+            return {
+                "text-success": this.overallProfitLossAfterEverything >= 0,
+                "text-danger": this.overallProfitLossAfterEverything < 0,
+            };
+        },
+
         previousMonthName() {
             if (this.monthly_sheet.month) {
                 const date = new Date(this.monthly_sheet.month);
@@ -226,6 +379,30 @@ export default {
         this.payables = this.monthly_sheet.entries.filter(
             (entry) => entry.category === "payable"
         );
+        this.income = this.monthly_sheet.entries.filter(
+            (entry) => entry.category === "income"
+        );
+
+        this.expenses = this.monthly_sheet.entries.filter(
+            (entry) => entry.category === "expense"
+        );
     },
 };
 </script>
+<style scoped>
+.text-success {
+    color: green !important;
+}
+
+.text-danger {
+    color: red !important;
+}
+
+.overall-summary {
+    background: #d6edff;
+    padding: 15px;
+    font-size: 1.8em !important;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+</style>

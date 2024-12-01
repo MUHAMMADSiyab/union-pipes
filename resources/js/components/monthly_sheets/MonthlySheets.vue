@@ -39,6 +39,9 @@
                     <strong>{{ previousMonthName(props.item.month) }}:</strong>
                     {{ money(props.item.previous_month_total) }}
                 </template>
+                <template slot="item.totals" slot-scope="props">
+                    <strong>{{ money(props.item.totals) }}</strong>
+                </template>
 
                 <!-- Top -->
                 <template v-slot:top v-if="!printMode">
@@ -166,6 +169,10 @@ export default {
                 {
                     text: "Previous Month Total",
                     value: "previous_month_total",
+                },
+                {
+                    text: "Total Profit/Loss for Current Month",
+                    value: "totals",
                 },
                 { text: "Actions", value: "actions", align: " d-print-none" },
             ],

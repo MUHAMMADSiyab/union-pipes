@@ -35,10 +35,20 @@ const actions = {
                 ...payable,
                 category: "payable",
             }));
+            const income = data.income.map((income) => ({
+                ...income,
+                category: "income",
+            }));
+
+            const expenses = data.expenses.map((expense) => ({
+                ...expense,
+                category: "expense",
+            }));
+
             const payload = {
                 month: data.month,
                 previous_month_total: data.previousMonthTotal,
-                entries: [...assets, ...payables],
+                entries: [...assets, ...payables, ...income, ...expenses],
             };
 
             const res = await axios.post("/api/monthly_sheets", payload);
@@ -102,10 +112,18 @@ const actions = {
                 ...payable,
                 category: "payable",
             }));
+            const income = data.income.map((income) => ({
+                ...income,
+                category: "income",
+            }));
+            const expenses = data.expenses.map((expense) => ({
+                ...expense,
+                category: "expense",
+            }));
             const payload = {
                 month: data.month,
                 previous_month_total: data.previousMonthTotal,
-                entries: [...assets, ...payables],
+                entries: [...assets, ...payables, ...income, ...expenses],
             };
 
             const res = await axios.put(
