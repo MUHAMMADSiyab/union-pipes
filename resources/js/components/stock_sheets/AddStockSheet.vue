@@ -63,12 +63,26 @@
                                     :key="index"
                                     class="d-flex align-center mb-2 mt-4"
                                 >
-                                    <v-text-field
+                                    <v-select
                                         v-model="entry.product"
+                                        :items="products"
+                                        item-text="product_full_name"
+                                        item-value="product_full_name"
                                         label="Product"
-                                        small
+                                        dense
+                                        filled
                                         class="mr-2"
-                                    />
+                                        :search-input.sync="productSearch"
+                                        @change="calculateTotals(entry)"
+                                    >
+                                        <template v-slot:no-data>
+                                            <v-list-item>
+                                                <v-list-item-title>
+                                                    No products found
+                                                </v-list-item-title>
+                                            </v-list-item>
+                                        </template>
+                                    </v-select>
                                     <small
                                         class="red--text"
                                         v-if="validation.hasErrors()"
@@ -80,11 +94,13 @@
                                     ></small>
 
                                     <v-text-field
-                                        v-model="entry.quantity"
+                                        v-model.number="entry.quantity"
                                         label="Quantity"
                                         type="number"
-                                        small
+                                        dense
+                                        filled
                                         class="mr-2"
+                                        @input="calculateTotals(entry)"
                                     />
                                     <small
                                         class="red--text"
@@ -97,11 +113,13 @@
                                     ></small>
 
                                     <v-text-field
-                                        v-model="entry.weight"
+                                        v-model.number="entry.weight"
                                         label="Weight"
                                         type="number"
-                                        small
+                                        dense
+                                        filled
                                         class="mr-2"
+                                        @input="calculateTotals(entry)"
                                     />
                                     <small
                                         class="red--text"
@@ -114,11 +132,13 @@
                                     ></small>
 
                                     <v-text-field
-                                        v-model="entry.total_weight"
+                                        v-model.number="entry.total_weight"
                                         label="Total Weight"
                                         type="number"
-                                        small
+                                        dense
+                                        filled
                                         class="mr-2"
+                                        readonly
                                     />
                                     <small
                                         class="red--text"
@@ -131,11 +151,13 @@
                                     ></small>
 
                                     <v-text-field
-                                        v-model="entry.rate"
+                                        v-model.number="entry.rate"
                                         label="Rate"
                                         type="number"
-                                        small
+                                        dense
+                                        filled
                                         class="mr-2"
+                                        @input="calculateTotals(entry)"
                                     />
                                     <small
                                         class="red--text"
@@ -148,10 +170,12 @@
                                     ></small>
 
                                     <v-text-field
-                                        v-model="entry.total_amount"
+                                        v-model.number="entry.total_amount"
                                         label="Total Amount"
                                         type="number"
-                                        small
+                                        dense
+                                        filled
+                                        readonly
                                     />
                                     <small
                                         class="red--text"
@@ -174,14 +198,16 @@
                                 <v-btn
                                     color="green white--text"
                                     @click.prevent="addEntry"
-                                    ><v-icon>mdi-plus</v-icon> Add Entry</v-btn
                                 >
+                                    <v-icon>mdi-plus</v-icon> Add Entry
+                                </v-btn>
                                 <v-btn
                                     color="primary"
                                     type="submit"
                                     class="float-end"
-                                    >Save</v-btn
                                 >
+                                    Save
+                                </v-btn>
                             </v-form>
                         </v-card-text>
                     </v-card>
@@ -206,11 +232,12 @@ export default {
     data() {
         return {
             formLoading: false,
+            productSearch: null,
             data: {
                 month: "",
                 entries: [
                     {
-                        product: "",
+                        product: null,
                         quantity: 0,
                         weight: 0,
                         rate: 0,
@@ -222,9 +249,17 @@ export default {
         };
     },
 
+    computed: {
+        ...mapGetters({
+            validationErrors: "validationErrors",
+            products: "product/products",
+        }),
+    },
+
     methods: {
         ...mapActions({
             addStockSheet: "stock_sheet/addStockSheet",
+            fetchProducts: "product/getProducts",
         }),
 
         async add() {
@@ -240,7 +275,7 @@ export default {
                 this.data.month = "";
                 this.data.entries = [
                     {
-                        product: "",
+                        product: null,
                         quantity: 0,
                         weight: 0,
                         rate: 0,
@@ -254,7 +289,7 @@ export default {
 
         addEntry() {
             this.data.entries.push({
-                product: "",
+                product: null,
                 quantity: 0,
                 weight: 0,
                 rate: 0,
@@ -266,28 +301,16 @@ export default {
         removeEntry(index) {
             this.data.entries.splice(index, 1);
         },
-    },
 
-    computed: {
-        ...mapGetters({
-            validationErrors: "validationErrors",
-        }),
-    },
-
-    watch: {
-        "data.entries": {
-            handler(updatedEntries) {
-                updatedEntries.forEach((entry) => {
-                    const total_weight = entry.quantity * entry.weight;
-                    const total_amount = total_weight * entry.rate;
-                    entry.total_weight = total_weight;
-                    entry.total_amount = total_amount;
-                });
-            },
-            deep: true,
+        calculateTotals(entry) {
+            entry.total_weight = entry.quantity * entry.weight;
+            entry.total_amount = entry.total_weight * entry.rate;
         },
     },
 
-    mounted() {},
+    created() {
+        // Fetch products when component is created
+        this.fetchProducts();
+    },
 };
 </script>
