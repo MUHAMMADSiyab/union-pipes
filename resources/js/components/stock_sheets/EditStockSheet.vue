@@ -320,7 +320,7 @@ export default {
             ...entry,
             product:
                 this.products.find((p) => p.product_full_name === entry.product)
-                    ?.id || null,
+                    ?.product_full_name || null,
         }));
     },
 };
