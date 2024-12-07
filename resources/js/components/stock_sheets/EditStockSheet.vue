@@ -319,7 +319,8 @@ export default {
         this.data.entries = this.stock_sheet.entries.map((entry) => ({
             ...entry,
             product:
-                this.products.find((p) => p.name === entry.product)?.id || null,
+                this.products.find((p) => p.product_full_name === entry.product)
+                    ?.id || null,
         }));
     },
 };
