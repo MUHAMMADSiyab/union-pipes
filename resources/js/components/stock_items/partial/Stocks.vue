@@ -187,7 +187,7 @@ export default {
     watch: {
         stockItemId: {
             handler(newStockItemId) {
-                this.stock_item_id = newStockItemId;
+                this.getStocks(newStockItemId);
             },
             deep: true,
         },

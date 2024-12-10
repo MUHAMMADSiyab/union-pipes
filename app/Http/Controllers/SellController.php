@@ -328,8 +328,10 @@ class SellController extends Controller
                     $stock_item = StockItem::query()->find($sell->stock_item_id);
                 }
 
-                $stock_item->increment('available_quantity', $soldItem->weight);
-                $stock_item->increment('available_length', $soldItem->quantity);
+                if ($stock_item) {
+                    $stock_item->increment('available_quantity', $soldItem->weight);
+                    $stock_item->increment('available_length', $soldItem->quantity);
+                }
             }
 
             $sell->delete();

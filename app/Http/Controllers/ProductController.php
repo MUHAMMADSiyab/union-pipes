@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Models\StockItem;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
@@ -33,9 +36,21 @@ class ProductController extends Controller
         Gate::authorize('product_access');
         Gate::authorize('product_create');
 
-        $product = Product::create($request->all());
-
-        return response()->json($product, 201);
+        try {
+            DB::beginTransaction();
+            $product = Product::create($request->all());
+            StockItem::query()->create([
+                'product_id' => $product->id,
+                'name' => $product->product_full_name,
+                'available_quantity' => 0,
+                'available_length' => 0,
+            ]);
+            DB::commit();
+            return response()->json($product, 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Unable to add product'], 500);
+        }
     }
 
     /**
@@ -64,9 +79,23 @@ class ProductController extends Controller
         Gate::authorize('product_access');
         Gate::authorize('product_edit');
 
-        $product->update($request->all());
+        try {
+            DB::beginTransaction();
 
-        return response()->json(Product::find($product->id));
+            $product->update($request->all());
+            $updatedProduct = Product::find($product->id);
+            StockItem::query()
+                ->where('product_id', $product->id)
+                ->update([
+                    'name' => $product->product_full_name,
+                ]);
+
+            DB::commit();
+            return response()->json($updatedProduct);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Unable to update product'], 500);
+        }
     }
 
     /**

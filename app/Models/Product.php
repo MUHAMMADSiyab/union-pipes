@@ -25,7 +25,7 @@ class Product extends Model
 
     public function getProductFullNameAttribute()
     {
-        $size = empty($this->size) ?  '' : " - " . $this->size;
+        $size = empty($this->size) ?  '' : " - " . number_format($this->size, 2);
         return $this->name . " - " . $this->type . $size;
     }
 }

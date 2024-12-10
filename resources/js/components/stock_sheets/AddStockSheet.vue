@@ -56,6 +56,43 @@
                                             ></v-date-picker>
                                         </v-menu>
                                     </v-col>
+
+                                    <v-col
+                                        xl="3"
+                                        lg="3"
+                                        md="3"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <v-switch
+                                            color="green"
+                                            v-model="manualEntry"
+                                            title="When checked, will show the product field as plain text input"
+                                            label="Manual Entry"
+                                        ></v-switch>
+                                    </v-col>
+
+                                    <v-col
+                                        xl="6"
+                                        lg="6"
+                                        md="6"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <v-btn
+                                            small
+                                            @click="populateRecords"
+                                            color="teal white--text"
+                                            class="float-right"
+                                        >
+                                            <v-icon small class="mr-1"
+                                                >mdi-refresh</v-icon
+                                            >
+                                            Load Entries from Stock Items</v-btn
+                                        >
+                                    </v-col>
                                 </v-row>
 
                                 <div
@@ -66,6 +103,7 @@
                                     <v-select
                                         v-model="entry.product"
                                         :items="products"
+                                        v-if="!manualEntry"
                                         item-text="product_full_name"
                                         item-value="product_full_name"
                                         label="Product"
@@ -83,6 +121,14 @@
                                             </v-list-item>
                                         </template>
                                     </v-select>
+                                    <v-text-field
+                                        v-else
+                                        v-model.number="entry.product"
+                                        label="Product"
+                                        dense
+                                        filled
+                                        class="mr-2"
+                                    />
                                     <small
                                         class="red--text"
                                         v-if="validation.hasErrors()"
@@ -231,6 +277,7 @@ export default {
 
     data() {
         return {
+            manualEntry: false,
             formLoading: false,
             productSearch: null,
             data: {
@@ -253,6 +300,7 @@ export default {
         ...mapGetters({
             validationErrors: "validationErrors",
             products: "product/products",
+            stock_items: "stock_item/stock_items",
         }),
     },
 
@@ -260,6 +308,7 @@ export default {
         ...mapActions({
             addStockSheet: "stock_sheet/addStockSheet",
             fetchProducts: "product/getProducts",
+            getStockItems: "stock_item/getStockItems",
         }),
 
         async add() {
@@ -306,10 +355,32 @@ export default {
             entry.total_weight = entry.quantity * entry.weight;
             entry.total_amount = entry.total_weight * entry.rate;
         },
+
+        async populateRecords() {
+            await this.getStockItems();
+
+            this.data.entries = this.stock_items
+                .filter(
+                    (stock_item) =>
+                        this.products.filter(
+                            (product) =>
+                                product.product_full_name === stock_item.name
+                        ).length
+                )
+                .map((stock_item) => ({
+                    product: stock_item.name,
+                    quantity: stock_item.available_length,
+                    weight: stock_item.available_quantity,
+                    rate: 0,
+                    total_weight:
+                        stock_item.available_length *
+                        stock_item.available_quantity,
+                    total_amount: 0,
+                }));
+        },
     },
 
     created() {
-        // Fetch products when component is created
         this.fetchProducts();
     },
 };

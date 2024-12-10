@@ -30,19 +30,39 @@
             >
                 <!-- Weight and Length Column Templates -->
                 <template v-slot:item.available_quantity="{ item }">
-                    <v-chip color="green" label outlined small>
-                        {{ money(item.available_quantity) }}
+                    <v-chip color="indigo" label outlined small>
+                        <strong>{{ money(item.available_quantity) }}</strong>
                     </v-chip>
                 </template>
 
                 <template v-slot:item.available_length="{ item }">
-                    <v-chip color="green" label outlined small>
-                        {{ money(item.available_length) }}
+                    <v-chip color="indigo" label outlined small>
+                        <strong> {{ money(item.available_length) }}</strong>
                     </v-chip>
                 </template>
 
                 <!-- Actions Column Template -->
                 <template v-slot:item.actions="{ item }">
+                    <v-btn
+                        x-small
+                        color="success"
+                        @click="showAddStockDialog(item.id)"
+                        title="Add Stock"
+                        v-if="can('stock_item_create')"
+                        class="mr-1"
+                    >
+                        <v-icon small>mdi-plus</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                        x-small
+                        color="info"
+                        @click="showStocksDialog(item.id)"
+                        title="View Stocks"
+                    >
+                        <v-icon small>mdi-clock-outline</v-icon>
+                    </v-btn>
+
                     <v-btn
                         x-small
                         text
@@ -65,25 +85,6 @@
                         class="mr-1"
                     >
                         <v-icon small>mdi-delete</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                        x-small
-                        color="success"
-                        @click="showAddStockDialog(item.id)"
-                        title="Add Stock"
-                        class="mr-1"
-                    >
-                        Add Stock
-                    </v-btn>
-
-                    <v-btn
-                        x-small
-                        color="info"
-                        @click="showStocksDialog(item.id)"
-                        title="View Stocks"
-                    >
-                        View History
                     </v-btn>
                 </template>
 

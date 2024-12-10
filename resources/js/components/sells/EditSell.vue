@@ -700,7 +700,10 @@ export default {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
                     item.total =
-                        data.items[index].rate * data.items[index].quantity;
+                        data.unit === "Meter"
+                            ? data.items[index].rate *
+                              data.items[index].quantity
+                            : data.items[index].rate * data.items[index].weight;
                     const sales_tax_amount = item.total * sales_tax_percentage;
                     item.sales_tax = sales_tax_amount;
                     item.grand_total = item.total + item.sales_tax;

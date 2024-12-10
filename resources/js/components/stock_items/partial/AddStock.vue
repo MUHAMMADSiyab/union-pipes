@@ -137,6 +137,14 @@ export default {
         },
     },
 
+    watch: {
+        stockItemId: {
+            handler(newVal) {
+                this.data.stock_item_id = newVal;
+            },
+        },
+    },
+
     computed: {
         ...mapGetters({
             validationErrors: "validationErrors",
