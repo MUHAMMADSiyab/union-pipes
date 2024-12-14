@@ -149,7 +149,9 @@
                     </v-card>
 
                     <v-card class="mb-2">
-                        <v-card-title> Total Income</v-card-title>
+                        <v-card-title>
+                            Total Partners Received Amount</v-card-title
+                        >
                         <v-card-text>
                             <v-simple-table dense bordered>
                                 <thead>
@@ -180,7 +182,7 @@
                     </v-card>
 
                     <v-card class="mb-2">
-                        <v-card-title> Total Expenses</v-card-title>
+                        <v-card-title> Total New Investments</v-card-title>
                         <v-card-text>
                             <v-simple-table dense bordered>
                                 <thead>
@@ -216,8 +218,8 @@
                                 <tbody>
                                     <tr class="font-weight-bold">
                                         <td class="text-left">
-                                            + Total Profit/Loss Before any
-                                            Expense/Income
+                                            + Total Profit/Loss Before any New
+                                            Investments/Partners Received Amount
                                         </td>
                                         <td class="text-right">
                                             {{
@@ -231,7 +233,7 @@
                                     </tr>
                                     <tr class="font-weight-bold">
                                         <td class="text-left">
-                                            + Total Income
+                                            + Total Partners Received Amount
                                         </td>
                                         <td class="text-right">
                                             {{ money(incomeTotal) }}
@@ -239,7 +241,7 @@
                                     </tr>
                                     <tr class="font-weight-bold">
                                         <td class="text-left">
-                                            - Total Expense
+                                            - Total New Investments
                                         </td>
                                         <td class="text-right">
                                             {{ money(expensesTotal) }}

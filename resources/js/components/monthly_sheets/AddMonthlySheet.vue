@@ -171,7 +171,7 @@
                                 </div>
 
                                 <!-- Income Section -->
-                                <h3>Income</h3>
+                                <h3>Partners Received Amount</h3>
                                 <div
                                     v-for="(entry, index) in data.income"
                                     :key="`income_${index}`"
@@ -202,19 +202,19 @@
                                     small
                                     @click.prevent="addIncome"
                                 >
-                                    <v-icon>mdi-plus</v-icon> Add income
+                                    <v-icon>mdi-plus</v-icon> Add
                                 </v-btn>
 
                                 <!-- Total for Income -->
                                 <div class="totals-row">
-                                    Total Income
+                                    Total Partners Received Amount
                                     <span class="float-right">{{
                                         money(totalIncome)
                                     }}</span>
                                 </div>
 
                                 <!-- Expenses Section -->
-                                <h3>Expenses</h3>
+                                <h3>New Investments</h3>
                                 <div
                                     v-for="(entry, index) in data.expenses"
                                     :key="`expense_${index}`"
@@ -245,12 +245,12 @@
                                     small
                                     @click.prevent="addExpense"
                                 >
-                                    <v-icon>mdi-plus</v-icon> Add expense
+                                    <v-icon>mdi-plus</v-icon> Add
                                 </v-btn>
 
                                 <!-- Total for Expenses -->
                                 <div class="totals-row">
-                                    Total Expenses
+                                    Total New Investments
                                     <span class="float-right">{{
                                         money(totalExpenses)
                                     }}</span>
