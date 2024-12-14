@@ -254,42 +254,6 @@ class LedgerService
         return $lastRecord ? $lastRecord['balance'] : 0;
     }
 
-    public function getBankLedgerEntries($bank_id)
-    {
-        $payments = Payment::query()
-            ->where('bank_id', $bank_id)
-            ->orderBy('payment_date')
-            ->get();
-
-        $ledger = [];
-        $balance = 0;
-
-        foreach ($payments as $payment) {
-            $entry = [
-                // 'particular' => explode("\\", $payment->model)[2],
-                'description' => $payment->description,
-                'date' => $payment->payment_date,
-                'debit' => 0,
-                'credit' => 0,
-                'balance' => $balance,
-            ];
-
-            if ($payment->transaction_type === 'Debit') {
-                $entry['debit'] = $payment->amount - $payment->discount;
-                $balance += $entry['debit'];
-            } elseif ($payment->transaction_type === 'Credit') {
-                $entry['credit'] = $payment->amount;
-                $balance -= $entry['credit'];
-            }
-
-            $entry['balance'] = $balance;
-
-            $ledger[] = $entry;
-        }
-
-        return $this->filterBetweenDateRange($ledger);
-    }
-
     // public function getBankLedgerEntries($bank_id)
     // {
     //     $payments = Payment::query()
@@ -297,39 +261,75 @@ class LedgerService
     //         ->orderBy('payment_date')
     //         ->get();
 
-    //     $groupedPayments = $payments->groupBy(fn($item) => date('Y-m-d', strtotime($item->payment_date)));
-
     //     $ledger = [];
     //     $balance = 0;
 
-    //     foreach ($groupedPayments as $date => $dailyPayments) {
-    //         $debit = 0;
-    //         $credit = 0;
-    //         $descriptions = [];
-
-    //         foreach ($dailyPayments as $payment) {
-    //             $descriptions[] = $payment->description;
-
-    //             if ($payment->transaction_type === 'Debit') {
-    //                 $debit += $payment->amount - $payment->discount;
-    //                 $balance += $payment->amount - $payment->discount;
-    //             } elseif ($payment->transaction_type === 'Credit') {
-    //                 $credit += $payment->amount;
-    //                 $balance -= $payment->amount;
-    //             }
-    //         }
-
-    //         $ledger[] = [
-    //             'description' => implode("<br>", $descriptions),
-    //             'date' => $date,
-    //             'debit' => $debit,
-    //             'credit' => $credit,
+    //     foreach ($payments as $payment) {
+    //         $entry = [
+    //             // 'particular' => explode("\\", $payment->model)[2],
+    //             'description' => $payment->description,
+    //             'date' => $payment->payment_date,
+    //             'debit' => 0,
+    //             'credit' => 0,
     //             'balance' => $balance,
     //         ];
+
+    //         if ($payment->transaction_type === 'Debit') {
+    //             $entry['debit'] = $payment->amount - $payment->discount;
+    //             $balance += $entry['debit'];
+    //         } elseif ($payment->transaction_type === 'Credit') {
+    //             $entry['credit'] = $payment->amount;
+    //             $balance -= $entry['credit'];
+    //         }
+
+    //         $entry['balance'] = $balance;
+
+    //         $ledger[] = $entry;
     //     }
 
     //     return $this->filterBetweenDateRange($ledger);
     // }
+
+    public function getBankLedgerEntries($bank_id)
+    {
+        $payments = Payment::query()
+            ->where('bank_id', $bank_id)
+            ->orderBy('payment_date')
+            ->get();
+
+        $groupedPayments = $payments->groupBy(fn($item) => date('Y-m-d', strtotime($item->payment_date)));
+
+        $ledger = [];
+        $balance = 0;
+
+        foreach ($groupedPayments as $date => $dailyPayments) {
+            $debit = 0;
+            $credit = 0;
+            $descriptions = [];
+
+            foreach ($dailyPayments as $payment) {
+                $descriptions[] = $payment->description;
+
+                if ($payment->transaction_type === 'Debit') {
+                    $debit += $payment->amount - $payment->discount;
+                    $balance += $payment->amount - $payment->discount;
+                } elseif ($payment->transaction_type === 'Credit') {
+                    $credit += $payment->amount;
+                    $balance -= $payment->amount;
+                }
+            }
+
+            $ledger[] = [
+                'description' => implode("<br>", $descriptions),
+                'date' => $date,
+                'debit' => $debit,
+                'credit' => $credit,
+                'balance' => $balance,
+            ];
+        }
+
+        return $this->filterBetweenDateRange($ledger);
+    }
 
 
     private function filterBetweenDateRange($entries)
