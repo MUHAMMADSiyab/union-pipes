@@ -114,7 +114,7 @@ import EditMonthlySheet from "./components/monthly_sheets/EditMonthlySheet";
 import MonthlySheets from "./components/monthly_sheets/MonthlySheets";
 import MonthlySheetEntries from "./components/monthly_sheets/MonthlySheetEntries";
 
-import store from "./store";
+import Playlist from "./components/tutorials/Playlist.vue";
 
 const router = new VueRouter({
     mode: "history",
@@ -971,6 +971,16 @@ const router = new VueRouter({
             meta: {
                 title: ` Monthly Sheet Entries - PipeSync`,
                 gate: "monthly_sheet_show",
+            },
+        },
+
+        {
+            path: "/video-tutorials",
+            name: "video-tutorials",
+            component: Playlist,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Video Tutorials / Guide - PipeSync`,
             },
         },
     ],

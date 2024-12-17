@@ -25,6 +25,7 @@ use App\Http\Controllers\GatePassController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\MonthlySheetController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\PurchaseController;
@@ -254,6 +255,8 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         ChequeClearanceController::class,
         'markAllAsCleared'
     ]);
+
+    Route::get('/youtube/playlist', [PlaylistController::class, 'getPlaylistVideos']);
 });
 
 // Public routes

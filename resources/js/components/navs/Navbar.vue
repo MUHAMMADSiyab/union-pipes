@@ -148,6 +148,13 @@ export default {
                 },
 
                 {
+                    text: "Video Tutorials",
+                    icon: "mdi-playlist-play",
+                    to: "/video-tutorials",
+                    active: this.activeMenu("/video-tutorials"),
+                },
+
+                {
                     text: "Products",
                     icon: "mdi-format-list-bulleted",
                     active: this.activeMenu("products"),

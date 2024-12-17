@@ -11,8 +11,6 @@ import role from "./modules/role";
 import user from "./modules/user";
 import setting from "./modules/setting";
 import product from "./modules/product";
-import tank from "./modules/tank";
-import dispenser from "./modules/dispenser";
 import bank from "./modules/bank";
 import expense_source from "./modules/expense_source";
 import expense from "./modules/expense";
@@ -36,6 +34,7 @@ import bulk_payment from "./modules/bulk_payment";
 import raw_material from "./modules/raw_material";
 import stock_sheet from "./modules/stock_sheet";
 import monthly_sheet from "./modules/monthly_sheet";
+import playlist from "./modules/playlist";
 
 // Subscriber
 import subscriber from "./subscriber";
@@ -193,6 +192,11 @@ const store = new Vuex.Store({
 
         monthly_sheet: {
             ...monthly_sheet,
+            namespaced: true,
+        },
+
+        playlist: {
+            ...playlist,
             namespaced: true,
         },
     },
