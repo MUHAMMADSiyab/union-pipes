@@ -219,6 +219,18 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'monthly_sheet_delete'],
             ['name' => 'monthly_sheet_show'],
 
+            ['name' => 'partner_create'],
+            ['name' => 'partner_access'],
+            ['name' => 'partner_edit'],
+            ['name' => 'partner_delete'],
+            ['name' => 'partner_show'],
+
+            ['name' => 'partner_withdrawal_create'],
+            ['name' => 'partner_withdrawal_access'],
+            ['name' => 'partner_withdrawal_edit'],
+            ['name' => 'partner_withdrawal_delete'],
+            ['name' => 'partner_withdrawal_show'],
+
         ];
 
 

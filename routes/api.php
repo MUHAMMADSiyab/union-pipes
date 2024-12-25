@@ -9,6 +9,7 @@ use App\Http\Controllers\ChequeClearanceController;
 use App\Http\Controllers\ClosingReportController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExportController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GatePassController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\MonthlySheetController;
+use App\Http\Controllers\PartnerWithdrawalController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\ProductionController;
@@ -128,6 +130,20 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
     Route::post('/customers/{customer_id}/ledger_entries', [CustomerController::class, 'get_ledger_entries']);
     Route::get('all_customers', [CustomerController::class, 'all']);
     Route::resource('customers', CustomerController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Partner
+    Route::post('/partners/search', [PartnerController::class, 'search']);
+    Route::get('all_partners', [PartnerController::class, 'all']);
+    Route::resource('partners', PartnerController::class, [
+        'except' => ['create', 'edit']
+    ]);
+
+    // Partner Withdrawal
+    Route::get('search_partner_withdrawals', [PartnerWithdrawalController::class, 'search_partner_withdrawals']);
+    Route::delete('partner_withdrawals/delete_multiple', [PartnerWithdrawalController::class, 'destroy_multiple']);
+    Route::resource('partner_withdrawals', PartnerWithdrawalController::class, [
         'except' => ['create', 'edit']
     ]);
 

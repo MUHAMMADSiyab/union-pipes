@@ -311,6 +311,38 @@ export default {
                 },
 
                 {
+                    text: "Partners",
+                    icon: "mdi-account-group",
+                    active:
+                        this.activeMenu("partners") ||
+                        this.activeMenu("partner_withdrawals"),
+                    gate: "partner_access",
+                    submenu: [
+                        {
+                            text: "Add Partner",
+                            to: "/partners/add",
+                            icon: "mdi-chevron-double-right",
+                            gate: "partner_create",
+                            exact: true,
+                        },
+                        {
+                            text: "Manage Partners",
+                            to: "/partners",
+                            icon: "mdi-chevron-double-right",
+                            gate: "partner_access",
+                            exact: true,
+                        },
+                        {
+                            text: "Partner Withdrawals",
+                            to: "/partner_withdrawals",
+                            icon: "mdi-chevron-double-right",
+                            gate: "partner_withdrawal_access",
+                            exact: true,
+                        },
+                    ],
+                },
+
+                {
                     text: "Employees",
                     icon: "mdi-account-box-multiple",
                     active:

@@ -116,6 +116,14 @@ import MonthlySheetEntries from "./components/monthly_sheets/MonthlySheetEntries
 
 import Playlist from "./components/tutorials/Playlist.vue";
 
+import AddPartner from "./components/partners/AddPartner";
+import EditPartner from "./components/partners/EditPartner";
+import Partners from "./components/partners/Partners";
+
+import AddPartnerWithdrawal from "./components/partner_withdrawals/AddPartnerWithdrawal";
+import EditPartnerWithdrawal from "./components/partner_withdrawals/EditPartnerWithdrawal";
+import PartnerWithdrawals from "./components/partner_withdrawals/PartnerWithdrawals";
+
 const router = new VueRouter({
     mode: "history",
     routes: [
@@ -981,6 +989,70 @@ const router = new VueRouter({
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
                 title: `Video Tutorials / Guide - PipeSync`,
+            },
+        },
+
+        {
+            path: "/partners/add",
+            name: "partner_add",
+            component: AddPartner,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Partner - PipeSync`,
+                gate: "partner_create",
+            },
+        },
+
+        {
+            path: "/partners",
+            name: "partners",
+            component: Partners,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Partners - PipeSync`,
+                gate: "partner_access",
+            },
+        },
+
+        {
+            path: "/partners/edit/:id",
+            name: "partner_edit",
+            component: EditPartner,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Partner - PipeSync`,
+                gate: "partner_edit",
+            },
+        },
+
+        {
+            path: "/partner_withdrawals/add",
+            name: "partner_withdrawal_add",
+            component: AddPartnerWithdrawal,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `New Partner Withdrawal - PipeSync`,
+                gate: "partner_withdrawal_create",
+            },
+        },
+        {
+            path: "/partner_withdrawals/edit/:id",
+            name: "partner_withdrawal_edit",
+            component: EditPartnerWithdrawal,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Edit Partner Withdrawal - PipeSync`,
+                gate: "partner_withdrawal_edit",
+            },
+        },
+        {
+            path: "/partner_withdrawals",
+            name: "partner_withdrawals",
+            component: PartnerWithdrawals,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Partners - PipeSync`,
+                gate: "partner_withdrawal_access",
             },
         },
     ],

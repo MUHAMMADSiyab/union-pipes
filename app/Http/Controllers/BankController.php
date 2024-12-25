@@ -26,7 +26,19 @@ class BankController extends Controller
     {
         Gate::authorize('bank_access');
 
-        $banks = Bank::all();
+        $query = Bank::all();
+
+        $banks = $query->map(function ($bank) {
+            return [
+                'id' => $bank->id,
+                'name' => $bank->name,
+                'account_no' => $bank->account_no,
+                'branch_name' => $bank->branch_name,
+                'branch_code' => $bank->branch_code,
+                'balance' => (new LedgerService)->getBankLedgerEntries($bank->id, returnLastBalance: true)
+            ];
+        });
+
         return response()->json($banks);
     }
 

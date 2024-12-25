@@ -103,7 +103,7 @@
                                     :key="i"
                                 >
                                     <td>{{ i + 1 }}</td>
-                                    <td>{{ entry.date }}</td>
+                                    <td>{{ formatDate(entry.date) }}</td>
                                     <!-- <td>{{ entry.particular }}</td> -->
                                     <td
                                         v-html="entry.description"
@@ -169,6 +169,18 @@ export default {
             getLedgerEntries: "bank/getLedgerEntries",
             getBank: "bank/getBank",
         }),
+
+        formatDate(date) {
+            return new Date(date).toLocaleString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+            });
+        },
 
         async filterEntries() {
             if (this.filters.from_date && this.filters.to_date) {

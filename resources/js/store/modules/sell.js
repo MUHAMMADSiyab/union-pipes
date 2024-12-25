@@ -39,6 +39,10 @@ const actions = {
     async addSell({ dispatch, commit }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.items = data.items.map((item) => ({
+                ...item,
+                product_id: item.product_id?.id,
+            }));
             const res = await axios.post("/api/sells", data);
 
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
@@ -70,9 +74,8 @@ const actions = {
         try {
             commit(SET_LOADING, true);
 
-            const orderBy = sortBy && sortBy.length ? sortBy[0] : "date";
-            const orderByDesc =
-                sortDesc && sortDesc.length ? sortDesc[0] : true;
+            const orderBy = sortBy && sortBy.length ? sortBy[0] : "id";
+            const orderByDesc = sortDesc[0];
 
             const res = await axios.get(
                 `/api/sells?local=${local}&page=${page}&itemsPerPage=${itemsPerPage}&orderBy=${orderBy}&orderByDesc=${orderByDesc}`
@@ -127,6 +130,11 @@ const actions = {
     async updateSell({ dispatch, commit }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.items = data.items.map((item) => ({
+                ...item,
+                product_id: item.product_id?.id,
+            }));
+
             const res = await axios.put(`/api/sells/${data.id}`, data);
 
             commit(CLEAR_VALIDATION_ERRORS, _, { root: true });

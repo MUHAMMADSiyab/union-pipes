@@ -43,7 +43,6 @@ class ExpenseController extends Controller
         $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
 
         $expenses = Expense::query()
-            ->with(['machine', 'employee', 'product'])
             ->where(function ($query) {
                 $searchTerm = request('search');
                 $query->where('name', 'like', '%' . $searchTerm . '%')

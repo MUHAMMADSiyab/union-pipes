@@ -13,6 +13,7 @@ class SoldItem extends Model
         'sell_id',
         'product_id',
         'quantity',
+        'per_quantity_weight',
         'weight',
         'rate',
         'total',

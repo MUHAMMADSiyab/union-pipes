@@ -35,6 +35,8 @@ import raw_material from "./modules/raw_material";
 import stock_sheet from "./modules/stock_sheet";
 import monthly_sheet from "./modules/monthly_sheet";
 import playlist from "./modules/playlist";
+import partner from "./modules/partner";
+import partner_withdrawal from "./modules/partner_withdrawal";
 
 // Subscriber
 import subscriber from "./subscriber";
@@ -197,6 +199,16 @@ const store = new Vuex.Store({
 
         playlist: {
             ...playlist,
+            namespaced: true,
+        },
+
+        partner: {
+            ...partner,
+            namespaced: true,
+        },
+
+        partner_withdrawal: {
+            ...partner_withdrawal,
             namespaced: true,
         },
     },

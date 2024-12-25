@@ -254,7 +254,7 @@ class LedgerService
         return $lastRecord ? $lastRecord['balance'] : 0;
     }
 
-    public function getBankLedgerEntries($bank_id)
+    public function getBankLedgerEntries($bank_id, $returnLastBalance = false)
     {
         $payments = Payment::query()
             ->where('bank_id', $bank_id)
@@ -285,6 +285,10 @@ class LedgerService
             $entry['balance'] = $balance;
 
             $ledger[] = $entry;
+        }
+
+        if ($returnLastBalance) {
+            return !is_null(collect($ledger)->last()) ? collect($ledger)->last()['balance'] : 0;
         }
 
         return $this->filterBetweenDateRange($ledger);

@@ -33,6 +33,10 @@ class CustomPathGenerator implements PathGenerator
       return 'customers/' . $media->id . '/';
     }
 
+    if ($media->model_type === 'App\\Models\\Partner') {
+      return 'partners/' . $media->id . '/';
+    }
+
     if ($media->model_type === 'App\\Models\\Employee') {
       return 'employees/' . $media->id . '/';
     }
@@ -63,6 +67,10 @@ class CustomPathGenerator implements PathGenerator
       return 'customers/conversions/' . $media->id . '/';
     }
 
+    if ($media->model_type === 'App\\Models\\Partner') {
+      return 'partners/conversions/' . $media->id . '/';
+    }
+
     if ($media->model_type === 'App\\Models\\Employee') {
       return 'employees/conversions/' . $media->id . '/';
     }
@@ -91,6 +99,10 @@ class CustomPathGenerator implements PathGenerator
 
     if ($media->model_type === 'App\\Models\\Customer') {
       return 'customers/responsive-images/' . $media->id . '/';
+    }
+
+    if ($media->model_type === 'App\\Models\\Partner') {
+      return 'partners/responsive-images/' . $media->id . '/';
     }
 
     if ($media->model_type === 'App\\Models\\Employee') {

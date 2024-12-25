@@ -104,7 +104,9 @@
                                     :key="i"
                                 >
                                     <td>{{ i + 1 }}</td>
-                                    <td>{{ entry.date }}</td>
+                                    <td>
+                                        {{ formatDate(entry.date) }}
+                                    </td>
                                     <td>{{ entry.invoice_no }}</td>
                                     <td>{{ entry.description }}</td>
                                     <td>{{ money(entry.debit) }}</td>
@@ -168,6 +170,17 @@ export default {
             getCustomer: "customer/getCustomer",
         }),
 
+        formatDate(date) {
+            return new Date(date).toLocaleString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+            });
+        },
         async filterEntries() {
             if (this.filters.from_date && this.filters.to_date) {
                 try {

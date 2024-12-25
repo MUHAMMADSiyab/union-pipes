@@ -422,7 +422,9 @@ export default {
             local: false,
             date: "",
             currentSoldItems: null,
-            options: {},
+            options: {
+                sortDesc: [true],
+            },
             currentSoldItemsForReturn: null,
             soldItemsDialog: false,
             soldItemsForReturnDialog: false,

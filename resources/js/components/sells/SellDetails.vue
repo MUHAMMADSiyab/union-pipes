@@ -110,10 +110,10 @@
                                     :key="item.id"
                                     id="sold-items-row"
                                 >
-                                    <td width="50%">
-                                        {{ item.product.name }} ({{
-                                            item.product.size
-                                        }})({{ item.product.type }})
+                                    <td width="50%" align="left">
+                                        <span class="pl-2">{{
+                                            item.product.product_full_name
+                                        }}</span>
                                     </td>
                                     <td>{{ money(item.rate) }}</td>
                                     <td>{{ money(item.quantity) }}</td>
@@ -197,6 +197,12 @@
                     </v-card>
                 </v-col>
             </v-row>
+
+            <v-row class="d-print-none">
+                <v-col cols="12">
+                    <ReturnedItems :returned-items="sell.returned_items" />
+                </v-col>
+            </v-row>
         </v-container>
     </div>
 </template>
@@ -205,12 +211,14 @@
 import { mapActions, mapGetters } from "vuex";
 import CurrencyMixin from "../../mixins/CurrencyMixin";
 import Navbar from "../navs/Navbar";
+import ReturnedItems from "./partial/ReturnedItems";
 
 export default {
     mixins: [CurrencyMixin],
 
     components: {
         Navbar,
+        ReturnedItems,
     },
 
     methods: {

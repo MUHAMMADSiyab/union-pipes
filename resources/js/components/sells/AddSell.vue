@@ -12,7 +12,7 @@
                         <v-card-subtitle>Add a New Sell</v-card-subtitle>
 
                         <v-card-text class="mt-3">
-                            <v-form @submit.prevent="add">
+                            <v-form @submit.prevent="add" class="sell-form">
                                 <!-- Gate pass -->
                                 <v-row>
                                     <v-col cols="12">
@@ -333,21 +333,28 @@
                                             :key="i"
                                             no-action
                                         >
-                                            <v-list-item>
+                                            <v-list-item
+                                                style="position: relative"
+                                            >
                                                 <v-btn
                                                     color="error"
                                                     x-small
                                                     @click="removeItemRow(i)"
                                                     class="mb-5 mr-2"
+                                                    style="
+                                                        position: absolute;
+                                                        right: 0;
+                                                        top: -20px;
+                                                    "
                                                     ><v-icon x-small
                                                         >mdi-minus</v-icon
                                                     ></v-btn
                                                 >
                                                 <v-row>
                                                     <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
+                                                        xl="3"
+                                                        lg="3"
+                                                        md="3"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -363,28 +370,27 @@
                                                                 )
                                                             "
                                                         ></small>
-                                                        <v-select
+
+                                                        <v-combobox
                                                             :items="products"
                                                             item-text="product_full_name"
                                                             item-value="id"
                                                             v-model="
                                                                 item.product_id
                                                             "
-                                                            placeholder="Select Item"
+                                                            placeholder="Search or Select Item"
                                                             @change="
-                                                                handleRateSelect(
-                                                                    item
-                                                                )
+                                                                handleRateSelect
                                                             "
-                                                            autocomplete
-                                                            filled
-                                                        ></v-select>
+                                                            dense
+                                                            hide-no-data
+                                                        ></v-combobox>
                                                     </v-col>
 
                                                     <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
+                                                        xl="1"
+                                                        lg="1"
+                                                        md="1"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -407,14 +413,13 @@
                                                             type="number"
                                                             label="Quantity"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
                                                     <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
+                                                        xl="1"
+                                                        lg="1"
+                                                        md="1"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -435,7 +440,6 @@
                                                             type="number"
                                                             label="Rate"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -443,6 +447,35 @@
                                                         xl="2"
                                                         lg="2"
                                                         md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.per_quantity_weight`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="
+                                                                item.per_quantity_weight
+                                                            "
+                                                            type="number"
+                                                            label="Per Qty Weight"
+                                                            dense
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                        xl="1"
+                                                        lg="1"
+                                                        md="1"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -465,7 +498,6 @@
                                                             type="number"
                                                             label="Weight"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -493,7 +525,6 @@
                                                             type="number"
                                                             label="Total"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -523,7 +554,6 @@
                                                             type="number"
                                                             label="Grand Total"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
                                                 </v-row>
@@ -533,7 +563,7 @@
                                     </v-col>
                                 </v-row>
 
-                                <v-row class="mb-4">
+                                <v-row class="mb-4 mt-5">
                                     <v-col
                                         xl="4"
                                         lg="4"
@@ -613,6 +643,7 @@ export default {
                     {
                         product_id: "",
                         quantity: 0,
+                        per_quantity_weight: 0,
                         weight: 0,
                         rate: 0,
                         total: 0,
@@ -648,6 +679,7 @@ export default {
                 {
                     product_id: "",
                     quantity: 0,
+                    per_quantity_weight: 0,
                     weight: 0,
                     rate: 0,
                     total: 0,
@@ -674,6 +706,12 @@ export default {
         },
 
         async add() {
+            if (
+                this.data.items.filter((item) => item.product_id).length === 0
+            ) {
+                return alert("Please select product first");
+            }
+
             this.formLoading = true;
 
             await this.addSell(this.data);
@@ -731,6 +769,15 @@ export default {
                 this.data.items.forEach((item, index) => {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
+
+                    if (item.per_quantity_weight) {
+                        item.weight =
+                            parseFloat(data.items[index].quantity) *
+                            parseFloat(data.items[index].per_quantity_weight);
+                    } else {
+                        item.weight = data.items[index].weight;
+                    }
+
                     item.total =
                         data.unit === "Meter"
                             ? data.items[index].rate *
@@ -763,3 +810,13 @@ export default {
     },
 };
 </script>
+<style>
+.sell-form
+    .v-select:not(.v-text-field--single-line):not(.v-text-field--outlined)
+    .v-select__slot
+    > input {
+    align-self: flex-end;
+    font-size: 0.73rem;
+    font-weight: 500;
+}
+</style>

@@ -332,21 +332,28 @@
                                             :key="i"
                                             no-action
                                         >
-                                            <v-list-item>
+                                            <v-list-item
+                                                style="position: relative"
+                                            >
                                                 <v-btn
                                                     color="error"
                                                     x-small
                                                     @click="removeItemRow(i)"
                                                     class="mb-5 mr-2"
+                                                    style="
+                                                        position: absolute;
+                                                        right: 0;
+                                                        top: -20px;
+                                                    "
                                                     ><v-icon x-small
                                                         >mdi-minus</v-icon
                                                     ></v-btn
                                                 >
                                                 <v-row>
                                                     <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
+                                                        xl="3"
+                                                        lg="3"
+                                                        md="3"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -362,23 +369,27 @@
                                                                 )
                                                             "
                                                         ></small>
-                                                        <v-select
+
+                                                        <v-combobox
                                                             :items="products"
                                                             item-text="product_full_name"
                                                             item-value="id"
                                                             v-model="
                                                                 item.product_id
                                                             "
-                                                            placeholder="Select Item"
-                                                            autocomplete
-                                                            filled
-                                                        ></v-select>
+                                                            placeholder="Search or Select Item"
+                                                            @change="
+                                                                handleRateSelect
+                                                            "
+                                                            dense
+                                                            hide-no-data
+                                                        ></v-combobox>
                                                     </v-col>
 
                                                     <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
+                                                        xl="1"
+                                                        lg="1"
+                                                        md="1"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -401,14 +412,13 @@
                                                             type="number"
                                                             label="Quantity"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
                                                     <v-col
-                                                        xl="2"
-                                                        lg="2"
-                                                        md="2"
+                                                        xl="1"
+                                                        lg="1"
+                                                        md="1"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -429,7 +439,6 @@
                                                             type="number"
                                                             label="Rate"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -437,6 +446,35 @@
                                                         xl="2"
                                                         lg="2"
                                                         md="2"
+                                                        sm="12"
+                                                        cols="12"
+                                                        class="py-0"
+                                                    >
+                                                        <small
+                                                            class="red--text"
+                                                            v-if="
+                                                                validation.hasErrors()
+                                                            "
+                                                            v-text="
+                                                                validation.getMessage(
+                                                                    `items.${i}.per_quantity_weight`
+                                                                )
+                                                            "
+                                                        ></small>
+                                                        <v-text-field
+                                                            v-model="
+                                                                item.per_quantity_weight
+                                                            "
+                                                            type="number"
+                                                            label="Per Qty Weight"
+                                                            dense
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                        xl="1"
+                                                        lg="1"
+                                                        md="1"
                                                         sm="12"
                                                         cols="12"
                                                         class="py-0"
@@ -459,7 +497,6 @@
                                                             type="number"
                                                             label="Weight"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -487,7 +524,6 @@
                                                             type="number"
                                                             label="Total"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -517,7 +553,6 @@
                                                             type="number"
                                                             label="Grand Total"
                                                             dense
-                                                            filled
                                                         ></v-text-field>
                                                     </v-col>
                                                 </v-row>
@@ -527,7 +562,7 @@
                                     </v-col>
                                 </v-row>
 
-                                <v-row class="mb-4">
+                                <v-row class="mb-4 mt-5">
                                     <v-col
                                         xl="4"
                                         lg="4"
@@ -591,7 +626,7 @@ export default {
         return {
             formLoading: false,
             units: ["Meter", "Kilogram", "Inch", "Foot", "Feet", "Centimeter"],
-            categories: ["Pipe", "Return", "Misc", "Advance Payment"],
+            categories: ["Pipe", "Opening Balance", "Advance Payment"],
             data: {
                 date: "",
                 gate_pass_id: "",
@@ -607,6 +642,7 @@ export default {
                     {
                         product_id: "",
                         quantity: 0,
+                        per_quantity_weight: 0,
                         weight: 0,
                         rate: 0,
                         total: 0,
@@ -629,12 +665,21 @@ export default {
             updateSell: "sell/updateSell",
         }),
 
+        handleRateSelect(item) {
+            if (item.product_id) {
+                item.rate = this.products.find(
+                    (product) => product.id == item.product_id
+                ).per_kg_price;
+            }
+        },
+
         addItemRow() {
             this.data.items = [
                 ...this.data.items,
                 {
                     product_id: "",
                     quantity: 0,
+                    per_quantity_weight: 0,
                     weight: 0,
                     rate: 0,
                     total: 0,
@@ -661,6 +706,12 @@ export default {
         },
 
         async update() {
+            if (
+                this.data.items.filter((item) => item.product_id).length === 0
+            ) {
+                return alert("Please select product first");
+            }
+
             this.formLoading = true;
 
             await this.updateSell({
@@ -699,6 +750,15 @@ export default {
                 this.data.items.forEach((item, index) => {
                     const sales_tax_percentage =
                         data.sales_tax_percentage / 100;
+
+                    if (item.per_quantity_weight) {
+                        item.weight =
+                            parseFloat(data.items[index].quantity) *
+                            parseFloat(data.items[index].per_quantity_weight);
+                    } else {
+                        item.weight = data.items[index].weight;
+                    }
+
                     item.total =
                         data.unit === "Meter"
                             ? data.items[index].rate *
@@ -740,10 +800,14 @@ export default {
         this.data.discount = this.sell.discount;
         this.data.description = this.sell.description;
         this.data.category = this.sell.category;
+        this.data.total_amount = this.sell.total_amount;
         this.data.customer_id = this.sell.customer_id;
         this.data.stock_item_id = this.sell.stock_item_id;
         this.data.gate_pass_id = this.sell.gate_pass_id;
-        this.data.items = this.sell.sold_items;
+        this.data.items = this.sell.sold_items.map((soldItem) => ({
+            ...soldItem,
+            product_id: soldItem.product,
+        }));
     },
 };
 </script>
