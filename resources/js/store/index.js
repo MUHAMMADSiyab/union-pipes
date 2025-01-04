@@ -36,7 +36,7 @@ import stock_sheet from "./modules/stock_sheet";
 import monthly_sheet from "./modules/monthly_sheet";
 import playlist from "./modules/playlist";
 import partner from "./modules/partner";
-import partner_withdrawal from "./modules/partner_withdrawal";
+import partner_transaction from "./modules/partner_transaction";
 
 // Subscriber
 import subscriber from "./subscriber";
@@ -207,8 +207,8 @@ const store = new Vuex.Store({
             namespaced: true,
         },
 
-        partner_withdrawal: {
-            ...partner_withdrawal,
+        partner_transaction: {
+            ...partner_transaction,
             namespaced: true,
         },
     },

@@ -93,7 +93,7 @@
                                         ></small>
                                         <v-select
                                             :items="products"
-                                            item-text="name"
+                                            item-text="product_full_name"
                                             item-value="id"
                                             v-model="data.product_id"
                                             placeholder="Select Product"

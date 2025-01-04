@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductionRequest;
 use App\Models\Machine;
 use App\Models\Production;
+use App\Models\Stock;
 use App\Services\OrderByService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
@@ -122,8 +125,18 @@ class ProductionController extends Controller
         Gate::authorize('production_access');
         Gate::authorize('production_delete');
 
-        if ($production->delete()) {
+        try {
+            DB::beginTransaction();
+
+            Stock::query()->where('production_id', $production->id)->first()?->delete();
+            $production->delete();
+
+            DB::commit();
+
             return response()->json(['success' => 'Production deleted successfully']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Unable to delete production. ' . $e->getMessage()], 500);
         }
     }
 

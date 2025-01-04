@@ -169,7 +169,7 @@ export default {
                 { text: "S#", value: "sno" },
                 { text: "Machine", value: "machine.name" },
                 { text: "Operator", value: "employee.name" },
-                { text: "Product", value: "product.name" },
+                { text: "Product", value: "product.product_full_name" },
                 { text: "Date", value: "date" },
                 { text: "Shift", value: "shift" },
                 { text: "Weight", value: "weight" },

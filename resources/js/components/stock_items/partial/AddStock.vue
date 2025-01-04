@@ -23,11 +23,26 @@
                 <small
                     class="red--text"
                     v-if="validation.hasErrors()"
+                    v-text="validation.getMessage('per_unit_weight')"
+                ></small>
+                <v-text-field
+                    name="per_unit_weight"
+                    label="Per Unit Weight"
+                    id="per_unit_weight"
+                    v-model="data.per_unit_weight"
+                    type="number"
+                    dense
+                    outlined
+                ></v-text-field>
+
+                <small
+                    class="red--text"
+                    v-if="validation.hasErrors()"
                     v-text="validation.getMessage('quantity')"
                 ></small>
                 <v-text-field
                     name="quantity"
-                    label="Weight"
+                    label="Total Weight"
                     id="quantity"
                     v-model="data.quantity"
                     type="number"
@@ -98,6 +113,7 @@ export default {
             data: {
                 stock_item_id: this.stockItemId,
                 length: 0,
+                per_unit_weight: 0,
                 quantity: 0,
                 date: "",
                 description: "",
@@ -123,6 +139,7 @@ export default {
             } else {
                 this.data.length = 0;
                 this.data.quantity = 0;
+                this.data.per_unit_weight = 0;
                 this.data.date = "";
                 this.data.description = "";
                 // Clear the validation messages object
@@ -142,6 +159,14 @@ export default {
             handler(newVal) {
                 this.data.stock_item_id = newVal;
             },
+        },
+
+        data: {
+            handler(newVal) {
+                this.data.quantity =
+                    this.data.length * this.data.per_unit_weight;
+            },
+            deep: true,
         },
     },
 

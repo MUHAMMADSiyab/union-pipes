@@ -8,10 +8,13 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseSource;
 use App\Models\Machine;
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchasedItem;
 use App\Models\Sell;
 use App\Models\SoldItem;
+use App\Models\Stock;
+use App\Models\StockItem;
 
 class ReportService
 {
@@ -19,7 +22,8 @@ class ReportService
     {
         $purchases = Purchase::with('purchased_items', 'company', 'purchased_items.purchase_item')
             ->whereBetween(
-                'date', [$request->from_date.' 00:00:00', $request->to_date.' 23:59:59']
+                'date',
+                [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
             )
             ->whereIn('company_id', $request->companies)
             ->get()
@@ -63,7 +67,7 @@ class ReportService
 
         $purchasedItems = PurchasedItem::whereHas('purchase', function ($query) use ($fromDate, $toDate, $companyIds) {
             $query
-                ->whereBetween('date', [$fromDate.' 00:00:00', $toDate.' 23:59:59'])
+                ->whereBetween('date', [$fromDate . ' 00:00:00', $toDate . ' 23:59:59'])
                 ->whereIn('company_id', $companyIds)
                 ->with('company');
         })
@@ -114,8 +118,9 @@ class ReportService
     public function getSellReport($request)
     {
         $sells = Sell::with('sold_items', 'customer', 'sold_items.product')
-             ->whereBetween(
-                'date', [$request->from_date.' 00:00:00', $request->to_date.' 23:59:59']
+            ->whereBetween(
+                'date',
+                [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
             )
             ->whereIn('customer_id', $request->customers)
             ->get()
@@ -161,7 +166,7 @@ class ReportService
 
         $soldItems = SoldItem::whereHas('sell', function ($query) use ($fromDate, $toDate, $customerIds) {
             $query
-                ->whereBetween('date', [$fromDate.' 00:00:00', $toDate.' 23:59:59'])
+                ->whereBetween('date', [$fromDate . ' 00:00:00', $toDate . ' 23:59:59'])
                 ->whereIn('customer_id', $customerIds)
                 ->with('customer');
         })
@@ -290,8 +295,11 @@ class ReportService
             $q->whereIn('id', $request->expense_sources);
         })
             ->whereHas('payment', function ($q) use ($request) {
-                $q->whereBetween('payment_date', [
-                    $request->from_date.' 00:00:00', $request->to_date.' 23:59:59'
+                $q->whereBetween(
+                    'payment_date',
+                    [
+                        $request->from_date . ' 00:00:00',
+                        $request->to_date . ' 23:59:59'
                     ]
                 );
             })
@@ -327,7 +335,8 @@ class ReportService
         $machines_productions = Machine::query()
             ->whereHas('productions', function ($q) use ($request) {
                 $q->whereBetween(
-                    'date', [$request->from_date.' 00:00:00', $request->to_date.' 23:59:59']
+                    'date',
+                    [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
                 );
             })
             ->withSum('productions', 'total_weight')
@@ -343,5 +352,35 @@ class ReportService
             $query->where('balance', '>', 0);
         })
             ->withSum('salaries', 'balance')->get();
+    }
+
+    public function getStocksReport($request)
+    {
+        $stocks = StockItem::query()
+            ->with(['product', 'stocks' => function ($q) use ($request) {
+                $q->whereBetween(
+                    'date',
+                    [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
+                );
+            }])
+            ->whereHas('stocks', function ($q) use ($request) {
+                $q->whereBetween(
+                    'date',
+                    [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
+                );
+            })
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'stock_product' => [
+                        'id' => $item->product?->id ?? $item->id,
+                        'name' => $item->product?->product_full_name ?? $item->name,
+                    ],
+                    'total_weight' => $item->stocks->sum('quantity'),
+                    'total_length' => $item->stocks->sum('length'),
+                ];
+            });
+
+        return $stocks;
     }
 }

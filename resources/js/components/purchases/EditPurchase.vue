@@ -279,7 +279,8 @@
                                                                 )
                                                             "
                                                         ></small>
-                                                        <v-select
+
+                                                        <v-combobox
                                                             :items="
                                                                 purchase_items
                                                             "
@@ -289,9 +290,11 @@
                                                                 item.purchase_item_id
                                                             "
                                                             placeholder="Select Item"
-                                                            autocomplete
                                                             filled
-                                                        ></v-select>
+                                                            autocomplete
+                                                            hide-no-data
+                                                            hide-selected
+                                                        ></v-combobox>
                                                     </v-col>
 
                                                     <v-col
@@ -579,7 +582,10 @@ export default {
                     total_amount += item.grand_total;
                 });
 
-                if (this.data.items.filter((item) => item.product_id).length) {
+                if (
+                    this.data.items.filter((item) => item.purchase_item_id)
+                        .length
+                ) {
                     this.data.total_amount = total_amount;
                 }
             },
@@ -605,7 +611,10 @@ export default {
         this.data.category = this.purchase.category;
         this.data.description = this.purchase.description;
         this.data.company_id = this.purchase.company_id;
-        this.data.items = this.purchase.purchased_items;
+        this.data.items = this.purchase.purchased_items?.map((item) => ({
+            ...item,
+            purchase_item_id: item.purchase_item,
+        }));
 
         let total_amount = 0;
         this.data.items.forEach((item) => {

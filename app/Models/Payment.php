@@ -48,16 +48,63 @@ class Payment extends Model implements HasMedia
             ->height('500');
     }
 
+    // public function purchase()
+    // {
+    //     return $this->belongsTo(Purchase::class, 'paymentable_id');
+    // }
+
+    // public function sell()
+    // {
+    //     return $this->belongsTo(Sell::class, 'paymentable_id');
+    // }
+
     public function purchase()
     {
-        return $this->belongsTo(Purchase::class, 'paymentable_id');
+        return $this->belongsTo(Purchase::class, 'paymentable_id')
+            ->when($this->model === Purchase::class, function ($query) {
+                return $query;
+            });
     }
 
     public function sell()
     {
-        return $this->belongsTo(Sell::class, 'paymentable_id');
+        return $this->belongsTo(Sell::class, 'paymentable_id')
+            ->when($this->model === Sell::class, function ($query) {
+                return $query;
+            });
     }
 
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class, 'paymentable_id')
+            ->when($this->model === Transaction::class, function ($query) {
+                return $query;
+            });
+    }
+
+    public function expense()
+    {
+        return $this->belongsTo(Expense::class, 'paymentable_id')
+            ->when($this->model === Expense::class, function ($query) {
+                return $query;
+            });
+    }
+
+    public function partner_transaction()
+    {
+        return $this->belongsTo(PartnerTransaction::class, 'paymentable_id')
+            ->when($this->model === PartnerTransaction::class, function ($query) {
+                return $query;
+            });
+    }
+
+    public function salary()
+    {
+        return $this->belongsTo(Salary::class, 'paymentable_id')
+            ->when($this->model === Salary::class, function ($query) {
+                return $query;
+            });
+    }
 
     public function bulk_payment()
     {

@@ -198,6 +198,25 @@ const actions = {
             }
         }
     },
+
+    // Get stock report data
+    async getStockReportData({ dispatch, commit }, data) {
+        try {
+            const res = await axios.post("/api/reports/stock", data);
+
+            commit(GET_REPORT_DATA, res.data);
+            commit(SET_LOADING, false, { root: true });
+            commit(CLEAR_VALIDATION_ERRORS, _, { root: true });
+        } catch (error) {
+            commit(SET_LOADING, false, { root: true });
+
+            if (error.response.status === 422) {
+                commit(SET_VALIDATION_ERRORS, error.response.data, {
+                    root: true,
+                });
+            }
+        }
+    },
 };
 
 const mutations = {

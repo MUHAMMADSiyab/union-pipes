@@ -7,17 +7,48 @@
                 <v-col cols="12">
                     <v-card :loading="formLoading" :disabled="formLoading">
                         <v-card-title primary-title
-                            >Edit Partner Withdrawal</v-card-title
+                            >New Partner Transaction</v-card-title
                         >
-                        <v-card-subtitle>Update the Withdrawal</v-card-subtitle>
+                        <v-card-subtitle>Add a New Transaction</v-card-subtitle>
 
                         <v-card-text class="mt-2">
-                            <v-form @submit.prevent="update">
+                            <v-form @submit.prevent="add">
                                 <v-row>
                                     <v-col
-                                        xl="6"
-                                        lg="6"
-                                        md="6"
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <small
+                                            class="red--text"
+                                            v-if="validation.hasErrors()"
+                                            v-text="
+                                                validation.getMessage(
+                                                    'partner_id'
+                                                )
+                                            "
+                                        ></small>
+                                        <v-select
+                                            :items="partners"
+                                            label="Partner"
+                                            id="partner_id"
+                                            name="name"
+                                            item-value="id"
+                                            item-text="name"
+                                            v-model="data.partner_id"
+                                            search=""
+                                            dense
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+
+                                    <v-col
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
                                         sm="12"
                                         cols="12"
                                         class="py-0"
@@ -40,9 +71,9 @@
                                     </v-col>
 
                                     <v-col
-                                        xl="6"
-                                        lg="6"
-                                        md="6"
+                                        xl="4"
+                                        lg="4"
+                                        md="4"
                                         sm="12"
                                         cols="12"
                                         class="py-0"
@@ -51,20 +82,15 @@
                                             class="red--text"
                                             v-if="validation.hasErrors()"
                                             v-text="
-                                                validation.getMessage(
-                                                    'partner_id'
-                                                )
+                                                validation.getMessage('type')
                                             "
                                         ></small>
                                         <v-select
-                                            :items="partners"
-                                            label="Partner"
-                                            id="expense_source"
-                                            name="name"
-                                            item-value="id"
-                                            item-text="name"
-                                            v-model="data.partner_id"
-                                            search=""
+                                            :items="['Debit', 'Credit']"
+                                            name="type"
+                                            label="Type"
+                                            id="type"
+                                            v-model="data.type"
                                             dense
                                             outlined
                                         ></v-select>
@@ -122,7 +148,6 @@
                                             :label="`Amount (${paymentSetting.currency})`"
                                             id="amount"
                                             v-model="data.payment.amount"
-                                            max="purchase.amount"
                                             type="number"
                                             dense
                                             outlined
@@ -146,34 +171,6 @@
                                                 )
                                             "
                                         ></small>
-                                        <!-- <v-menu
-                                            max-width="290px"
-                                            min-width="auto"
-                                        >
-                                            <template v-slot:activator="{ on }">
-                                                <v-text-field
-                                                    v-model="
-                                                        data.payment
-                                                            .payment_date
-                                                    "
-                                                    v-on="on"
-                                                    label="Payment Date"
-                                                    prepend-inner-icon="mdi-calendar"
-                                                    dense
-                                                    outlined
-                                                ></v-text-field>
-                                            </template>
-                                            <v-date-picker
-                                                v-model="
-                                                    data.payment.payment_date
-                                                "
-                                                label="Payment Date"
-                                                no-title
-                                                outlined
-                                                dense
-                                                show-current
-                                            ></v-date-picker>
-                                        </v-menu> -->
 
                                         <v-datetime-picker
                                             label="Payment Date"
@@ -261,7 +258,6 @@
                                             data.payment.payment_method ===
                                             'Cheque'
                                         "
-                                        class="mt-1 mb-1"
                                     >
                                         <v-col
                                             xl="6"
@@ -406,10 +402,10 @@
                                 </v-row>
 
                                 <v-btn
-                                    color="success"
-                                    class="mt-3"
+                                    color="primary"
                                     type="submit"
-                                    >Update</v-btn
+                                    class="mt-3"
+                                    >Add Transaction</v-btn
                                 >
                             </v-form>
                         </v-card-text>
@@ -436,18 +432,16 @@ export default {
         return {
             formLoading: false,
             data: {
-                id: null,
-                name: "",
+                title: "",
+                type: "",
                 amount: "",
-                expense_source_id: "",
+                partner_id: "",
                 description: "",
                 payment: {
-                    id: null,
-                    model: "App\\Models\\Partner Withdrawal",
+                    model: "App\\Models\\PartnerTransaction",
                     paymentable_id: null,
                     amount: "",
-                    discount: 0,
-                    transaction_type: "Credit",
+                    transaction_type: "",
                     payment_date: "",
                     bank_id: "",
                     payment_method: "",
@@ -455,7 +449,6 @@ export default {
                     cheque_no: "",
                     cheque_due_date: "",
                     cheque_images: [],
-                    installment_month: "",
                     description: "",
                 },
             },
@@ -467,28 +460,27 @@ export default {
             getPartners: "partner/getPartners",
             getBanks: "bank/getBanks",
             getPaymentSetting: "getPaymentSetting",
-            updatePartnerWithdrawal:
-                "partner_withdrawal/updatePartnerWithdrawal",
-            getPartnerWithdrawal: "partner_withdrawal/getPartnerWithdrawal",
-            editPayment: "payment/editPayment",
+            addPartnerTransaction: "partner_transaction/addPartnerTransaction",
+            addNewPayment: "payment/addNewPayment",
         }),
 
         handleFiles(files) {
             this.data.payment.cheque_images = files;
         },
 
-        async update() {
+        async add() {
             this.formLoading = true;
 
-            this.data.amount =
-                this.data.payment.amount || this.partner_withdrawal.amount;
+            this.data.amount = this.data.payment.amount;
 
-            await this.updatePartnerWithdrawal(this.data);
+            await this.addPartnerTransaction(this.data);
 
-            if (this.old_expense) {
+            if (this.recent_partner_transaction) {
+                this.data.payment.paymentable_id =
+                    this.recent_partner_transaction.id;
                 this.data.payment.description = this.data.description;
-                this.data.payment.transaction_type = this.data.type;
-                await this.editPayment(this.data.payment);
+
+                await this.addNewPayment(this.data.payment);
             }
 
             this.formLoading = false;
@@ -497,11 +489,31 @@ export default {
             if (this.validationErrors !== null) {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
+                this.data.title = "";
+                this.data.partner_id = "";
+                this.data.description = "";
+                this.data.payment.amount = "";
+                this.data.payment.payment_date = "";
+                this.data.payment.bank_id = "";
+                this.data.payment.payment_method = "";
+                this.data.payment.cheque_type = "";
+                this.data.payment.cheque_no = "";
+                this.data.payment.cheque_due_date = "";
+                this.data.payment.cheque_images = [];
+                this.data.payment.description = "";
+
                 // Clear the validation messages object
                 this.validation.setMessages({});
-
-                return this.$router.push({ name: "partner_withdrawals" });
             }
+        },
+    },
+
+    watch: {
+        "data.type": {
+            handler(newVal) {
+                this.data.payment.transaction_type = newVal;
+            },
+            deep: true,
         },
     },
 
@@ -511,43 +523,17 @@ export default {
             partners: "partner/partners",
             banks: "bank/banks",
             paymentSetting: "paymentSetting",
-            partner_withdrawal: "partner_withdrawal/partner_withdrawal",
-            old_partner_withdrawal: "partner_withdrawal/old_partner_withdrawal",
+            recent_partner_transaction:
+                "partner_transaction/recent_partner_transaction",
         }),
     },
 
-    async mounted() {
-        await Promise.all([
+    mounted() {
+        Promise.all([
             this.getPaymentSetting(),
             this.getPartners(),
             this.getBanks(),
-            this.getPartnerWithdrawal(this.$route.params.id),
         ]);
-
-        if (!this.partner_withdrawal) {
-            return this.$router.push({ name: "not_found" });
-        }
-
-        this.data.id = this.partner_withdrawal.id;
-        this.data.partner_id = this.partner_withdrawal.partner_id;
-        this.data.title = this.partner_withdrawal.title;
-        this.data.amount = this.partner_withdrawal.amount;
-        this.data.description = this.partner_withdrawal.description;
-        this.data.payment.id = this.partner_withdrawal.payment.id;
-        this.data.payment.paymentable_id = this.partner_withdrawal.id;
-        this.data.payment.amount = this.partner_withdrawal.amount;
-        this.data.payment.payment_date =
-            this.partner_withdrawal.payment.payment_date;
-        this.data.payment.bank_id = this.partner_withdrawal.payment.bank_id;
-        this.data.payment.payment_method =
-            this.partner_withdrawal.payment.payment_method;
-        this.data.payment.cheque_type =
-            this.partner_withdrawal.payment.cheque_type;
-        this.data.payment.cheque_no = this.partner_withdrawal.payment.cheque_no;
-        this.data.payment.cheque_due_date =
-            this.partner_withdrawal.payment.cheque_due_date;
-        this.data.payment.description =
-            this.partner_withdrawal.payment.description;
     },
 };
 </script>

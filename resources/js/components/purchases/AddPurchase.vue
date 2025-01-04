@@ -279,7 +279,8 @@
                                                                 )
                                                             "
                                                         ></small>
-                                                        <v-select
+
+                                                        <v-combobox
                                                             :items="
                                                                 purchase_items
                                                             "
@@ -289,9 +290,11 @@
                                                                 item.purchase_item_id
                                                             "
                                                             placeholder="Select Item"
-                                                            autocomplete
                                                             filled
-                                                        ></v-select>
+                                                            autocomplete
+                                                            hide-no-data
+                                                            hide-selected
+                                                        ></v-combobox>
                                                     </v-col>
 
                                                     <v-col

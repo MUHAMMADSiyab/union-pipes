@@ -76,4 +76,11 @@ class ReportController extends Controller
 
         return response()->json($unpaid_salaries);
     }
+
+    function get_stocks_report(MachineReportRequest $request, ReportService $reportService)
+    {
+        $stocks = $reportService->getStocksReport($request);
+
+        return response()->json($stocks);
+    }
 }

@@ -2,10 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\Expense;
+use App\Models\PartnerTransaction;
 use App\Models\Payment;
 use App\Models\Purchase;
+use App\Models\Salary;
 use App\Models\Sell;
+use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class LedgerService
 {
@@ -254,19 +259,122 @@ class LedgerService
         return $lastRecord ? $lastRecord['balance'] : 0;
     }
 
+    # Original Latest #
+    // public function getBankLedgerEntries($bank_id, $returnLastBalance = false)
+    // {
+    //     $payments = Payment::query()
+    //         ->where('bank_id', $bank_id)
+    //         ->orderBy('payment_date')
+    //         ->get();
+
+    //     $ledger = [];
+    //     $balance = 0;
+
+    //     foreach ($payments as $payment) {
+    //         $entry = [
+    //             // 'particular' => explode("\\", $payment->model)[2],
+    //             'description' => $payment->description,
+    //             'date' => $payment->payment_date,
+    //             'debit' => 0,
+    //             'credit' => 0,
+    //             'balance' => $balance,
+    //         ];
+
+    //         if ($payment->transaction_type === 'Debit') {
+    //             $entry['debit'] = $payment->amount - $payment->discount;
+    //             $balance += $entry['debit'];
+    //         } elseif ($payment->transaction_type === 'Credit') {
+    //             $entry['credit'] = $payment->amount;
+    //             $balance -= $entry['credit'];
+    //         }
+
+    //         $entry['balance'] = $balance;
+
+    //         $ledger[] = $entry;
+    //     }
+
+    //     if ($returnLastBalance) {
+    //         return !is_null(collect($ledger)->last()) ? collect($ledger)->last()['balance'] : 0;
+    //     }
+
+    //     return $this->filterBetweenDateRange($ledger);
+    // }
+
+    # Updated (without grouping)
     public function getBankLedgerEntries($bank_id, $returnLastBalance = false)
     {
-        $payments = Payment::query()
-            ->where('bank_id', $bank_id)
-            ->orderBy('payment_date')
+        $payments = DB::table('payments')
+            ->leftJoin('purchases', function ($join) {
+                $join->on('payments.paymentable_id', '=', 'purchases.id')
+                    ->where('payments.model', '=', Purchase::class);
+            })
+            ->leftJoin('companies', 'purchases.company_id', '=', 'companies.id')
+            ->leftJoin('sells', function ($join) {
+                $join->on('payments.paymentable_id', '=', 'sells.id')
+                    ->where('payments.model', '=', Sell::class);
+            })
+            ->leftJoin('customers', 'sells.customer_id', '=', 'customers.id')
+            ->leftJoin('transactions', function ($join) {
+                $join->on('payments.paymentable_id', '=', 'transactions.id')
+                    ->where('payments.model', '=', Transaction::class);
+            })
+            ->leftJoin('expenses', function ($join) {
+                $join->on('payments.paymentable_id', '=', 'expenses.id')
+                    ->where('payments.model', '=', Expense::class);
+            })
+            ->leftJoin('partner_transactions', function ($join) {
+                $join->on('payments.paymentable_id', '=', 'partner_transactions.id')
+                    ->where('payments.model', '=', PartnerTransaction::class);
+            })
+            ->leftJoin('partners', 'partner_transactions.partner_id', '=', 'partners.id')
+            ->leftJoin('salaries', function ($join) {
+                $join->on('payments.paymentable_id', '=', 'salaries.id')
+                    ->where('payments.model', '=', Salary::class);
+            })
+            ->select(
+                'payments.*',
+                'customers.id as customer_id',
+                'customers.name as customer_name',
+                'companies.id as company_id',
+                'companies.name as company_name',
+                'salaries.id as salary_id',
+                'salaries.month as salary_month',
+                'transactions.id as transaction_id',
+                'transactions.title as transaction_title',
+                'expenses.id as expense_id',
+                'expenses.name as expense_title',
+                'partners.id as partner_id',
+                'partners.name as partner_name'
+            )
+            ->where('payments.bank_id', $bank_id)
+            ->orderBy('payments.payment_date')
             ->get();
+
 
         $ledger = [];
         $balance = 0;
 
         foreach ($payments as $payment) {
+            $particular = '';
+            $cssClass = 'font-weight-bold indigo--text';
+
+            switch ($payment->model) {
+                case Sell::class:
+                    $particular = '<span class="' . $cssClass . '">Customer: </span>' . $payment->customer_name ?? '';
+                    break;
+                case Purchase::class:
+                    $particular = '<span class="' . $cssClass . '">Company: </span>' . $payment->company_name ?? '';
+                    break;
+                case Transaction::class:
+                    $particular = '<span class="' . $cssClass . '">Transaction: </span>' . $payment->transaction_title ?? '';
+                    break;
+                case Expense::class:
+                    $particular = '<span class="' . $cssClass . '">Expense: </span>' . $payment->expense_title ?? '';
+                    break;
+            }
+
             $entry = [
-                // 'particular' => explode("\\", $payment->model)[2],
+                'particular' => $particular,
                 'description' => $payment->description,
                 'date' => $payment->payment_date,
                 'debit' => 0,
@@ -275,7 +383,7 @@ class LedgerService
             ];
 
             if ($payment->transaction_type === 'Debit') {
-                $entry['debit'] = $payment->amount - $payment->discount;
+                $entry['debit'] = $payment->amount - ($payment->discount ?? 0);
                 $balance += $entry['debit'];
             } elseif ($payment->transaction_type === 'Credit') {
                 $entry['credit'] = $payment->amount;
@@ -294,6 +402,7 @@ class LedgerService
         return $this->filterBetweenDateRange($ledger);
     }
 
+    ### Date Wise Sorted Ledger Entries ###
     // public function getBankLedgerEntries($bank_id)
     // {
     //     $payments = Payment::query()
@@ -334,6 +443,18 @@ class LedgerService
 
     //     return $this->filterBetweenDateRange($ledger);
     // }
+
+
+
+
+
+    ##
+
+    ##
+
+
+
+
 
 
     private function filterBetweenDateRange($entries)

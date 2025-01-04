@@ -25,7 +25,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GatePassController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\MonthlySheetController;
-use App\Http\Controllers\PartnerWithdrawalController;
+use App\Http\Controllers\PartnerTransactionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\ProductionController;
@@ -140,10 +140,9 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         'except' => ['create', 'edit']
     ]);
 
-    // Partner Withdrawal
-    Route::get('search_partner_withdrawals', [PartnerWithdrawalController::class, 'search_partner_withdrawals']);
-    Route::delete('partner_withdrawals/delete_multiple', [PartnerWithdrawalController::class, 'destroy_multiple']);
-    Route::resource('partner_withdrawals', PartnerWithdrawalController::class, [
+    // Partner Transaction
+    Route::delete('partner_transactions/delete_multiple', [PartnerTransactionController::class, 'destroy_multiple']);
+    Route::resource('partner_transactions', PartnerTransactionController::class, [
         'except' => ['create', 'edit']
     ]);
 
@@ -258,6 +257,8 @@ Route::group(['middleware' => ['auth:api', AuthGates::class, NullToEmptyString::
         Route::post('machine', [ReportController::class, 'get_machines_report']);
 
         Route::post('salary', [ReportController::class, 'get_salaries_report']);
+
+        Route::post('stock', [ReportController::class, 'get_stocks_report']);
 
         Route::post('closing', [ClosingReportController::class, 'index']);
     });

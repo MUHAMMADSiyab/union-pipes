@@ -225,11 +225,11 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'partner_delete'],
             ['name' => 'partner_show'],
 
-            ['name' => 'partner_withdrawal_create'],
-            ['name' => 'partner_withdrawal_access'],
-            ['name' => 'partner_withdrawal_edit'],
-            ['name' => 'partner_withdrawal_delete'],
-            ['name' => 'partner_withdrawal_show'],
+            ['name' => 'partner_transaction_create'],
+            ['name' => 'partner_transaction_access'],
+            ['name' => 'partner_transaction_edit'],
+            ['name' => 'partner_transaction_delete'],
+            ['name' => 'partner_transaction_show'],
 
         ];
 

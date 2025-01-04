@@ -93,6 +93,7 @@
                                 <tr>
                                     <th>S#</th>
                                     <th>Date</th>
+                                    <th>Particular</th>
                                     <th>Description</th>
                                     <th>Debit</th>
                                     <th>Credit</th>
@@ -104,7 +105,10 @@
                                 >
                                     <td>{{ i + 1 }}</td>
                                     <td>{{ formatDate(entry.date) }}</td>
-                                    <!-- <td>{{ entry.particular }}</td> -->
+                                    <td
+                                        v-html="entry.particular"
+                                        style="font-size: 0.7rem"
+                                    ></td>
                                     <td
                                         v-html="entry.description"
                                         style="font-size: 0.7rem"
@@ -117,7 +121,7 @@
                                 </tr>
 
                                 <tr style="color: #000">
-                                    <td colspan="3" class="text-center">
+                                    <td colspan="4" class="text-center">
                                         <strong>Total</strong>
                                     </td>
                                     <td>
@@ -175,10 +179,10 @@ export default {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: true,
+                // hour: "2-digit",
+                // minute: "2-digit",
+                // second: "2-digit",
+                // hour12: true,
             });
         },
 

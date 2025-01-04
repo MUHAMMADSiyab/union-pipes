@@ -37,6 +37,11 @@ class Production extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function stock()
+    {
+        return $this->hasOne(Stock::class);
+    }
+
 
     protected static function newFactory()
     {

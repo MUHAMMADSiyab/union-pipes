@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Payment;
+use App\Models\Production;
 use App\Models\Stock;
 use App\Models\ReturnedSoldItem;
 use App\Models\Sell;
 use App\Models\SoldItem;
 use App\Observers\PaymentObserver;
+use App\Observers\ProductionObserver;
 use App\Observers\StockObserver;
 use App\Observers\ReturnedSoldItemObserver;
 use App\Observers\SellObserver;
@@ -36,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         Payment::observe(PaymentObserver::class);
         ReturnedSoldItem::observe(ReturnedSoldItemObserver::class);
         Stock::observe(StockObserver::class);
+        Production::observe(ProductionObserver::class);
         // Sell::observe(SellObserver::class);
         // SoldItem::observe(SoldItemObserver::class);
     }

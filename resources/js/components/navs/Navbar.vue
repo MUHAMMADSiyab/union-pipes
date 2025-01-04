@@ -315,7 +315,7 @@ export default {
                     icon: "mdi-account-group",
                     active:
                         this.activeMenu("partners") ||
-                        this.activeMenu("partner_withdrawals"),
+                        this.activeMenu("partner_transactions"),
                     gate: "partner_access",
                     submenu: [
                         {
@@ -330,13 +330,6 @@ export default {
                             to: "/partners",
                             icon: "mdi-chevron-double-right",
                             gate: "partner_access",
-                            exact: true,
-                        },
-                        {
-                            text: "Partner Withdrawals",
-                            to: "/partner_withdrawals",
-                            icon: "mdi-chevron-double-right",
-                            gate: "partner_withdrawal_access",
                             exact: true,
                         },
                     ],
@@ -647,6 +640,14 @@ export default {
                         {
                             text: "Salary",
                             to: "/reports/salary",
+                            icon: "mdi-chevron-double-right",
+                            gate: "report_access",
+                            exact: true,
+                        },
+
+                        {
+                            text: "Production/Stock",
+                            to: "/reports/stock",
                             icon: "mdi-chevron-double-right",
                             gate: "report_access",
                             exact: true,

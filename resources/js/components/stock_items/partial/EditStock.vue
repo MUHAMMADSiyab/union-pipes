@@ -23,6 +23,21 @@
                 <small
                     class="red--text"
                     v-if="validation.hasErrors()"
+                    v-text="validation.getMessage('per_unit_weight')"
+                ></small>
+                <v-text-field
+                    name="per_unit_weight"
+                    label="Per Unit Weight"
+                    id="per_unit_weight"
+                    v-model="data.per_unit_weight"
+                    type="number"
+                    dense
+                    outlined
+                ></v-text-field>
+
+                <small
+                    class="red--text"
+                    v-if="validation.hasErrors()"
                     v-text="validation.getMessage('quantity')"
                 ></small>
                 <v-text-field
@@ -95,8 +110,15 @@ export default {
     mixins: [ValidationMixin],
 
     data() {
-        const { id, quantity, length, date, stock_item_id, description } =
-            this.stock;
+        const {
+            id,
+            quantity,
+            per_unit_weight,
+            length,
+            date,
+            stock_item_id,
+            description,
+        } = this.stock;
 
         return {
             formLoading: false,
@@ -104,6 +126,7 @@ export default {
                 stock_item_id,
                 id,
                 length,
+                per_unit_weight,
                 quantity,
                 date,
                 description,
@@ -151,8 +174,18 @@ export default {
                 this.data.stock_item_id = newStock.stock_item_id;
                 this.data.id = newStock.id;
                 this.data.quantity = newStock.quantity;
+                this.data.per_unit_weight = newStock.per_unit_weight;
                 this.data.date = newStock.date;
                 this.data.description = newStock.description;
+            },
+
+            deep: true,
+        },
+
+        data: {
+            handler(newVal) {
+                this.data.quantity =
+                    this.data.length * this.data.per_unit_weight;
             },
             deep: true,
         },

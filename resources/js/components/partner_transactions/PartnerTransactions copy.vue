@@ -3,7 +3,7 @@
         <Navbar v-if="!printMode" />
         <print-button />
         <v-container class="mt-4">
-            <h5 class="text-subtitle-1 mb-2">Partner Withdrawals</h5>
+            <h5 class="text-subtitle-1 mb-2">Partner Transactions</h5>
             <!-- Partner Selection -->
             <v-row>
                 <v-col cols="12">
@@ -30,7 +30,7 @@
                 <v-col cols="12">
                     <v-data-table
                         :headers="displayedHeaders"
-                        :items="filteredPartnerWithdrawals"
+                        :items="partner_transactions.data"
                         class="elevation-1"
                         item-key="id"
                         :loading="loading"
@@ -38,9 +38,9 @@
                         :server-items-length="total"
                         :search="search"
                         :show-select="
-                            can('partner_withdrawal_delete') && !printMode
+                            can('partner_transaction_delete') && !printMode
                         "
-                        loading-text="Loading partner_withdrawals..."
+                        loading-text="Loading partner transactions..."
                         :footer-props="footerProps"
                         v-model="selectedItems"
                         dense
@@ -49,27 +49,42 @@
                         <template slot="item.sno" slot-scope="props">{{
                             props.index + 1
                         }}</template>
-                        <!-- Amount -->
-                        <template slot="item.amount" slot-scope="props">
-                            <span>{{ money(props.item.amount) }}</span>
-                        </template>
-                        <!-- Cheque Columns Toggle -->
+                        <!-- Amounts -->
                         <template
-                            v-if="showChequeColumns"
+                            slot="item.payment.payment_date"
+                            slot-scope="props"
+                        >
+                            <span>{{
+                                formatDate(props.item.payment.payment_date)
+                            }}</span>
+                        </template>
+                        <template slot="item.debit" slot-scope="props">
+                            <span>{{ money(props.item.debit) }}</span>
+                        </template>
+                        <template slot="item.credit" slot-scope="props">
+                            <span>{{ money(props.item.credit) }}</span>
+                        </template>
+                        <template slot="item.balance" slot-scope="props">
+                            <span>{{ money(props.item.balance) }}</span>
+                        </template>
+
+                        <!-- Payments Columns Toggle -->
+                        <template
+                            v-if="paymentColumns"
                             slot="item.payment.cheque_type"
                             slot-scope="props"
                         >
                             {{ props.item.payment.cheque_type }}
                         </template>
                         <template
-                            v-if="showChequeColumns"
+                            v-if="paymentColumns"
                             slot="item.payment.cheque_no"
                             slot-scope="props"
                         >
                             {{ props.item.payment.cheque_no }}
                         </template>
                         <template
-                            v-if="showChequeColumns"
+                            v-if="paymentColumns"
                             slot="item.payment.cheque_due_date"
                             slot-scope="props"
                         >
@@ -79,7 +94,7 @@
                         <template
                             v-if="
                                 props.item.payment.cheque_images.length &&
-                                showChequeColumns
+                                paymentColumns
                             "
                             slot="item.payment.cheque_images"
                             slot-scope="props"
@@ -103,17 +118,7 @@
                             slot="item.description"
                             slot-scope="props"
                         >
-                            <v-tooltip bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <span v-bind="attrs" v-on="on"
-                                        >{{
-                                            props.item.description &&
-                                            props.item.description.slice(0, 35)
-                                        }}...</span
-                                    >
-                                </template>
-                                <span>{{ props.item.description }}</span>
-                            </v-tooltip>
+                            <small>{{ props.item.description }}</small>
                         </template>
                         <!-- Top Actions -->
                         <template v-slot:top v-if="!printMode">
@@ -121,15 +126,13 @@
                                 color="blue-grey darken-3"
                                 small
                                 class="ma-2 text-right white--text"
-                                @click="toggleChequeColumns"
-                                v-if="can('partner_withdrawal_delete')"
+                                @click="togglePaymentColumns"
+                                v-if="can('partner_transaction_delete')"
                             >
                                 <v-icon left>{{
-                                    showChequeColumns
-                                        ? "mdi-eye-off"
-                                        : "mdi-eye"
+                                    paymentColumns ? "mdi-eye-off" : "mdi-eye"
                                 }}</v-icon>
-                                {{ showChequeColumns ? "Hide" : "Show" }} Cheque
+                                {{ paymentColumns ? "Hide" : "Show" }} Payment
                                 Columns
                             </v-btn>
                             <v-btn
@@ -138,7 +141,7 @@
                                 :disabled="!selectedItems.length"
                                 class="ma-2 text-right"
                                 @click="deleteMultiple"
-                                v-if="can('partner_withdrawal_delete')"
+                                v-if="can('partner_transaction_delete')"
                             >
                                 <v-icon left>mdi-trash-can-outline</v-icon>
                                 Delete Selected
@@ -147,12 +150,12 @@
                                 color="success"
                                 small
                                 link
-                                to="/partner_withdrawals/add"
+                                to="/partner_transactions/add"
                                 class="ma-2 text-right"
-                                v-if="can('partner_withdrawal_create')"
+                                v-if="can('partner_transaction_create')"
                             >
                                 <v-icon left>mdi-account-plus-outline</v-icon>
-                                New Partner Withdrawal
+                                New Partner Transaction
                             </v-btn>
                             <v-text-field
                                 v-model="search"
@@ -167,9 +170,9 @@
                                 x-small
                                 text
                                 color="primary"
-                                :to="`/partner_withdrawals/edit/${props.item.id}`"
+                                :to="`/partner_transactions/edit/${props.item.id}`"
                                 title="Edit"
-                                v-if="can('partner_withdrawal_edit')"
+                                v-if="can('partner_transaction_edit')"
                             >
                                 <v-icon small>mdi-pencil</v-icon>
                             </v-btn>
@@ -177,9 +180,9 @@
                                 x-small
                                 text
                                 color="red darken-2"
-                                @click="setPartnerWithdrawalId(props.item.id)"
+                                @click="setPartnerTransactionId(props.item.id)"
                                 title="Delete"
-                                v-if="can('partner_withdrawal_delete')"
+                                v-if="can('partner_transaction_delete')"
                             >
                                 <v-icon small>mdi-delete</v-icon>
                             </v-btn>
@@ -197,11 +200,11 @@
                     <!-- Confirmation -->
                     <Confirmation
                         ref="confirmationComponent"
-                        :id="partner_withdrawalId"
+                        :id="partner_transactionId"
                         @confirmDeletion="
-                            partner_withdrawalId
-                                ? handlePartnerWithdrawalDelete()
-                                : handleMultiplePartnerWithdrawalsDelete()
+                            partner_transactionId
+                                ? handlePartnerTransactionDelete()
+                                : handleMultiplePartnerTransactionsDelete()
                         "
                     />
                 </v-col>
@@ -216,7 +219,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DatatableMixin from "../../mixins/DatatableMixin";
-import EditPartnerWithdrawal from "./EditPartnerWithdrawal.vue";
+import EditPartnerTransaction from "./EditPartnerTransaction.vue";
 import Confirmation from "../globals/Confirmation";
 import Navbar from "../navs/Navbar";
 import ChequeImages from "../globals/ChequeImages.vue";
@@ -228,7 +231,7 @@ import CurrencyMixin from "../../mixins/CurrencyMixin";
 export default {
     mixins: [DatatableMixin, CurrencyMixin],
     components: {
-        EditPartnerWithdrawal,
+        EditPartnerTransaction,
         Navbar,
         Confirmation,
         ChequeImages,
@@ -239,22 +242,24 @@ export default {
     data() {
         return {
             options: {},
-            showChequeColumns: false,
+            paymentColumns: false,
             currentChequeImages: null,
             chequeImagesDialog: false,
             selectedPartner: null,
             headers: [
                 { text: "S#", value: "sno", show: true },
-                { text: "Partner", value: "partner.name", show: true },
+                { text: "Date", value: "payment.payment_date", show: false },
                 { text: "Title", value: "title", show: true },
-                { text: "Amount", value: "amount", show: true },
+                { text: "Description", value: "description", show: true },
+                { text: "Debit", value: "debit", show: true },
+                { text: "Credit", value: "credit", show: true },
+                { text: "Balance", value: "balance", show: true },
                 {
                     text: "Payment Method",
                     value: "payment.payment_method",
-                    show: true,
+                    show: false,
                 },
-                { text: "Date", value: "payment.payment_date", show: true },
-                { text: "Bank", value: "payment.bank.name", show: true },
+                { text: "Bank", value: "payment.bank.name", show: false },
                 {
                     text: "Cheque Type",
                     value: "payment.cheque_type",
@@ -271,37 +276,52 @@ export default {
                     value: "payment.cheque_images",
                     show: false,
                 },
-                { text: "Description", value: "description", show: true },
                 { text: "Actions", value: "actions", align: "d-print-none" },
             ],
             selectedItems: [],
-            partner_withdrawalId: null,
+            partner_transactionId: null,
             currentPhoto: null,
         };
     },
     methods: {
         ...mapActions({
-            getPartnerWithdrawals: "partner_withdrawal/getPartnerWithdrawals",
-            searchPartnerWithdrawals:
-                "partner_withdrawal/searchPartnerWithdrawals",
+            getPartnerTransactions:
+                "partner_transaction/getPartnerTransactions",
+            searchPartnerTransactions:
+                "partner_transaction/searchPartnerTransactions",
             getPartners: "partner/getPartners",
-            deletePartnerWithdrawal:
-                "partner_withdrawal/deletePartnerWithdrawal",
-            deleteMultiplePartnerWithdrawals:
-                "partner_withdrawal/deleteMultiplePartnerWithdrawals",
+            deletePartnerTransaction:
+                "partner_transaction/deletePartnerTransaction",
+            deleteMultiplePartnerTransactions:
+                "partner_transaction/deleteMultiplePartnerTransactions",
         }),
-        toggleChequeColumns() {
-            this.showChequeColumns = !this.showChequeColumns;
+
+        formatDate(date) {
+            return new Date(date).toLocaleString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                // hour: "2-digit",
+                // minute: "2-digit",
+                // second: "2-digit",
+                // hour12: true,
+            });
+        },
+
+        togglePaymentColumns() {
+            this.paymentColumns = !this.paymentColumns;
             this.headers.forEach((header) => {
                 if (
                     [
+                        "payment.payment_method",
+                        "payment.bank.name",
                         "payment.cheque_type",
                         "payment.cheque_no",
                         "payment.cheque_due_date",
                         "payment.cheque_images",
                     ].includes(header.value)
                 ) {
-                    header.show = this.showChequeColumns;
+                    header.show = this.paymentColumns;
                 }
             });
         },
@@ -313,23 +333,23 @@ export default {
             this.currentChequeImages = null;
             this.chequeImagesDialog = false;
         },
-        setPartnerWithdrawalId(id) {
-            this.partner_withdrawalId = id;
+        setPartnerTransactionId(id) {
+            this.partner_transactionId = id;
             this.$refs.confirmationComponent.setDialog(true);
         },
-        async handlePartnerWithdrawalDelete() {
-            await this.deletePartnerWithdrawal(this.partner_withdrawalId);
-            this.partner_withdrawalId = null;
+        async handlePartnerTransactionDelete() {
+            await this.deletePartnerTransaction(this.partner_transactionId);
+            this.partner_transactionId = null;
             this.$refs.confirmationComponent.setDialog(false);
         },
         async deleteMultiple() {
             this.$refs.confirmationComponent.setDialog(true);
         },
-        async handleMultiplePartnerWithdrawalsDelete() {
+        async handleMultiplePartnerTransactionsDelete() {
             const ids = this.selectedItems.map(
                 (selectedItem) => selectedItem.id
             );
-            await this.deleteMultiplePartnerWithdrawals(ids);
+            await this.deleteMultiplePartnerTransactions(ids);
             this.$refs.confirmationComponent.setDialog(false);
             this.selectedItems = [];
         },
@@ -341,28 +361,19 @@ export default {
     },
     computed: {
         ...mapGetters({
-            partner_withdrawals: "partner_withdrawal/partner_withdrawals",
-            loading: "partner_withdrawal/loading",
-            total: "partner_withdrawal/total",
+            partner_transactions: "partner_transaction/partner_transactions",
+            loading: "partner_transaction/loading",
+            total: "partner_transaction/total",
             partners: "partner/partners",
         }),
-
-        filteredPartnerWithdrawals() {
-            if (this.selectedPartner) {
-                return this.partner_withdrawals.filter(
-                    (withdrawal) =>
-                        withdrawal.partner.id === parseInt(this.selectedPartner)
-                );
-            }
-
-            return this.partner_withdrawals;
-        },
 
         displayedHeaders() {
             return this.headers.filter(
                 (header) =>
                     header.show ||
                     ![
+                        "payment.payment_method",
+                        "payment.bank.name",
                         "payment.cheque_type",
                         "payment.cheque_no",
                         "payment.cheque_due_date",
@@ -374,7 +385,10 @@ export default {
     watch: {
         options: {
             handler() {
-                this.getPartnerWithdrawals(this.options);
+                this.getPartnerTransactions({
+                    ...this.options,
+                    partnerId: this.selectedPartner,
+                });
             },
             deep: true,
         },
@@ -382,7 +396,10 @@ export default {
         search: {
             handler(newVal) {
                 this.options.search = newVal;
-                this.searchPartnerWithdrawals(this.options);
+                this.searchPartnerTransactions({
+                    ...this.options,
+                    partnerId: this.selectedPartner,
+                });
             },
         },
     },
@@ -397,10 +414,15 @@ export default {
                     partner.id === parseInt(this.getSelectedPartnerFromUrl())
             )?.id || null;
 
+        this.getPartnerTransactions({
+            ...this.options,
+            partnerId: this.selectedPartner,
+        });
+
         // Remove actions if no access is given
         if (
-            !this.can("partner_withdrawal_edit") &&
-            !this.can("partner_withdrawal_delete")
+            !this.can("partner_transaction_edit") &&
+            !this.can("partner_transaction_delete")
         ) {
             this.headers = this.headers.filter(
                 (header) => header.value !== "actions"

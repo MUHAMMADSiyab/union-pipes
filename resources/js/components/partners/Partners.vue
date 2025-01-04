@@ -88,8 +88,8 @@
                                 small
                                 color="info darken-2"
                                 icon
-                                :to="`/partner_withdrawals?partner_id=${partner.id}`"
-                                :title="`${partner.name}'s Withdrawals`"
+                                :to="`/partner_transactions?partner_id=${partner.id}`"
+                                :title="`${partner.name}'s Transactions`"
                             >
                                 <v-icon small>mdi-account-cash-outline</v-icon>
                             </v-btn>

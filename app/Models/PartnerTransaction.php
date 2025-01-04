@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PartnerWithdrawal extends Model
+class PartnerTransaction extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
+        'type',
         'amount',
         'partner_id',
         'description',
@@ -30,6 +31,6 @@ class PartnerWithdrawal extends Model
 
     public function payment()
     {
-        return $this->hasOne(Payment::class, 'paymentable_id')->where('model', PartnerWithdrawal::class);
+        return $this->hasOne(Payment::class, 'paymentable_id')->where('model', PartnerTransaction::class);
     }
 }

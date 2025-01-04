@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PartnerWithdrawalRequest extends FormRequest
+class PartnerTransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +25,7 @@ class PartnerWithdrawalRequest extends FormRequest
     {
         return [
             'title' => "required|min:3|max:200",
+            "type" => "required|in:Debit,Credit",
             'partner_id' => "required|exists:partners,id",
             'amount' => 'required|numeric',
             'description' => 'nullable|max:500',

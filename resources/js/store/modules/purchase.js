@@ -37,6 +37,10 @@ const actions = {
     async addPurchase({ commit, dispatch }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.items = data.items.map((item) => ({
+                ...item,
+                purchase_item_id: item.purchase_item_id?.id,
+            }));
             const res = await axios.post("/api/purchases", data);
 
             commit(NEW_PURCHASE, res.data);
@@ -121,6 +125,10 @@ const actions = {
     async updatePurchase({ dispatch, commit }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.items = data.items.map((item) => ({
+                ...item,
+                purchase_item_id: item.purchase_item_id?.id,
+            }));
             const res = await axios.put(`/api/purchases/${data.id}`, data);
 
             // commit(UPDATE_PURCHASE, res.data.updated_purchase);

@@ -72,6 +72,7 @@ import PayablesReport from "./components/reports/purchase/PayablesReport";
 import ExpenseReportSearch from "./components/reports/expense/ExpenseReportSearch";
 import MachineReportSearch from "./components/reports/machine/MachineReportSearch";
 import SalaryReport from "./components/reports/salary/SalaryReport";
+import StockReportSearch from "./components/reports/stock/StockReportSearch";
 import ClosingReportSearch from "./components/reports/closing/ClosingReportSearch";
 
 import CreateGatePass from "./components/gate_passes/CreateGatePass";
@@ -120,9 +121,9 @@ import AddPartner from "./components/partners/AddPartner";
 import EditPartner from "./components/partners/EditPartner";
 import Partners from "./components/partners/Partners";
 
-import AddPartnerWithdrawal from "./components/partner_withdrawals/AddPartnerWithdrawal";
-import EditPartnerWithdrawal from "./components/partner_withdrawals/EditPartnerWithdrawal";
-import PartnerWithdrawals from "./components/partner_withdrawals/PartnerWithdrawals";
+import AddPartnerTransaction from "./components/partner_transactions/AddPartnerTransaction";
+import EditPartnerTransaction from "./components/partner_transactions/EditPartnerTransaction";
+import PartnerTransactions from "./components/partner_transactions/PartnerTransactions";
 
 const router = new VueRouter({
     mode: "history",
@@ -627,6 +628,17 @@ const router = new VueRouter({
         },
 
         {
+            path: "/reports/stock",
+            name: "stock_report",
+            component: StockReportSearch,
+            beforeEnter: RedirectBasedOnAuthStatus,
+            meta: {
+                title: `Production/Stock Report - PipeSync`,
+                gate: "report_access",
+            },
+        },
+
+        {
             path: "/reports/closing",
             name: "closing_report",
             component: ClosingReportSearch,
@@ -1026,33 +1038,33 @@ const router = new VueRouter({
         },
 
         {
-            path: "/partner_withdrawals/add",
-            name: "partner_withdrawal_add",
-            component: AddPartnerWithdrawal,
+            path: "/partner_transactions/add",
+            name: "partner_transaction_add",
+            component: AddPartnerTransaction,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `New Partner Withdrawal - PipeSync`,
-                gate: "partner_withdrawal_create",
+                title: `New Partner Transaction - PipeSync`,
+                gate: "partner_transaction_create",
             },
         },
         {
-            path: "/partner_withdrawals/edit/:id",
-            name: "partner_withdrawal_edit",
-            component: EditPartnerWithdrawal,
+            path: "/partner_transactions/edit/:id",
+            name: "partner_transaction_edit",
+            component: EditPartnerTransaction,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Edit Partner Withdrawal - PipeSync`,
-                gate: "partner_withdrawal_edit",
+                title: `Edit Partner Transaction - PipeSync`,
+                gate: "partner_transaction_edit",
             },
         },
         {
-            path: "/partner_withdrawals",
-            name: "partner_withdrawals",
-            component: PartnerWithdrawals,
+            path: "/partner_transactions",
+            name: "partner_transactions",
+            component: PartnerTransactions,
             beforeEnter: RedirectBasedOnAuthStatus,
             meta: {
-                title: `Partners - PipeSync`,
-                gate: "partner_withdrawal_access",
+                title: `Partner Transactions - PipeSync`,
+                gate: "partner_transaction_access",
             },
         },
     ],

@@ -143,6 +143,7 @@ export default {
                 { text: "S#", value: "sno" },
                 { text: "Date", value: "date" },
                 { text: "Length (Meter/Foot)", value: "length" },
+                { text: "Per Unit Weight", value: "per_unit_weight" },
                 { text: "Weight", value: "quantity" },
                 { text: "Description", value: "description" },
                 { text: "Actions", value: "actions", align: " d-print-none" },

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Production;
 use App\Models\Stock;
 use App\Models\StockItem;
 
@@ -34,6 +35,17 @@ class StockObserver
 
         $stock_item->decrement('available_length', $stock->getOriginal('length'));
         $stock_item->increment('available_length', $stock->length);
+
+        if (!empty($stock->production_id)) {
+            Production::query()
+                ->where('id', $stock->production_id)
+                ->update([
+                    'weight' => ($stock->length > 0) ? ($stock->quantity / $stock->length) : 0,
+                    'quantity' => $stock->length,
+                    'total_weight' => $stock->quantity,
+                    'description' => $stock->description
+                ]);
+        }
     }
 
     /**
