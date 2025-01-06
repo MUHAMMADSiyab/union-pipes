@@ -7,6 +7,22 @@
             <h5 class="text-subtitle-2 mb-2 grey--text darken-3">
                 Partner Transactions
             </h5>
+
+            <v-row>
+                <v-col cols="12">
+                    <v-btn
+                        color="success"
+                        small
+                        link
+                        :to="`/partner_transactions/add`"
+                        class="ma-2 text-right float-right"
+                        v-if="can('partner_transaction_create')"
+                    >
+                        <v-icon left>mdi-plus-thick</v-icon>
+                        New Transaction</v-btn
+                    >
+                </v-col>
+            </v-row>
             <v-row>
                 <v-col cols="12">
                     <v-row align="center">
