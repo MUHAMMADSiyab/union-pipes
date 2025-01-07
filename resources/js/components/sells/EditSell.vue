@@ -707,6 +707,7 @@ export default {
 
         async update() {
             if (
+                this.data.category === "Pipe" &&
                 this.data.items.filter((item) => item.product_id).length === 0
             ) {
                 return alert("Please select product first");
