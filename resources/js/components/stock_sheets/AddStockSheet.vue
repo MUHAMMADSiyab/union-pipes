@@ -367,16 +367,18 @@ export default {
                                 product.product_full_name === stock_item.name
                         ).length
                 )
-                .map((stock_item) => ({
-                    product: stock_item.name,
-                    quantity: stock_item.available_length,
-                    weight: stock_item.available_quantity,
-                    rate: 0,
-                    total_weight:
-                        stock_item.available_length *
-                        stock_item.available_quantity,
-                    total_amount: 0,
-                }));
+                .map((stock_item) => {
+                    return {
+                        product: stock_item.name,
+                        quantity: stock_item.available_length,
+                        weight:
+                            stock_item.available_quantity /
+                            (stock_item.available_length || 1),
+                        rate: 0,
+                        total_weight: parseFloat(stock_item.available_quantity),
+                        total_amount: 0,
+                    };
+                });
         },
     },
 
