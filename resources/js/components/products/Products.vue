@@ -186,6 +186,7 @@ export default {
             headers: [
                 { text: "S#", value: "sno" },
                 { text: "Product Name", value: "name" },
+                { text: "Per Unit Weight", value: "per_unit_weight" },
                 { text: "Size", value: "size" },
                 { text: "Type", value: "type" },
                 { text: "Per Kg Price", value: "per_kg_price" },

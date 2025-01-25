@@ -103,7 +103,7 @@ import { mapActions, mapGetters } from "vuex";
 import ValidationMixin from "../../../mixins/ValidationMixin";
 
 export default {
-    props: ["stockItemId"],
+    props: ["stockItem"],
 
     mixins: [ValidationMixin],
 
@@ -111,9 +111,9 @@ export default {
         return {
             formLoading: false,
             data: {
-                stock_item_id: this.stockItemId,
+                stock_item_id: this.stockItem.id,
                 length: 0,
-                per_unit_weight: 0,
+                per_unit_weight: this.stockItem.product?.per_unit_weight || 0,
                 quantity: 0,
                 date: "",
                 description: "",
@@ -155,9 +155,11 @@ export default {
     },
 
     watch: {
-        stockItemId: {
+        stockItem: {
             handler(newVal) {
-                this.data.stock_item_id = newVal;
+                this.data.stock_item_id = newVal.id;
+                this.data.per_unit_weight =
+                    newVal.product?.per_unit_weight || 0;
             },
         },
 

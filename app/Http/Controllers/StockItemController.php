@@ -18,7 +18,7 @@ class StockItemController extends Controller
     {
         Gate::authorize('stock_item_access');
 
-        $stock_items = StockItem::all();
+        $stock_items = StockItem::query()->with('product')->get();
         return response()->json($stock_items);
     }
 

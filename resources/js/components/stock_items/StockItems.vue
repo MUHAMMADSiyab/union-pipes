@@ -46,7 +46,7 @@
                     <v-btn
                         x-small
                         color="success"
-                        @click="showAddStockDialog(item.id)"
+                        @click="showAddStockDialog(item)"
                         title="Add Stock"
                         v-if="can('stock_item_create')"
                         class="mr-1"
@@ -57,7 +57,7 @@
                     <v-btn
                         x-small
                         color="info"
-                        @click="showStocksDialog(item.id)"
+                        @click="showStocksDialog(item)"
                         title="View Stocks"
                     >
                         <v-icon small>mdi-clock-outline</v-icon>
@@ -106,7 +106,7 @@
             <!-- Add Stock Dialog -->
             <v-dialog v-model="addStockDialog" max-width="600" persistent>
                 <AddStock
-                    :stock-item-id="currentStockItemId"
+                    :stock-item="currentStockItem"
                     @closeDialog="closeAddStockDialog"
                 />
             </v-dialog>
@@ -114,7 +114,7 @@
             <!-- Stocks Dialog -->
             <v-dialog v-model="stocksDialog" max-width="800" persistent>
                 <Stocks
-                    :stock-item-id="currentStockItemId"
+                    :stock-item="currentStockItem"
                     @closeDialog="closeStocksDialog"
                 />
             </v-dialog>
@@ -161,7 +161,7 @@ export default {
             addStockDialog: false,
             stocksDialog: false,
             stockItemId: null,
-            currentStockItemId: null,
+            currentStockItem: null,
             headers: [
                 {
                     text: "Name",
@@ -169,9 +169,9 @@ export default {
                     value: "name",
                 },
                 {
-                    text: "Description",
+                    text: "Per Unit Weight",
                     align: "start",
-                    value: "description",
+                    value: "product.per_unit_weight",
                 },
                 {
                     text: "Available Weight",
@@ -208,24 +208,24 @@ export default {
             this.$refs.confirmationComponent.setDialog(true);
         },
 
-        showAddStockDialog(currentStockItemId) {
-            this.currentStockItemId = currentStockItemId;
+        showAddStockDialog(currentStockItem) {
+            this.currentStockItem = currentStockItem;
             this.addStockDialog = true;
         },
 
         closeAddStockDialog() {
-            this.currentStockItemId = null;
+            this.currentStockItem = null;
             this.addStockDialog = false;
         },
 
-        showStocksDialog(stockItemId) {
-            this.currentStockItemId = stockItemId;
+        showStocksDialog(stockItem) {
+            this.currentStockItem = stockItem;
             this.stocksDialog = true;
         },
 
         closeStocksDialog() {
             this.stocksDialog = false;
-            this.currentStockItemId = null;
+            this.currentStockItem = null;
         },
 
         async handleStockItemDelete() {

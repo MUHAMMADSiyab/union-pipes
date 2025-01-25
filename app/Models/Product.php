@@ -15,6 +15,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'per_kg_price',
+        'per_unit_weight',
         'size',
         'type',
     ];

@@ -38,7 +38,25 @@
                         ></v-text-field>
                     </v-col>
 
-                    <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
+                    <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
+                        <small
+                            class="red--text"
+                            v-if="validation.hasErrors()"
+                            v-text="validation.getMessage('per_unit_weight')"
+                        ></small>
+                        <v-text-field
+                            type="number"
+                            steps=".01"
+                            name="product-per_unit_weight"
+                            label="Per Unit Weight"
+                            id="product-per_unit_weight"
+                            v-model="data.per_unit_weight"
+                            dense
+                            outlined
+                        ></v-text-field>
+                    </v-col>
+
+                    <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                         <small
                             class="red--text"
                             v-if="validation.hasErrors()"
@@ -56,7 +74,7 @@
                         ></v-text-field>
                     </v-col>
 
-                    <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="py-0">
+                    <v-col xl="4" lg="4" md="4" sm="12" cols="12" class="py-0">
                         <small
                             class="red--text"
                             v-if="validation.hasErrors()"
@@ -92,7 +110,8 @@ export default {
     mixins: [ValidationMixin],
 
     data() {
-        const { id, name, per_kg_price, type, size } = this.singleProduct;
+        const { id, name, per_kg_price, per_unit_weight, type, size } =
+            this.singleProduct;
 
         return {
             formLoading: false,
@@ -100,6 +119,7 @@ export default {
                 id,
                 name,
                 per_kg_price,
+                per_unit_weight,
                 type,
                 size,
             },
@@ -137,6 +157,7 @@ export default {
                 this.data.id = id;
                 this.data.name = name;
                 this.data.per_kg_price = per_kg_price;
+                this.data.per_unit_weight = per_unit_weight;
                 this.data.size = size;
                 this.data.type = type;
             },

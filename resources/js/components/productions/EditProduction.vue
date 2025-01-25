@@ -97,6 +97,7 @@
                                             item-value="id"
                                             v-model="data.product_id"
                                             placeholder="Select Product"
+                                            @change="handleProductSelect"
                                             autocomplete
                                             dense
                                             outlined
@@ -324,6 +325,13 @@ export default {
             getProduction: "production/getProduction",
             updateProduction: "production/updateProduction",
         }),
+
+        handleProductSelect(e) {
+            const product = this.products.find((product) => product.id === e);
+            if (product && product.per_unit_weight) {
+                this.data.weight = product.per_unit_weight;
+            }
+        },
 
         async update() {
             this.formLoading = true;

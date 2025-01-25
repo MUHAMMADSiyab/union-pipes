@@ -331,6 +331,7 @@ class LedgerService
                 $join->on('payments.paymentable_id', '=', 'salaries.id')
                     ->where('payments.model', '=', Salary::class);
             })
+            ->leftJoin('employees', 'salaries.employee_id', '=', 'employees.id')
             ->select(
                 'payments.*',
                 'customers.id as customer_id',
@@ -339,6 +340,8 @@ class LedgerService
                 'companies.name as company_name',
                 'salaries.id as salary_id',
                 'salaries.month as salary_month',
+                'employees.id as employee_id',
+                'employees.name as employee_name',
                 'transactions.id as transaction_id',
                 'transactions.title as transaction_title',
                 'expenses.id as expense_id',
@@ -368,8 +371,14 @@ class LedgerService
                 case Transaction::class:
                     $particular = '<span class="' . $cssClass . '">Transaction: </span>' . $payment->transaction_title ?? '';
                     break;
+                case PartnerTransaction::class:
+                    $particular = '<span class="' . $cssClass . '">Partner Transaction: </span>' . $payment->partner_name ?? '';
+                    break;
                 case Expense::class:
                     $particular = '<span class="' . $cssClass . '">Expense: </span>' . $payment->expense_title ?? '';
+                    break;
+                case Salary::class:
+                    $particular = '<span class="' . $cssClass . '">Salary: </span>' . $payment->employee_name ?? '';
                     break;
             }
 

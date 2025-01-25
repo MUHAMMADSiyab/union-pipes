@@ -122,7 +122,7 @@ import PDF from "../../globals/exports/PDF.vue";
 export default {
     mixins: [DatatableMixin, CurrencyMixin],
 
-    props: ["stockItemId"],
+    props: ["stockItem"],
 
     components: {
         EditStock,
@@ -134,7 +134,7 @@ export default {
 
     data() {
         return {
-            stock_item_id: this.stockItemId,
+            stock_item_id: this.stockItem.id,
             stockId: null,
             stockModel: null,
             selectedItems: [],
@@ -186,9 +186,9 @@ export default {
     },
 
     watch: {
-        stockItemId: {
-            handler(newStockItemId) {
-                this.getStocks(newStockItemId);
+        stockItem: {
+            handler(newStockItem) {
+                this.getStocks(newStockItem.id);
             },
             deep: true,
         },

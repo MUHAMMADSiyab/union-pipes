@@ -27,7 +27,8 @@ class ProductRequest extends FormRequest
             'name' => 'required|max:30',
             'size' => 'nullable|numeric',
             'type' => 'required|max:50',
-            'per_kg_price' => 'nullable|numeric'
+            'per_kg_price' => 'nullable|numeric',
+            'per_unit_weight' => 'nullable|numeric',
         ];
     }
 }
