@@ -379,7 +379,9 @@
                                                             "
                                                             placeholder="Search or Select Item"
                                                             @change="
-                                                                handleRateSelect
+                                                                handleProductSelect(
+                                                                    i
+                                                                )
                                                             "
                                                             dense
                                                             hide-no-data
@@ -665,11 +667,19 @@ export default {
             updateSell: "sell/updateSell",
         }),
 
-        handleRateSelect(item) {
+        handleProductSelect(index) {
+            const item = this.data.items[index];
+
             if (item.product_id) {
-                item.rate = this.products.find(
-                    (product) => product.id == item.product_id
-                ).per_kg_price;
+                const product = this.products.find(
+                    (product) => product.id === item.product_id.id
+                );
+
+                if (product) {
+                    this.data.items[index].rate = product.per_kg_price;
+                    this.data.items[index].per_quantity_weight =
+                        product.per_unit_weight;
+                }
             }
         },
 

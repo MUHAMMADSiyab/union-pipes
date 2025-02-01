@@ -357,12 +357,7 @@ class ReportService
     public function getStocksReport($request)
     {
         $stocks = StockItem::query()
-            ->with(['product', 'stocks' => function ($q) use ($request) {
-                $q->whereBetween(
-                    'date',
-                    [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
-                );
-            }])
+            ->with(['product', 'stocks'])
             ->whereHas('stocks', function ($q) use ($request) {
                 $q->whereBetween(
                     'date',

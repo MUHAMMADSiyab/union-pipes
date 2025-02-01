@@ -11,6 +11,10 @@
                     <v-card>
                         <v-card-text>
                             <v-simple-table>
+                                <tr v-if="bulk_payment.is_advance">
+                                    <td>Advance Payment</td>
+                                    <td>Yes</td>
+                                </tr>
                                 <tr>
                                     <td>Type</td>
                                     <td>{{ bulk_payment.type }}</td>

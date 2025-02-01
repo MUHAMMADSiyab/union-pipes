@@ -25,6 +25,7 @@
                 :items="stock_items"
                 :loading="loading"
                 :search="search"
+                :items-per-page="-1"
                 class="elevation-1"
                 :custom-filter="customFilter"
             >

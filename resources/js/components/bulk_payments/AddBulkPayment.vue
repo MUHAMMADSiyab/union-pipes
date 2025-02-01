@@ -17,6 +17,22 @@
                             <v-form @submit.prevent="add">
                                 <v-row>
                                     <v-col
+                                        xl="3"
+                                        lg="3"
+                                        md="3"
+                                        sm="12"
+                                        cols="12"
+                                        class="py-0"
+                                    >
+                                        <v-switch
+                                            v-model="data.is_advance"
+                                            label="Advance Payment"
+                                            color="primary"
+                                        />
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col
                                         xl="6"
                                         lg="6"
                                         md="6"
@@ -441,6 +457,7 @@ export default {
         return {
             formLoading: false,
             data: {
+                is_advance: false,
                 type: "",
                 customer_id: "",
                 company_id: "",
@@ -486,6 +503,7 @@ export default {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
                 this.data.type = "";
+                this.data.is_advance = false;
                 this.data.customer_id = "";
                 this.data.company_id = "";
                 this.data.description = "";

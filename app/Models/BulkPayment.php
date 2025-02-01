@@ -26,6 +26,11 @@ class BulkPayment extends Model implements HasMedia
         'cheque_due_date',
         'bank_id',
         'description',
+        'is_advance'
+    ];
+
+    protected $casts = [
+        'is_advance' => 'boolean',
     ];
 
     protected $appends = [

@@ -41,12 +41,14 @@ const actions = {
             cheque_due_date,
             cheque_images,
             description,
+            is_advance,
         }
     ) {
         try {
             const fd = new FormData();
 
             fd.append("type", type);
+            fd.append("is_advance", is_advance);
             fd.append("customer_id", customer_id);
             fd.append("company_id", company_id);
             fd.append("amount", amount);
