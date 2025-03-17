@@ -9,6 +9,7 @@ use App\Models\Expense;
 use App\Models\ExpenseSource;
 use App\Models\Machine;
 use App\Models\Product;
+use App\Models\Production;
 use App\Models\Purchase;
 use App\Models\PurchasedItem;
 use App\Models\Sell;
@@ -354,28 +355,55 @@ class ReportService
             ->withSum('salaries', 'balance')->get();
     }
 
+    // public function getStocksReport($request)
+    // {
+    //     $stocks = StockItem::query()
+    //         ->with(['product', 'stocks'])
+    //         ->whereHas('stocks', function ($q) use ($request) {
+    //             $q->whereBetween(
+    //                 'date',
+    //                 [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
+    //             );
+    //         })
+    //         ->get()
+    //         ->map(function ($item) {
+    //             return [
+    //                 'stock_product' => [
+    //                     'id' => $item->product?->id ?? $item->id,
+    //                     'name' => $item->product?->product_full_name ?? $item->name,
+    //                 ],
+    //                 'total_weight' => $item->stocks->sum('quantity'),
+    //                 'total_length' => $item->stocks->sum('length'),
+    //             ];
+    //         });
+
+    //     return $stocks;
+    // }
+
     public function getStocksReport($request)
     {
-        $stocks = StockItem::query()
-            ->with(['product', 'stocks'])
-            ->whereHas('stocks', function ($q) use ($request) {
-                $q->whereBetween(
-                    'date',
-                    [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
-                );
-            })
+        $productions = Production::query()
+            ->with(['product'])
+            ->whereBetween(
+                'date',
+                [$request->from_date . ' 00:00:00', $request->to_date . ' 23:59:59']
+            )
             ->get()
-            ->map(function ($item) {
+            ->groupBy('product_id')
+            ->map(function ($items, $productId) {
+                $product = $items->first()->product;
+
                 return [
                     'stock_product' => [
-                        'id' => $item->product?->id ?? $item->id,
-                        'name' => $item->product?->product_full_name ?? $item->name,
+                        'id' => $product?->id ?? $productId,
+                        'name' => $product?->product_full_name ?? 'Unknown Product',
                     ],
-                    'total_weight' => $item->stocks->sum('quantity'),
-                    'total_length' => $item->stocks->sum('length'),
+                    'total_weight' => $items->sum('total_weight'),
+                    'total_length' => $items->sum('quantity'),
                 ];
-            });
+            })
+            ->values();
 
-        return $stocks;
+        return $productions;
     }
 }
