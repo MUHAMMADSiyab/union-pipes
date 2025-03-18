@@ -324,9 +324,13 @@ export default {
         }),
 
         handleProductSelect(e) {
-            const product = this.products.find((product) => product.id === e);
+            console.log(e);
 
-            this.data.weight = product.per_unit_weight;
+            const product = this.products.find(
+                (product) => product.id === e.id
+            );
+
+            this.data.weight = product?.per_unit_weight;
         },
 
         async add() {

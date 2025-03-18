@@ -327,7 +327,9 @@ export default {
         }),
 
         handleProductSelect(e) {
-            const product = this.products.find((product) => product.id === e);
+            const product = this.products.find(
+                (product) => product.id === e.id
+            );
             if (product && product.per_unit_weight) {
                 this.data.weight = product.per_unit_weight;
             }
