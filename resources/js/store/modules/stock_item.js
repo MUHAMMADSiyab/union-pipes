@@ -25,6 +25,7 @@ const actions = {
     // Add stock item
     async addStockItem({ dispatch, commit }, data) {
         try {
+            data.product_id = data.product_id?.id;
             const res = await axios.post("/api/stock_items", data);
 
             commit(NEW_STOCK_ITEM, res.data);
@@ -78,6 +79,7 @@ const actions = {
     // Update stock item
     async updateStockItem({ dispatch, commit }, data) {
         try {
+            data.product_id = data.product_id?.id;
             const res = await axios.put(`/api/stock_items/${data.id}`, data);
 
             commit(UPDATE_STOCK_ITEM, res.data);

@@ -39,6 +39,7 @@ const actions = {
     async addSell({ dispatch, commit }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.customer_id = data.customer_id?.id;
             data.items = data.items.map((item) => ({
                 ...item,
                 product_id: item.product_id?.id,
@@ -130,6 +131,7 @@ const actions = {
     async updateSell({ dispatch, commit }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.customer_id = data.customer_id?.id;
             data.items = data.items.map((item) => ({
                 ...item,
                 product_id: item.product_id?.id,

@@ -30,6 +30,8 @@ const actions = {
     // Add production
     async addProduction({ dispatch, commit }, data) {
         try {
+            data.product_id = data.product_id?.id;
+            data.employee_id = data.employee_id?.id;
             const res = await axios.post("/api/productions", data);
 
             commit(NEW_PRODUCTION, res.data);
@@ -113,6 +115,9 @@ const actions = {
     // Update production
     async updateProduction({ dispatch, commit }, data) {
         try {
+            data.employee_id = data.employee_id?.id;
+            data.product_id = data.product_id?.id;
+
             const res = await axios.put(`/api/productions/${data.id}`, data);
 
             commit(UPDATE_PRODUCTION, res.data);

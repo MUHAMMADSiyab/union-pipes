@@ -84,16 +84,16 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="customers"
                                             item-text="name"
                                             item-value="id"
                                             v-model="data.customer_id"
                                             placeholder="Select Customer"
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col

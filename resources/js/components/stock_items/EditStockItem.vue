@@ -31,22 +31,23 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="products"
                                             item-text="product_full_name"
                                             item-value="id"
                                             v-model="data.product_id"
                                             placeholder="Select Product"
                                             @change="
-                                                (e) =>
-                                                    (data.name = products.find(
-                                                        (p) => p.id == e
-                                                    )?.product_full_name)
+                                                (e) => {
+                                                    data.name = products.find(
+                                                        (p) => p.id == e.id
+                                                    )?.product_full_name;
+                                                }
                                             "
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col
@@ -232,7 +233,7 @@ export default {
         }
 
         this.data.id = this.stock_item.id;
-        this.data.product_id = this.stock_item.product_id;
+        this.data.product_id = this.stock_item.product;
         this.data.name = this.stock_item.name;
         this.data.available_quantity = this.stock_item.available_quantity;
         this.data.available_length = this.stock_item.available_length;

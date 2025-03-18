@@ -31,22 +31,23 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="products"
                                             item-text="product_full_name"
                                             item-value="id"
                                             v-model="data.product_id"
                                             placeholder="Select Product"
                                             @change="
-                                                (e) =>
-                                                    (data.name = products.find(
-                                                        (p) => p.id == e
-                                                    )?.product_full_name)
+                                                (e) => {
+                                                    data.name = products.find(
+                                                        (p) => p.id == e.id
+                                                    )?.product_full_name;
+                                                }
                                             "
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col

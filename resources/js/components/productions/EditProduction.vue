@@ -62,16 +62,16 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="employees"
                                             item-text="name"
                                             item-value="id"
                                             v-model="data.employee_id"
                                             placeholder="Select Operator"
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col
@@ -91,17 +91,17 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="products"
                                             item-text="product_full_name"
                                             item-value="id"
                                             v-model="data.product_id"
-                                            placeholder="Select Product"
                                             @change="handleProductSelect"
-                                            autocomplete
+                                            placeholder="Select Product"
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col
@@ -386,8 +386,8 @@ export default {
         const {
             id,
             machine_id,
-            employee_id,
-            product_id,
+            employee,
+            product,
             date,
             shift,
             weight,
@@ -398,8 +398,8 @@ export default {
 
         this.data.id = id;
         this.data.machine_id = machine_id;
-        this.data.employee_id = employee_id;
-        this.data.product_id = product_id;
+        this.data.employee_id = employee;
+        this.data.product_id = product;
         this.data.date = date;
         this.data.shift = shift;
         this.data.weight = weight;

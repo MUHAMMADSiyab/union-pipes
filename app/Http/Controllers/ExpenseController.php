@@ -43,6 +43,7 @@ class ExpenseController extends Controller
         $orderDirection = request()->boolean('orderByDesc') ? 'desc' : 'asc';
 
         $expenses = Expense::query()
+            ->with(['payment', 'expense_source'])
             ->where(function ($query) {
                 $searchTerm = request('search');
                 $query->where('name', 'like', '%' . $searchTerm . '%')
@@ -85,6 +86,8 @@ class ExpenseController extends Controller
     {
         Gate::authorize('expense_access');
         Gate::authorize('expense_show');
+
+        $expense->load('expense_source');
 
         return response()->json($expense);
     }

@@ -37,6 +37,7 @@ const actions = {
     async addPurchase({ commit, dispatch }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.company_id = data.company_id?.id;
             data.items = data.items.map((item) => ({
                 ...item,
                 purchase_item_id: item.purchase_item_id?.id,
@@ -125,6 +126,7 @@ const actions = {
     async updatePurchase({ dispatch, commit }, data) {
         try {
             data.date = moment(data.date).format("Y-MM-DD HH:mm:ss");
+            data.company_id = data.company_id?.id;
             data.items = data.items.map((item) => ({
                 ...item,
                 purchase_item_id: item.purchase_item_id?.id,

@@ -54,7 +54,7 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="expense_sources"
                                             label="Expense Source"
                                             id="expense_source"
@@ -62,10 +62,10 @@
                                             item-value="id"
                                             item-text="name"
                                             v-model="data.expense_source_id"
-                                            search=""
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col cols="12" class="py-0">
@@ -522,7 +522,7 @@ export default {
         }
 
         this.data.id = this.expense.id;
-        this.data.expense_source_id = this.expense.expense_source_id;
+        this.data.expense_source_id = this.expense.expense_source;
         this.data.name = this.expense.name;
         this.data.amount = this.expense.amount;
         this.data.description = this.expense.description;

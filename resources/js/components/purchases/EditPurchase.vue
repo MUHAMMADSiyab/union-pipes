@@ -65,16 +65,16 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="companies"
                                             item-text="name"
                                             item-value="id"
                                             v-model="data.company_id"
                                             placeholder="Select Supplier Company"
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col
@@ -610,7 +610,7 @@ export default {
         this.data.invoice_no = this.purchase.invoice_no;
         this.data.category = this.purchase.category;
         this.data.description = this.purchase.description;
-        this.data.company_id = this.purchase.company_id;
+        this.data.company_id = this.purchase.company;
         this.data.items = this.purchase.purchased_items?.map((item) => ({
             ...item,
             purchase_item_id: item.purchase_item,

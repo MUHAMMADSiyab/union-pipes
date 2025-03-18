@@ -94,6 +94,8 @@ class ProductionController extends Controller
         Gate::authorize('production_access');
         Gate::authorize('production_show');
 
+        $production->load(['employee', 'product']);
+
         return response()->json($production);
     }
 

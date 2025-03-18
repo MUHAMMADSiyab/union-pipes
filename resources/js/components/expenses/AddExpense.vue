@@ -54,7 +54,7 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="expense_sources"
                                             label="Expense Source"
                                             id="expense_source"
@@ -62,10 +62,10 @@
                                             item-value="id"
                                             item-text="name"
                                             v-model="data.expense_source_id"
-                                            search=""
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col cols="12" class="py-0">

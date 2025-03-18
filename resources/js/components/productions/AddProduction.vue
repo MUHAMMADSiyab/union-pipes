@@ -60,16 +60,16 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="employees"
                                             item-text="name"
                                             item-value="id"
                                             v-model="data.employee_id"
                                             placeholder="Select Operator"
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col
@@ -89,17 +89,17 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="products"
                                             item-text="product_full_name"
                                             item-value="id"
                                             v-model="data.product_id"
                                             @change="handleProductSelect"
                                             placeholder="Select Product"
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col

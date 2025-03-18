@@ -84,16 +84,16 @@
                                                 )
                                             "
                                         ></small>
-                                        <v-select
+                                        <v-combobox
                                             :items="customers"
                                             item-text="name"
                                             item-value="id"
                                             v-model="data.customer_id"
                                             placeholder="Select Customer"
-                                            autocomplete
                                             dense
                                             outlined
-                                        ></v-select>
+                                            clearable
+                                        ></v-combobox>
                                     </v-col>
 
                                     <v-col
@@ -812,7 +812,7 @@ export default {
         this.data.description = this.sell.description;
         this.data.category = this.sell.category;
         this.data.total_amount = this.sell.total_amount;
-        this.data.customer_id = this.sell.customer_id;
+        this.data.customer_id = this.sell.customer;
         this.data.stock_item_id = this.sell.stock_item_id;
         this.data.gate_pass_id = this.sell.gate_pass_id;
         this.data.items = this.sell.sold_items.map((soldItem) => ({

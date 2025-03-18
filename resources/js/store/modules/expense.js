@@ -34,6 +34,7 @@ const actions = {
     // Add expense
     async addExpense({ dispatch, commit }, data) {
         try {
+            data.expense_source_id = data.expense_source_id?.id;
             const res = await axios.post("/api/expenses", data);
 
             commit(NEW_EXPENSE, res.data);
@@ -108,6 +109,7 @@ const actions = {
     // Update expense
     async updateExpense({ commit }, data) {
         try {
+            data.expense_source_id = data.expense_source_id?.id;
             const res = await axios.put(`/api/expenses/${data.id}`, data);
 
             commit(UPDATE_EXPENSE, res.data.updated_expense);
