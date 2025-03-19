@@ -76,17 +76,16 @@
                                                     )
                                                 "
                                             ></small>
-                                            <v-select
+                                            <v-combobox
                                                 :items="customers"
                                                 item-text="name"
                                                 item-value="id"
                                                 v-model="data.customer_id"
                                                 placeholder="Select Customer"
-                                                autocomplete
-                                                clearable
                                                 dense
                                                 outlined
-                                            ></v-select>
+                                                clearable
+                                            ></v-combobox>
                                         </template>
 
                                         <template
@@ -101,17 +100,16 @@
                                                     )
                                                 "
                                             ></small>
-                                            <v-select
+                                            <v-combobox
                                                 :items="companies"
                                                 item-text="name"
                                                 item-value="id"
                                                 v-model="data.company_id"
                                                 placeholder="Select Company"
-                                                autocomplete
-                                                clearable
                                                 dense
                                                 outlined
-                                            ></v-select>
+                                                clearable
+                                            ></v-combobox>
                                         </template>
                                     </v-col>
                                 </v-row>

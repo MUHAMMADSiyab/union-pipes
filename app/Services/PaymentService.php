@@ -68,6 +68,7 @@ class PaymentService
             'deducted_amount' => $request->deducted_amount,
             'discount' => $request->discount,
             'payment_method' => $request->payment_method,
+            'transaction_type' => $request->transaction_type,
             'cheque_no' => $request->cheque_no,
             'cheque_type' => $request->cheque_type,
             'cheque_due_date' => $request->cheque_due_date,

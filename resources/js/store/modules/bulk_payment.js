@@ -49,8 +49,8 @@ const actions = {
 
             fd.append("type", type);
             fd.append("is_advance", is_advance);
-            fd.append("customer_id", customer_id);
-            fd.append("company_id", company_id);
+            fd.append("customer_id", customer_id?.id);
+            fd.append("company_id", company_id?.id);
             fd.append("amount", amount);
             fd.append("date", moment(date).format("Y-MM-DD HH:mm:ss"));
             fd.append("bank_id", bank_id);

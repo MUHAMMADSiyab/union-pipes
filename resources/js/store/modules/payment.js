@@ -179,6 +179,7 @@ const actions = {
             cheque_due_date,
             cheque_images,
             description,
+            transaction_type,
             paymentable_id,
             employeeId,
         }
@@ -195,6 +196,7 @@ const actions = {
             );
             fd.append("bank_id", bank_id);
             fd.append("payment_method", payment_method);
+            fd.append("transaction_type", transaction_type);
             fd.append("cheque_type", cheque_type);
             fd.append("cheque_no", cheque_no);
             fd.append("cheque_due_date", cheque_due_date);

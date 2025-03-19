@@ -170,16 +170,25 @@ export default {
             getCustomer: "customer/getCustomer",
         }),
 
+        // formatDate(date) {
+        //     return new Date(date).toLocaleString("en-US", {
+        //         day: "2-digit",
+        //         month: "long",
+        //         year: "numeric",
+        //         // hour: "2-digit",
+        //         // minute: "2-digit",
+        //         // second: "2-digit",
+        //         // hour12: true,
+        //     });
+        // },
+
         formatDate(date) {
-            return new Date(date).toLocaleString("en-US", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-                // hour: "2-digit",
-                // minute: "2-digit",
-                // second: "2-digit",
-                // hour12: true,
-            });
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, "0");
+            const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+            const year = String(d.getFullYear());
+
+            return `${day}/${month}/${year}`;
         },
         async filterEntries() {
             if (this.filters.from_date && this.filters.to_date) {

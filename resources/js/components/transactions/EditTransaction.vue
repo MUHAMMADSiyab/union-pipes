@@ -479,6 +479,7 @@ export default {
             if (this.old_transaction) {
                 this.data.payment.description = this.data.description;
                 this.data.payment.transaction_type = this.data.type;
+
                 await this.editPayment(this.data.payment);
             }
 
@@ -525,6 +526,7 @@ export default {
         this.data.payment.id = this.transaction.payment.id;
         this.data.payment.paymentable_id = this.transaction.id;
         this.data.payment.amount = this.transaction.amount;
+        this.data.payment.transaction_type = this.transaction.type;
         this.data.payment.payment_date = this.transaction.payment.payment_date;
         this.data.payment.bank_id = this.transaction.payment.bank_id;
         this.data.payment.payment_method =
