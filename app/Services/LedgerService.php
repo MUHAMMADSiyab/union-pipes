@@ -300,7 +300,161 @@ class LedgerService
     //     return $this->filterBetweenDateRange($ledger);
     // }
 
-    # Updated (without grouping)
+    # Updated (without grouping) -- before burraque
+    // public function getBankLedgerEntries($bank_id, $returnLastBalance = false)
+    // {
+    //     $payments = DB::table('payments')
+    //         ->leftJoin('purchases', function ($join) {
+    //             $join->on('payments.paymentable_id', '=', 'purchases.id')
+    //                 ->where('payments.model', '=', Purchase::class);
+    //         })
+    //         ->leftJoin('companies', 'purchases.company_id', '=', 'companies.id')
+    //         ->leftJoin('sells', function ($join) {
+    //             $join->on('payments.paymentable_id', '=', 'sells.id')
+    //                 ->where('payments.model', '=', Sell::class);
+    //         })
+    //         ->leftJoin('customers', 'sells.customer_id', '=', 'customers.id')
+    //         ->leftJoin('transactions', function ($join) {
+    //             $join->on('payments.paymentable_id', '=', 'transactions.id')
+    //                 ->where('payments.model', '=', Transaction::class);
+    //         })
+    //         ->leftJoin('expenses', function ($join) {
+    //             $join->on('payments.paymentable_id', '=', 'expenses.id')
+    //                 ->where('payments.model', '=', Expense::class);
+    //         })
+    //         ->leftJoin('partner_transactions', function ($join) {
+    //             $join->on('payments.paymentable_id', '=', 'partner_transactions.id')
+    //                 ->where('payments.model', '=', PartnerTransaction::class);
+    //         })
+    //         ->leftJoin('partners', 'partner_transactions.partner_id', '=', 'partners.id')
+    //         ->leftJoin('salaries', function ($join) {
+    //             $join->on('payments.paymentable_id', '=', 'salaries.id')
+    //                 ->where('payments.model', '=', Salary::class);
+    //         })
+    //         ->leftJoin('employees', 'salaries.employee_id', '=', 'employees.id')
+    //         ->select(
+    //             'payments.*',
+    //             'customers.id as customer_id',
+    //             'customers.name as customer_name',
+    //             'companies.id as company_id',
+    //             'companies.name as company_name',
+    //             'salaries.id as salary_id',
+    //             'salaries.month as salary_month',
+    //             'employees.id as employee_id',
+    //             'employees.name as employee_name',
+    //             'transactions.id as transaction_id',
+    //             'transactions.title as transaction_title',
+    //             'expenses.id as expense_id',
+    //             'expenses.name as expense_title',
+    //             'partners.id as partner_id',
+    //             'partners.name as partner_name'
+    //         )
+    //         ->where('payments.bank_id', $bank_id)
+    //         ->orderBy('payments.payment_date')
+    //         ->get();
+
+
+    //     $ledger = [];
+    //     $balance = 0;
+
+    //     foreach ($payments as $payment) {
+    //         $particular = '';
+    //         $cssClass = 'font-weight-bold indigo--text';
+
+    //         switch ($payment->model) {
+    //             case Sell::class:
+    //                 $particular = '<span class="' . $cssClass . '">Customer: </span>' . $payment->customer_name ?? '';
+    //                 break;
+    //             case Purchase::class:
+    //                 $particular = '<span class="' . $cssClass . '">Company: </span>' . $payment->company_name ?? '';
+    //                 break;
+    //             case Transaction::class:
+    //                 $particular = '<span class="' . $cssClass . '">Transaction: </span>' . $payment->transaction_title ?? '';
+    //                 break;
+    //             case PartnerTransaction::class:
+    //                 $particular = '<span class="' . $cssClass . '">Partner Transaction: </span>' . $payment->partner_name ?? '';
+    //                 break;
+    //             case Expense::class:
+    //                 $particular = '<span class="' . $cssClass . '">Expense: </span>' . $payment->expense_title ?? '';
+    //                 break;
+    //             case Salary::class:
+    //                 $particular = '<span class="' . $cssClass . '">Salary: </span>' . $payment->employee_name ?? '';
+    //                 break;
+    //         }
+
+    //         $entry = [
+    //             'particular' => $particular,
+    //             'description' => $payment->description,
+    //             'date' => $payment->payment_date,
+    //             'debit' => 0,
+    //             'credit' => 0,
+    //             'balance' => $balance,
+    //         ];
+
+    //         if ($payment->transaction_type === 'Debit') {
+    //             $entry['debit'] = $payment->amount - ($payment->discount ?? 0);
+    //             $balance += $entry['debit'];
+    //         } elseif ($payment->transaction_type === 'Credit') {
+    //             $entry['credit'] = $payment->amount;
+    //             $balance -= $entry['credit'];
+    //         }
+
+    //         $entry['balance'] = $balance;
+
+    //         $ledger[] = $entry;
+    //     }
+
+    //     if ($returnLastBalance) {
+    //         return !is_null(collect($ledger)->last()) ? collect($ledger)->last()['balance'] : 0;
+    //     }
+
+    //     return $this->filterBetweenDateRange($ledger);
+    // }
+
+    ### Date Wise Sorted Ledger Entries ###
+    // public function getBankLedgerEntries($bank_id)
+    // {
+    //     $payments = Payment::query()
+    //         ->where('bank_id', $bank_id)
+    //         ->orderBy('payment_date')
+    //         ->get();
+
+    //     $groupedPayments = $payments->groupBy(fn($item) => date('Y-m-d', strtotime($item->payment_date)));
+
+    //     $ledger = [];
+    //     $balance = 0;
+
+    //     foreach ($groupedPayments as $date => $dailyPayments) {
+    //         $debit = 0;
+    //         $credit = 0;
+    //         $descriptions = [];
+
+    //         foreach ($dailyPayments as $payment) {
+    //             $descriptions[] = $payment->description;
+
+    //             if ($payment->transaction_type === 'Debit') {
+    //                 $debit += $payment->amount - $payment->discount;
+    //                 $balance += $payment->amount - $payment->discount;
+    //             } elseif ($payment->transaction_type === 'Credit') {
+    //                 $credit += $payment->amount;
+    //                 $balance -= $payment->amount;
+    //             }
+    //         }
+
+    //         $ledger[] = [
+    //             'description' => implode("<br>", $descriptions),
+    //             'date' => $date,
+    //             'debit' => $debit,
+    //             'credit' => $credit,
+    //             'balance' => $balance,
+    //         ];
+    //     }
+
+    //     return $this->filterBetweenDateRange($ledger);
+    // }
+
+
+    // Latest from burraque
     public function getBankLedgerEntries($bank_id, $returnLastBalance = false)
     {
         $payments = DB::table('payments')
@@ -353,54 +507,93 @@ class LedgerService
             ->orderBy('payments.payment_date')
             ->get();
 
-
-        $ledger = [];
-        $balance = 0;
+        $grouped = [];
 
         foreach ($payments as $payment) {
+            $key = null;
+
+            if ($payment->model === Purchase::class && $payment->company_id && $payment->payment_date) {
+                $key = 'purchase_' . $payment->company_id . '_' . date('Y-m-d', strtotime($payment->payment_date));
+            } elseif ($payment->model === Sell::class && $payment->customer_id && $payment->payment_date) {
+                $key = 'sell_' . $payment->customer_id . '_' . date('Y-m-d', strtotime($payment->payment_date));
+            }
+
+            if ($key !== null) {
+                if (!isset($grouped[$key])) {
+                    $grouped[$key] = [];
+                }
+                $grouped[$key][] = $payment;
+            } else {
+                $grouped[] = [$payment]; // wrap non-groupable in array
+            }
+        }
+
+
+        // Flatten and normalize structure for grouping
+        $finalGroups = [];
+
+        foreach ($grouped as $group) {
+            if (!is_array($group)) $group = $group->toArray();
+
+            $group = collect($group);
+            $first = $group->first();
+
             $particular = '';
             $cssClass = 'font-weight-bold indigo--text';
 
-            switch ($payment->model) {
+            switch ($first->model) {
                 case Sell::class:
-                    $particular = '<span class="' . $cssClass . '">Customer: </span>' . $payment->customer_name ?? '';
+                    $particular = '<span class="' . $cssClass . '">Customer: </span>' . ($first->customer_name ?? '');
                     break;
                 case Purchase::class:
-                    $particular = '<span class="' . $cssClass . '">Company: </span>' . $payment->company_name ?? '';
+                    $particular = '<span class="' . $cssClass . '">Company: </span>' . ($first->company_name ?? '');
                     break;
                 case Transaction::class:
-                    $particular = '<span class="' . $cssClass . '">Transaction: </span>' . $payment->transaction_title ?? '';
+                    $particular = '<span class="' . $cssClass . '">Transaction: </span>' . ($first->transaction_title ?? '');
                     break;
                 case PartnerTransaction::class:
-                    $particular = '<span class="' . $cssClass . '">Partner Transaction: </span>' . $payment->partner_name ?? '';
+                    $particular = '<span class="' . $cssClass . '">Partner Transaction: </span>' . ($first->partner_name ?? '');
                     break;
                 case Expense::class:
-                    $particular = '<span class="' . $cssClass . '">Expense: </span>' . $payment->expense_title ?? '';
+                    $particular = '<span class="' . $cssClass . '">Expense: </span>' . ($first->expense_title ?? '');
                     break;
                 case Salary::class:
-                    $particular = '<span class="' . $cssClass . '">Salary: </span>' . $payment->employee_name ?? '';
+                    $particular = '<span class="' . $cssClass . '">Salary: </span>' . ($first->employee_name ?? '');
                     break;
             }
 
-            $entry = [
-                'particular' => $particular,
-                'description' => $payment->description,
-                'date' => $payment->payment_date,
-                'debit' => 0,
-                'credit' => 0,
-                'balance' => $balance,
-            ];
+            $groupedDebit = 0;
+            $groupedCredit = 0;
 
-            if ($payment->transaction_type === 'Debit') {
-                $entry['debit'] = $payment->amount - ($payment->discount ?? 0);
-                $balance += $entry['debit'];
-            } elseif ($payment->transaction_type === 'Credit') {
-                $entry['credit'] = $payment->amount;
-                $balance -= $entry['credit'];
+            foreach ($group as $payment) {
+                if ($payment->transaction_type === 'Debit') {
+                    $groupedDebit += $payment->amount - ($payment->discount ?? 0);
+                } elseif ($payment->transaction_type === 'Credit') {
+                    $groupedCredit += $payment->amount;
+                }
             }
 
-            $entry['balance'] = $balance;
+            $finalGroups[] = [
+                'particular' => $particular,
+                'description' => $first->description,
+                'date' => $first->payment_date,
+                'debit' => $groupedDebit,
+                'credit' => $groupedCredit,
+                'model' => $first->model, // for sorting if needed
+            ];
+        }
 
+        // Sort by date to preserve chronological flow
+        usort($finalGroups, fn($a, $b) => strtotime($a['date']) <=> strtotime($b['date']));
+
+        // Final ledger with running balance
+        $ledger = [];
+        $balance = 0;
+
+        foreach ($finalGroups as $entry) {
+            $balance += $entry['debit'];
+            $balance -= $entry['credit'];
+            $entry['balance'] = $balance;
             $ledger[] = $entry;
         }
 
@@ -410,51 +603,6 @@ class LedgerService
 
         return $this->filterBetweenDateRange($ledger);
     }
-
-    ### Date Wise Sorted Ledger Entries ###
-    // public function getBankLedgerEntries($bank_id)
-    // {
-    //     $payments = Payment::query()
-    //         ->where('bank_id', $bank_id)
-    //         ->orderBy('payment_date')
-    //         ->get();
-
-    //     $groupedPayments = $payments->groupBy(fn($item) => date('Y-m-d', strtotime($item->payment_date)));
-
-    //     $ledger = [];
-    //     $balance = 0;
-
-    //     foreach ($groupedPayments as $date => $dailyPayments) {
-    //         $debit = 0;
-    //         $credit = 0;
-    //         $descriptions = [];
-
-    //         foreach ($dailyPayments as $payment) {
-    //             $descriptions[] = $payment->description;
-
-    //             if ($payment->transaction_type === 'Debit') {
-    //                 $debit += $payment->amount - $payment->discount;
-    //                 $balance += $payment->amount - $payment->discount;
-    //             } elseif ($payment->transaction_type === 'Credit') {
-    //                 $credit += $payment->amount;
-    //                 $balance -= $payment->amount;
-    //             }
-    //         }
-
-    //         $ledger[] = [
-    //             'description' => implode("<br>", $descriptions),
-    //             'date' => $date,
-    //             'debit' => $debit,
-    //             'credit' => $credit,
-    //             'balance' => $balance,
-    //         ];
-    //     }
-
-    //     return $this->filterBetweenDateRange($ledger);
-    // }
-
-
-
 
 
     ##

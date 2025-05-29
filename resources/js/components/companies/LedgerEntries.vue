@@ -77,12 +77,20 @@
                             >{{ company.name }}
                             <v-btn
                                 color="indigo"
-                                class="white--text ml-auto d-print-none"
+                                class="white--text d-print-none ml-2"
                                 to="/companies"
                                 small
                                 >Back to Supplier Companies</v-btn
-                            ></v-card-title
-                        >
+                            >
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                color="success"
+                                class="white--text d-print-none"
+                                @click="exportPDF"
+                                small
+                                >Export PDF</v-btn
+                            >
+                        </v-card-title>
 
                         <v-card-text class="mt-1">
                             <table
@@ -135,6 +143,25 @@
             </v-row>
 
             <alert />
+
+            <v-btn
+                fab
+                small
+                color="primary"
+                class="scroll-btn top-btn d-print-none"
+                @click="scrollToTop"
+            >
+                <v-icon>mdi-arrow-up</v-icon>
+            </v-btn>
+            <v-btn
+                fab
+                small
+                color="primary"
+                class="scroll-btn bottom-btn d-print-none"
+                @click="scrollToBottom"
+            >
+                <v-icon>mdi-arrow-down</v-icon>
+            </v-btn>
         </v-container>
     </div>
 </template>
@@ -168,18 +195,6 @@ export default {
             getCompany: "company/getCompany",
         }),
 
-        // formatDate(date) {
-        //     return new Date(date).toLocaleString("en-US", {
-        //         day: "2-digit",
-        //         month: "long",
-        //         year: "numeric",
-        //         // hour: "2-digit",
-        //         // minute: "2-digit",
-        //         // second: "2-digit",
-        //         // hour12: true,
-        //     });
-        // },
-
         formatDate(date) {
             const d = new Date(date);
             const day = String(d.getDate()).padStart(2, "0");
@@ -187,6 +202,24 @@ export default {
             const year = String(d.getFullYear());
 
             return `${day}/${month}/${year}`;
+        },
+
+        async exportPDF() {
+            const url =
+                `/companies/${this.company.id}/ledger/export/pdf` +
+                (this.filters.from_date && this.filters.to_date
+                    ? `?from_date=${this.filters.from_date}&to_date=${this.filters.to_date}`
+                    : "");
+            window.open(url, "_blank");
+        },
+        scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        },
+        scrollToBottom() {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: "smooth",
+            });
         },
 
         async filterEntries() {
@@ -210,24 +243,6 @@ export default {
             company: "company/company",
             loading: "loading",
         }),
-
-        // filteredEntries() {
-        //     const { from_date, to_date } = this.filters;
-
-        //     if (!from_date || !to_date) {
-        //         return this.ledger_entries;
-        //     }
-
-        //     return this.ledger_entries.filter((entry) => {
-        //         const entryDate = new Date(entry.date);
-        //         const fromDate = new Date(from_date);
-        //         const toDate = new Date(to_date);
-
-        //         // Include entries on the selected date
-        //         toDate.setDate(toDate.getDate() + 1); // Add 1 day to toDate
-        //         return entryDate >= fromDate && entryDate <= toDate;
-        //     });
-        // },
 
         totalDebit() {
             return this.filteredEntries.reduce((total, entry) => {
@@ -287,5 +302,16 @@ th {
         padding: 2px !important;
         font-size: 10px !important;
     }
+}
+.scroll-btn {
+    position: fixed;
+    right: 20px;
+    z-index: 1000;
+}
+.top-btn {
+    bottom: 80px;
+}
+.bottom-btn {
+    bottom: 20px;
 }
 </style>
