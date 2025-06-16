@@ -480,7 +480,6 @@ export default {
 
             if (this.old_expense) {
                 this.data.payment.description = this.data.description;
-                this.data.payment.transaction_type = this.data.type;
                 await this.editPayment(this.data.payment);
             }
 

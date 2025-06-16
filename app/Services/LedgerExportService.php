@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Bank;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Setting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Response;
 
@@ -35,7 +36,9 @@ class LedgerExportService
 		$totalDebit = array_sum(array_column($entries, 'debit'));
 		$totalCredit = array_sum(array_column($entries, 'credit'));
 
-		$pdf = Pdf::loadView('exports.ledger', compact('company', 'entries', 'totalDebit', 'totalCredit', 'from_date', 'to_date'))
+		$setting = Setting::first();
+
+		$pdf = Pdf::loadView('exports.ledger', compact('company', 'entries', 'totalDebit', 'totalCredit', 'from_date', 'to_date', 'setting'))
 			->setPaper('a4', 'portrait');
 
 		return Response::streamDownload(
@@ -64,8 +67,9 @@ class LedgerExportService
 
 		$totalDebit = array_sum(array_column($entries, 'debit'));
 		$totalCredit = array_sum(array_column($entries, 'credit'));
+		$setting = Setting::first();
 
-		$pdf = Pdf::loadView('exports.ledger', compact('customer', 'entries', 'totalDebit', 'totalCredit', 'from_date', 'to_date'))
+		$pdf = Pdf::loadView('exports.ledger', compact('customer', 'entries', 'totalDebit', 'totalCredit', 'from_date', 'to_date', 'setting'))
 			->setPaper('a4', 'portrait');
 
 		return Response::streamDownload(
@@ -94,8 +98,9 @@ class LedgerExportService
 
 		$totalDebit = array_sum(array_column($entries, 'debit'));
 		$totalCredit = array_sum(array_column($entries, 'credit'));
+		$setting = Setting::first();
 
-		$pdf = Pdf::loadView('exports.ledger', compact('bank', 'entries', 'totalDebit', 'totalCredit', 'from_date', 'to_date'))
+		$pdf = Pdf::loadView('exports.ledger', compact('bank', 'entries', 'totalDebit', 'totalCredit', 'from_date', 'to_date', 'setting'))
 			->setPaper('a4', 'portrait');
 
 		return Response::streamDownload(

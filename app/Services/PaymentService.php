@@ -78,6 +78,8 @@ class PaymentService
         ];
 
         $updatedPayment = tap($payment)->update($data);
+        $updatedPayment = $payment->fresh();
+
 
         // Payment cheques
         if ($request->hasFile('cheque_images')) {

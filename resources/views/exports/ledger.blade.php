@@ -88,7 +88,7 @@
 </head>
 
 <body>
-    <h1>Karachi Super Delux</h1>
+    <h1>{{ $setting->app_name ?? 'PipeSync' }}</h1>
     <h2>{{ $company->name ?? ($customer->name ?? $bank->name) }}</h2>
     @if ($from_date && $to_date)
         <div class="subtitle">

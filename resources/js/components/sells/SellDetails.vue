@@ -4,16 +4,20 @@
 
         <print-button />
 
-        <v-container class="mt-6 d-block" v-if="sell">
+        <v-container
+            class="mt-6 d-block pa-0 full-width-invoice"
+            fluid
+            v-if="sell"
+        >
             <h3 class="text-center text-decoration-underline mb-3">
                 Sell Invoice
             </h3>
             <v-row>
                 <v-col cols="12">
-                    <v-card>
+                    <v-card class="elevation-0 full-width-card">
                         <v-card-text id="watermark-container">
                             <div id="watermark" class="d-none d-print-block">
-                                Karachi Super Delux
+                                {{ app_setting?.app_name || "PipeSync" }}
                             </div>
 
                             <table class="text--center">
@@ -224,12 +228,14 @@ export default {
     methods: {
         ...mapActions({
             getSell: "sell/getSell",
+            getAppSetting: "setting/getAppSetting",
         }),
     },
 
     computed: {
         ...mapGetters({
             sell: "sell/sell",
+            app_setting: "setting/app_setting",
             loading: "loading",
         }),
 
@@ -249,6 +255,7 @@ export default {
     },
 
     async mounted() {
+        this.getAppSetting();
         this.getSell(parseInt(this.$route.params.id));
     },
 };
@@ -288,5 +295,55 @@ th {
     rotate: -45deg;
     text-align: center;
     opacity: 0.2;
+}
+
+.full-width-invoice {
+    padding: 0 !important;
+    max-width: 100% !important;
+}
+
+.full-width-card {
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Optional: table full width and print-friendliness */
+#items-table,
+#items-table th,
+#items-table td {
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+/* Improve alignment for invoice tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td,
+th {
+    padding: 8px;
+    text-align: center;
+}
+
+@media only print {
+    .v-card,
+    .full-width-card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .v-container,
+    .full-width-invoice {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    table {
+        page-break-inside: avoid;
+    }
 }
 </style>
