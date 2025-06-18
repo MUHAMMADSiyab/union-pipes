@@ -14,13 +14,6 @@
                     :loading="formLoading"
                     class="pa-3 login-card"
                 >
-                    <!-- <v-img
-                        v-if="app_setting && app_setting.app_logo"
-                        :src="app_setting.app_logo"
-                        max-width="200"
-                        class="mx-auto"
-                    ></v-img> -->
-
                     <h4 class="text-subtitle text-center mt-3 grey--text">
                         User Account Login
                     </h4>
@@ -52,9 +45,13 @@
                                 name="password"
                                 label="Password"
                                 id="password"
-                                type="password"
+                                :type="showPassword ? 'text' : 'password'"
                                 v-model="data.password"
                                 prepend-inner-icon="mdi-account-key"
+                                :append-icon="
+                                    showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                                "
+                                @click:append="showPassword = !showPassword"
                                 required="true"
                                 aria-required="true"
                             ></v-text-field>
@@ -87,6 +84,7 @@ export default {
     data() {
         return {
             formLoading: false,
+            showPassword: false,
             data: {
                 email: "",
                 password: "",
@@ -107,17 +105,14 @@ export default {
 
             this.formLoading = false;
 
-            // Validation
             if (this.validationErrors !== null) {
                 this.validation.setMessages(this.validationErrors.errors);
             } else {
-                // Clear the validation messages object
                 this.validation.setMessages({});
 
                 if (!this.authError) {
                     this.data.email = "";
                     this.data.password = "";
-                    // Redirect to dashboard on successful login
                     this.$router.replace({ name: "dashboard" });
                 }
             }
@@ -138,9 +133,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.login-card {
-    /* background: rgba(255, 255, 255, 0.4) !important; */
-}
-</style>
