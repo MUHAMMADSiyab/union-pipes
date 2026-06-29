@@ -3,7 +3,9 @@
         <Navbar v-if="!printMode" />
 
         <v-container class="mt-4" v-if="dashboardData">
+            <!-- Temporarily hidden
             <TotalsCards :totals="dashboardData.totals" />
+            -->
 
             <UnclearedChequesCard
                 :uncleared-cheques="dashboardData.unclearedCheques"

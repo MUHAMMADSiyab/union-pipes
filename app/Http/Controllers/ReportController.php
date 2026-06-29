@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpenseReportRequest;
 use App\Http\Requests\MachineReportRequest;
+use App\Http\Requests\PaymentSummaryReportRequest;
 use App\Http\Requests\PurchaseReportRequest;
 use App\Http\Requests\SellReportRequest;
 use App\Models\Customer;
@@ -82,5 +83,15 @@ class ReportController extends Controller
         $stocks = $reportService->getStocksReport($request);
 
         return response()->json($stocks);
+    }
+
+    function get_payment_summary_report(PaymentSummaryReportRequest $request, ReportService $reportService)
+    {
+        $fromDate = $request->from_date;
+        $toDate = $request->to_date;
+
+        $paymentSummary = $reportService->getPaymentSummary($fromDate, $toDate);
+
+        return response()->json($paymentSummary);
     }
 }

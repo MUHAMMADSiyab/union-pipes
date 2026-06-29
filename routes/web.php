@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LedgerExportController;
 use App\Http\Controllers\UserController;
+use App\Services\ReportService;
 use Illuminate\Support\Facades\Route;
 
 Route::post('users/export', [UserController::class, 'export']);
@@ -9,6 +10,10 @@ Route::get('/companies/{company_id}/ledger/export/pdf', [LedgerExportController:
 Route::get('/customers/{customer_id}/ledger/export/pdf', [LedgerExportController::class, 'exportCustomerPDF'])->name('customer.ledger.export.pdf');
 Route::get('/banks/{bank_id}/ledger/export/pdf', [LedgerExportController::class, 'exportBankPDF'])
     ->name('bank.ledger.export.pdf');
+
+Route::get('/tt,', function () {
+    return (new ReportService)->getPaymentSummary("2024-01-01", "2024-12-31");
+});
 
 Route::get('{any}', function () {
     return view('layouts.app');

@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseSource;
 use App\Models\Machine;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Production;
 use App\Models\Purchase;
@@ -16,6 +17,7 @@ use App\Models\Sell;
 use App\Models\SoldItem;
 use App\Models\Stock;
 use App\Models\StockItem;
+use Illuminate\Support\Facades\DB;
 
 class ReportService
 {
@@ -405,5 +407,64 @@ class ReportService
             ->values();
 
         return $productions;
+    }
+
+    public function getPaymentSummary($fromDate, $toDate)
+    {
+        $receivedFromCustomers = $this->getReceivedFromCustomers($fromDate, $toDate);
+        $paidToCompanies = $this->getPaidToCompanies($fromDate, $toDate);
+
+        return [
+            'received_from_customers' => $receivedFromCustomers,
+            'paid_to_companies' => $paidToCompanies
+        ];
+    }
+
+    private function getReceivedFromCustomers($fromDate, $toDate)
+    {
+        return Payment::select([
+            'payment_date as date',
+            'customers.name as customer_name',
+            DB::raw('SUM(payments.amount) as amount')
+        ])
+            ->join('sells', 'payments.paymentable_id', '=', 'sells.id')
+            ->join('customers', 'sells.customer_id', '=', 'customers.id')
+            ->where('payments.model', Sell::class)
+            ->whereBetween('payments.payment_date', [$fromDate, $toDate])
+            ->groupBy('payments.payment_date', 'customers.id', 'customers.name')
+            ->orderBy('payments.payment_date')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'date' => $item->date,
+                    'customer_name' => $item->customer_name,
+                    'amount' => $item->amount
+                ];
+            })
+            ->toArray();
+    }
+
+    private function getPaidToCompanies($fromDate, $toDate)
+    {
+        return Payment::select([
+            'payment_date as date',
+            'companies.name as company_name',
+            DB::raw('SUM(payments.amount) as amount')
+        ])
+            ->join('purchases', 'payments.paymentable_id', '=', 'purchases.id')
+            ->join('companies', 'purchases.company_id', '=', 'companies.id')
+            ->where('payments.model', Purchase::class)
+            ->whereBetween('payments.payment_date', [$fromDate, $toDate])
+            ->groupBy('payments.payment_date', 'companies.id', 'companies.name')
+            ->orderBy('payments.payment_date')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'date' => $item->date,
+                    'company_name' => $item->company_name,
+                    'amount' => $item->amount
+                ];
+            })
+            ->toArray();
     }
 }
